@@ -4,7 +4,7 @@ import { FaEye } from "react-icons/fa6";
 import appointmentJSON from "../../assets/jsonData/appointment.json";
 import { InfoCard } from "../../components/common/dashboard/card/InfoCard";
 import { useModal } from "../../context/ModalContext";
-import { ViewAppointmentDetailsModel } from "../../components/model/viewAppointmentDetailsModel";
+import { ViewAppointmentDetailsModel } from "../../components/model/ViewAppointmentDetailsModel";
 import { NewAppointmentModel } from "../../components/model/NewAppointmentModel";
 export const Appointment = () => {
   const { openModal } = useModal();
