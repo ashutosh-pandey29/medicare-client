@@ -1,0 +1,197 @@
+[
+  {
+    "reportId": "RPT001",
+    "patientName": "Rahul Sharma",
+    "doctorName": "Dr. Sharma",
+    "department": "Cardiology",
+    "appointmentDate": "2025-11-25",
+    "reportDate": "2025-11-25",
+    "status": "ready",
+    "reportType": "ECG",
+    "summary": "Normal ECG with no abnormalities detected.",
+    "problem": "Minor arrhythmia detected",
+    "solution": "Monitor for 1 week, take prescribed beta blockers",
+    "medicine": [
+      {
+        "name": "Metoprolol",
+        "dose": "50mg",
+        "timing": "Morning after breakfast"
+      }
+    ],
+    "fileUrl": "/reports/RPT001.pdf",
+    "notes": "Patient should avoid heavy exercise for one week.",
+    "message": "Your ECG report is ready. You can view and download your report."
+  },
+  
+  {
+    "reportId": "RPT002",
+    "patientName": "Anita Verma",
+    "doctorName": "Dr. Verma",
+    "department": "Neurology",
+    "appointmentDate": "2025-11-25",
+    "reportDate": "2025-11-26",
+    "status": "pending",
+    "reportType": "MRI Brain",
+    "summary": "Awaiting radiologist review",
+    "problem": "Frequent headaches",
+    "solution": "",
+    "medicine": [],
+    "fileUrl": null,
+    "notes": "",
+    "message": "Your MRI Brain report is under review. Please check back later."
+  },
+  {
+    "reportId": "RPT003",
+    "patientName": "Suresh Mehta",
+    "doctorName": "Dr. Mehta",
+    "department": "Orthopedics",
+    "appointmentDate": "2025-11-22",
+    "reportDate": "2025-11-23",
+    "status": "ready",
+    "reportType": "X-Ray Knee",
+    "summary": "Minor joint inflammation detected.",
+    "problem": "Knee pain",
+    "solution": "Apply cold packs and take anti-inflammatory medicine",
+    "medicine": [
+      {
+        "name": "Ibuprofen",
+        "dose": "400mg",
+        "timing": "Twice a day after food"
+      }
+    ],
+    "fileUrl": "/reports/RPT003.pdf",
+    "notes": "",
+    "message": "Your X-Ray Knee report is ready. You can view and download your report."
+  },
+  {
+    "reportId": "RPT004",
+    "patientName": "Priya Singh",
+    "doctorName": "Dr. Singh",
+    "department": "Dermatology",
+    "appointmentDate": "2025-11-22",
+    "reportDate": "2025-11-23",
+    "status": "delivered",
+    "reportType": "Skin Biopsy",
+    "summary": "Benign lesion, no malignancy found.",
+    "problem": "Skin rashes",
+    "solution": "Apply ointment twice daily",
+    "medicine": [
+      {
+        "name": "Hydrocortisone cream",
+        "dose": "Apply thin layer",
+        "timing": "Morning and night"
+      }
+    ],
+    "fileUrl": "/reports/RPT004.pdf",
+    "notes": "Avoid sun exposure",
+    "message": "Your Skin Biopsy report has been delivered. You can download it anytime."
+  },
+  {
+    "reportId": "RPT005",
+    "patientName": "Neha Kapoor",
+    "doctorName": "Dr. Kapoor",
+    "department": "Gynecology",
+    "appointmentDate": "2025-11-23",
+    "reportDate": "2025-11-24",
+    "status": "ready",
+    "reportType": "Ultrasound",
+    "summary": "Normal scan, no anomalies detected.",
+    "problem": "Routine checkup",
+    "solution": "No treatment required",
+    "medicine": [],
+    "fileUrl": "/reports/RPT005.pdf",
+    "notes": "",
+    "message": "Your Ultrasound report is ready. You can view and download your report."
+  },
+  {
+    "reportId": "RPT006",
+    "patientName": "Rohit Reddy",
+    "doctorName": "Dr. Reddy",
+    "department": "ENT",
+    "appointmentDate": "2025-11-23",
+    "reportDate": "2025-11-24",
+    "status": "pending",
+    "reportType": "Hearing Test",
+    "summary": "Awaiting audiologist review.",
+    "problem": "Mild hearing loss",
+    "solution": "",
+    "medicine": [],
+    "fileUrl": null,
+    "notes": "",
+    "message": "Your Hearing Test report is under review. Please check back later."
+  },
+  {
+    "reportId": "RPT007",
+    "patientName": "Aarav Nair",
+    "doctorName": "Dr. Nair",
+    "department": "Pediatrics",
+    "appointmentDate": "2025-11-24",
+    "reportDate": "2025-11-24",
+    "status": "ready",
+    "reportType": "Blood Test",
+    "summary": "Slightly low hemoglobin detected.",
+    "problem": "Anemia",
+    "solution": "Iron supplements",
+    "medicine": [
+      {
+        "name": "Ferrous Sulfate",
+        "dose": "100mg",
+        "timing": "Once a day after lunch"
+      }
+    ],
+    "fileUrl": "/reports/RPT007.pdf",
+    "notes": "",
+    "message": "Your Blood Test report is ready. You can view and download your report."
+  },
+  {
+    "reportId": "RPT008",
+    "patientName": "Sneha Gupta",
+    "doctorName": "Dr. Gupta",
+    "department": "Gastroenterology",
+    "appointmentDate": "2025-11-24",
+    "reportDate": "2025-11-25",
+    "status": "delivered",
+    "reportType": "Endoscopy",
+    "summary": "No ulcers or lesions found.",
+    "problem": "Stomach discomfort",
+    "solution": "Maintain diet, avoid spicy food",
+    "medicine": [],
+    "fileUrl": "/reports/RPT008.pdf",
+    "notes": "",
+    "message": "Your Endoscopy report has been delivered. You can download it anytime."
+  },
+  {
+    "reportId": "RPT009",
+    "patientName": "Karan Bansal",
+    "doctorName": "Dr. Bansal",
+    "department": "Ophthalmology",
+    "appointmentDate": "2025-11-25",
+    "reportDate": "2025-11-25",
+    "status": "ready",
+    "reportType": "Eye Test",
+    "summary": "Vision slightly impaired, corrective lenses recommended.",
+    "problem": "Mild myopia",
+    "solution": "Use glasses as prescribed",
+    "medicine": [],
+    "fileUrl": "/reports/RPT009.pdf",
+    "notes": "",
+    "message": "Your Eye Test report is ready. You can view and download your report."
+  },
+  {
+    "reportId": "RPT010",
+    "patientName": "Pooja Joshi",
+    "doctorName": "Dr. Joshi",
+    "department": "Psychiatry",
+    "appointmentDate": "2025-11-25",
+    "reportDate": "2025-11-26",
+    "status": "pending",
+    "reportType": "Psych Evaluation",
+    "summary": "Awaiting psychologist review.",
+    "problem": "Anxiety issues",
+    "solution": "",
+    "medicine": [],
+    "fileUrl": null,
+    "notes": "",
+    "message": "Your Psych Evaluation report is under review. Please check back later."
+  }
+]

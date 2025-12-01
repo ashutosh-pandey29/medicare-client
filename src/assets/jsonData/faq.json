@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "question": "How can I book an appointment on MediCare?",
+    "answer": "You can easily schedule an appointment by selecting your preferred doctor, choosing a time slot, and submitting your basic details. You will receive confirmation on email and WhatsApp."
+  },
+  {
+    "id": 2,
+    "question": "Do you offer online or video consultations?",
+    "answer": "Yes, MediCare provides both in-person and online video consultations. You can select the consultation type while booking an appointment."
+  },
+  {
+    "id": 3,
+    "question": "Can I cancel or reschedule an appointment?",
+    "answer": "Yes, appointments can be canceled or rescheduled up to 6 hours before the scheduled time without any extra charges."
+  },
+  {
+    "id": 4,
+    "question": "Is my medical data safe on MediCare?",
+    "answer": "Absolutely. All patient data is fully encrypted and stored securely following healthcare privacy standards."
+  },
+  {
+    "id": 5,
+    "question": "What payment methods are available?",
+    "answer": "We support UPI, credit/debit cards, net banking, and cash payment at the hospital."
+  },
+  {
+    "id": 6,
+    "question": "Do you accept health insurance?",
+    "answer": "Yes, we support major health insurance providers for cashless and reimbursement claims. You can check supported insurance during booking."
+  },
+  {
+    "id": 7,
+    "question": "How can I check my appointment status?",
+    "answer": "After booking, you can track appointment status from the dashboard in real time or through notifications."
+  },
+  {
+    "id": 8,
+    "question": "What should I bring to my appointment?",
+    "answer": "Please carry your ID proof, previous medical reports, and health insurance card if applicable."
+  },
+  {
+    "id": 9,
+    "question": "Do you provide emergency services?",
+    "answer": "Yes, MediCare offers 24/7 emergency medical support and ambulance services."
+  },
+  {
+    "id": 10,
+    "question": "How long is the typical waiting time?",
+    "answer": "Waiting times may vary, but appointments booked online typically reduce waiting by 70% compared to walk-ins."
+  }
+]

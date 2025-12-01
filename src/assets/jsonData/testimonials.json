@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "image": "https://randomuser.me/api/portraits/men/11.jpg",
+    "name": "Arjun Mehta",
+    "rating": 5,
+    "text": "Booking an appointment on MediCare was so simple and fast. I selected a doctor, picked a time slot and immediately received confirmation. Everything was organized and stress-free."
+  },
+  {
+    "id": 2,
+    "image": "https://randomuser.me/api/portraits/women/25.jpg",
+    "name": "Priya Sharma",
+    "rating": 4,
+    "text": "Earlier, waiting in long hospital queues was painful. MediCare helped me book my dermatology appointment smoothly and the doctor attended right on time. Amazing experience!"
+  },
+  {
+    "id": 3,
+    "image": "https://randomuser.me/api/portraits/men/18.jpg",
+    "name": "Rohit Gupta",
+    "rating": 5,
+    "text": "I used the emergency appointment at midnight and got connected with a specialist within minutes. This system truly saved time and reduced panic. Highly recommended!"
+  },
+  {
+    "id": 4,
+    "image": "https://randomuser.me/api/portraits/women/32.jpg",
+    "name": "Sneha Verma",
+    "rating": 3,
+    "text": "Good platform, but I hope report upload is added soon. Appointment and consultation were smooth though. Doctors were polite and helpful."
+  },
+  {
+    "id": 5,
+    "image": "https://randomuser.me/api/portraits/men/42.jpg",
+    "name": "Vikas Singh",
+    "rating": 5,
+    "text": "The transparency in appointment timings and billing is impressive. I got accurate waiting time details and easy digital payments. Very happy with the service."
+  },
+  {
+    "id": 6,
+    "image": "https://randomuser.me/api/portraits/women/41.jpg",
+    "name": "Manisha Bajaj",
+    "rating": 4,
+    "text": "I booked a pediatric appointment for my son. No waiting, clean environment, and hassle-free process. The platform deserves appreciation!"
+  },
+  {
+    "id": 7,
+    "image": "https://randomuser.me/api/portraits/men/52.jpg",
+    "name": "Amit Kumar",
+    "rating": 5,
+    "text": "Best healthcare booking app. Real-time updates, SMS reminders and easy rescheduling without calling anyone. A must-use system."
+  },
+  {
+    "id": 8,
+    "image": "https://randomuser.me/api/portraits/women/56.jpg",
+    "name": "Shivani Raj",
+    "rating": 4,
+    "text": "The video consultation feature helped me connect with the doctor while I was traveling. Clear audio and very professional conversation. Great feature!"
+  },
+  {
+    "id": 9,
+    "image": "https://randomuser.me/api/portraits/men/63.jpg",
+    "name": "Naman Bhardwaj",
+    "rating": 5,
+    "text": "Appointment reminders through WhatsApp and SMS ensured I never missed my visit. Well-managed digital healthcare experience."
+  },
+  {
+    "id": 10,
+    "image": "https://randomuser.me/api/portraits/women/62.jpg",
+    "name": "Aditi Mishra",
+    "rating": 5,
+    "text": "The queue management system reduced waiting time drastically. The payment and report access system is also very convenient. Loved it!"
+  },
+  {
+    "id": 11,
+    "image": "https://randomuser.me/api/portraits/men/77.jpg",
+    "name": "Harshit Tiwari",
+    "rating": 4,
+    "text": "Everything worked smoothly except parking at the hospital was crowded. But appointment scheduling and doctor session were excellent."
+  },
+  {
+    "id": 12,
+    "image": "https://randomuser.me/api/portraits/women/39.jpg",
+    "name": "Nikita Chauhan",
+    "rating": 5,
+    "text": "The platform let me compare specialist ratings before selecting a doctor. Very professional environment and friendly medical staff."
+  },
+  {
+    "id": 13,
+    "image": "https://randomuser.me/api/portraits/men/90.jpg",
+    "name": "Sandeep Malhotra",
+    "rating": 3,
+    "text": "Good overall experience. A little improvement needed in waiting area seating. Otherwise, service and system were very smooth."
+  },
+  {
+    "id": 14,
+    "image": "https://randomuser.me/api/portraits/women/13.jpg",
+    "name": "Komal Dahiya",
+    "rating": 5,
+    "text": "Our pediatric visit experience was wonderful. The doctor was friendly and supportive, and booking through MediCare saved a lot of time."
+  },
+  {
+    "id": 15,
+    "image": "https://randomuser.me/api/portraits/men/6.jpg",
+    "name": "Tarun Patel",
+    "rating": 4,
+    "text": "The website works fast even on slow networks. Clean UI and simple navigation. Great development work!"
+  },
+  {
+    "id": 16,
+    "image": "https://randomuser.me/api/portraits/women/74.jpg",
+    "name": "Simran Kaur",
+    "rating": 5,
+    "text": "Digital prescriptions and report downloads helped me avoid physical document handling. Very modern experience."
+  },
+  {
+    "id": 17,
+    "image": "https://randomuser.me/api/portraits/men/37.jpg",
+    "name": "Deepak Mishra",
+    "rating": 4,
+    "text": "Real-time doctor availability display helped me choose the earliest appointment. Super helpful!"
+  },
+  {
+    "id": 18,
+    "image": "https://randomuser.me/api/portraits/women/52.jpg",
+    "name": "Anushka Jain",
+    "rating": 5,
+    "text": "I booked a gynecology appointment and was impressed by the well-managed process. Staff was caring and comforting."
+  },
+  {
+    "id": 19,
+    "image": "https://randomuser.me/api/portraits/men/14.jpg",
+    "name": "Rahul Sinha",
+    "rating": 5,
+    "text": "Prescription history and appointment tracking helped me manage my treatment schedule. Loved the app!"
+  },
+  {
+    "id": 20,
+    "image": "https://randomuser.me/api/portraits/women/29.jpg",
+    "name": "Kritika Bansal",
+    "rating": 4,
+    "text": "I really liked the online payment and invoice download options. Smart healthcare system!"
+  },
+  {
+    "id": 21,
+    "image": "https://randomuser.me/api/portraits/men/49.jpg",
+    "name": "Saurabh Jaiswal",
+    "rating": 5,
+    "text": "Doctor consultation was extremely helpful. The system kept everything smooth and clear."
+  },
+  {
+    "id": 22,
+    "image": "https://randomuser.me/api/portraits/women/21.jpg",
+    "name": "Ritu Mathur",
+    "rating": 5,
+    "text": "Being able to choose slot timings and reschedule easily was a lifesaver. Loved the UI!"
+  },
+  {
+    "id": 23,
+    "image": "https://randomuser.me/api/portraits/men/65.jpg",
+    "name": "Aditya Rathore",
+    "rating": 4,
+    "text": "Customer support response time was quick and professional. Good experience."
+  },
+  {
+    "id": 24,
+    "image": "https://randomuser.me/api/portraits/women/27.jpg",
+    "name": "Shalini Sengar",
+    "rating": 5,
+    "text": "Easy appointment booking system and supportive staff. I did not face any difficulty."
+  },
+  {
+    "id": 25,
+    "image": "https://randomuser.me/api/portraits/men/71.jpg",
+    "name": "Ashok Yadav",
+    "rating": 5,
+    "text": "The platform works very smoothly. Appointment reminders helped me stay organized."
+  },
+  {
+    "id": 26,
+    "image": "https://randomuser.me/api/portraits/women/71.jpg",
+    "name": "Tanisha Aggarwal",
+    "rating": 4,
+    "text": "Hospital staff was well prepared when I arrived. Zero waiting and easy payment system."
+  },
+  {
+    "id": 27,
+    "image": "https://randomuser.me/api/portraits/men/67.jpg",
+    "name": "Yuvraj Chauhan",
+    "rating": 5,
+    "text": "This is the future of healthcare. The platform removed unnecessary stress from the process."
+  },
+  {
+    "id": 28,
+    "image": "https://randomuser.me/api/portraits/women/88.jpg",
+    "name": "Harleen Walia",
+    "rating": 4,
+    "text": "Clean UI, easy appointment booking and polite doctors. Loved everything about the service."
+  },
+  {
+    "id": 29,
+    "image": "https://randomuser.me/api/portraits/men/20.jpg",
+    "name": "Karan Joshi",
+    "rating": 5,
+    "text": "A great experience from appointment booking to final consultation. Seamless and professional."
+  },
+  {
+    "id": 30,
+    "image": "https://randomuser.me/api/portraits/women/17.jpg",
+    "name": "Neha Saxena",
+    "rating": 5,
+    "text": "Super helpful service during an emergency. Immediate doctor response and proper guidance. Thank you MediCare!"
+  }
+]

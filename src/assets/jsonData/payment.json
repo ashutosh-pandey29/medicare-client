@@ -1,0 +1,92 @@
+[
+  {
+    "paymentId": "PAY001",
+    "appointmentId": "APT001",
+    "doctorName": "Dr. Sharma",
+    "amount": 500,
+    "paymentDate": "2025-11-20",
+    "status": "success",
+    "method": "Card"
+  },
+  {
+    "paymentId": "PAY002",
+    "appointmentId": "APT002",
+    "doctorName": "Dr. Verma",
+    "amount": 700,
+    "paymentDate": "2025-11-21",
+    "status": "pending",
+    "method": "UPI"
+  },
+  {
+    "paymentId": "PAY003",
+    "appointmentId": "APT003",
+    "doctorName": "Dr. Mehta",
+    "amount": 450,
+    "paymentDate": "2025-11-22",
+    "status": "success",
+    "method": "Cash"
+  },
+  {
+    "paymentId": "PAY004",
+    "appointmentId": "APT004",
+    "doctorName": "Dr. Singh",
+    "amount": 600,
+    "paymentDate": "2025-11-22",
+    "status": "success",
+    "method": "Card"
+  },
+  {
+    "paymentId": "PAY005",
+    "appointmentId": "APT005",
+    "doctorName": "Dr. Kapoor",
+    "amount": 800,
+    "paymentDate": "2025-11-23",
+    "status": "pending",
+    "method": "UPI"
+  },
+  {
+    "paymentId": "PAY006",
+    "appointmentId": "APT006",
+    "doctorName": "Dr. Reddy",
+    "amount": 400,
+    "paymentDate": "2025-11-23",
+    "status": "success",
+    "method": "Cash"
+  },
+  {
+    "paymentId": "PAY007",
+    "appointmentId": "APT007",
+    "doctorName": "Dr. Nair",
+    "amount": 550,
+    "paymentDate": "2025-11-24",
+    "status": "success",
+    "method": "Card"
+  },
+  {
+    "paymentId": "PAY008",
+    "appointmentId": "APT008",
+    "doctorName": "Dr. Gupta",
+    "amount": 650,
+    "paymentDate": "2025-11-24",
+    "status": "failed",
+    "method": "UPI"
+  },
+  {
+    "paymentId": "PAY009",
+    "appointmentId": "APT009",
+    "doctorName": "Dr. Bansal",
+    "amount": 700,
+    "paymentDate": "2025-11-25",
+    "status": "success",
+    "method": "Card"
+  },
+  {
+    "paymentId": "PAY010",
+    "appointmentId": "APT010",
+    "doctorName": "Dr. Joshi",
+    "amount": 500,
+    "paymentDate": "2025-11-25",
+    "status": "pending",
+    "method": "UPI"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  { "month": "Jan", "Appointment": 32 },
+  { "month": "Feb", "Appointment": 45 },
+  { "month": "Mar", "Appointment": 50 },
+  { "month": "Apr", "Appointment": 38 },
+  { "month": "May", "Appointment": 62 },
+  { "month": "Jun", "Appointment": 75 },
+  { "month": "Jul", "Appointment": 68 },
+  { "month": "Aug", "Appointment": 80 },
+  { "month": "Sep", "Appointment": 90 },
+  { "month": "Oct", "Appointment": 120 },
+  { "month": "Nov", "Appointment": 110 },
+  { "month": "Dec", "Appointment": 140 }
+]

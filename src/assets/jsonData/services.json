@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "service_name": "General Consultation",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "General OPD – Consultation for common health issues like fever, cold, headache, and seasonal illnesses. Our expert physicians provide personalized advice and treatment plans to ensure optimal health."
+  },
+  {
+    "id": 2,
+    "service_name": "Child Care / Pediatrics",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Specialized health care for infants, children, and adolescents. We focus on preventive care, vaccinations, and managing both common and complex childhood illnesses."
+  },
+  {
+    "id": 3,
+    "service_name": "ENT (Ear, Nose & Throat)",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Treatment for ear pain, hearing issues, sinus problems, and throat infections. Our ENT specialists provide comprehensive care including diagnosis, medical treatment, and minor procedures."
+  },
+  {
+    "id": 4,
+    "service_name": "Orthopedics",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Care for bone fractures, joint pain, and musculoskeletal injuries. We provide both surgical and non-surgical solutions to restore mobility and reduce pain effectively."
+  },
+  {
+    "id": 5,
+    "service_name": "CT Scan & Radiology",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "High-resolution CT scan, X-ray, and imaging services. Our radiology department ensures accurate diagnosis using advanced imaging technology and expert analysis."
+  },
+  {
+    "id": 6,
+    "service_name": "Pathology & Diagnostic Lab",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Full-service pathology lab for blood tests, biopsies, and other diagnostic investigations. We deliver precise and timely results to support effective treatment plans."
+  },
+  {
+    "id": 7,
+    "service_name": "Cardiology & ECG",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Heart‑related diagnosis and treatment including ECG, stress tests, and cardiology consultations. Our cardiologists focus on preventive care and advanced interventions for heart health."
+  },
+  {
+    "id": 8,
+    "service_name": "Gynecology & Women Health",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Pregnancy care, menstrual issues, and overall women’s health. Our gynecologists provide personalized guidance, prenatal support, and treatment for reproductive health conditions."
+  },
+  {
+    "id": 9,
+    "service_name": "Dental Care",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "Teeth cleaning, tooth extraction, and preventive dental treatments. Our dental specialists ensure oral health with pain-free procedures and professional care."
+  },
+  {
+    "id": 10,
+    "service_name": "Emergency & Trauma Care",
+    "image": "https://technext.github.io/novena/images/service/service-1.jpg",
+    "description": "24/7 emergency services for accidents, injuries, and sudden illnesses. Our trauma team provides rapid response and comprehensive care to stabilize and treat patients effectively."
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "year": 2021,
+    "new": 320,
+    "returning": 210,
+    "lost": 85,
+    "growthRate": "+8%"
+  },
+  {
+    "year": 2022,
+    "new": 380,
+    "returning": 260,
+    "lost": 90,
+    "growthRate": "+12%"
+  },
+  {
+    "year": 2023,
+    "new": 420,
+    "returning": 310,
+    "lost": 95,
+    "growthRate": "+10%"
+  },
+  {
+    "year": 2024,
+    "new": 470,
+    "returning": 355,
+    "lost": 100,
+    "growthRate": "+11%"
+  },
+  {
+    "year": 2025,
+    "new": 520,
+    "returning": 400,
+    "lost": 120,
+    "growthRate": "+14%"
+  }
+]
