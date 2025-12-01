@@ -1,5 +1,5 @@
 import { DashboardLayout } from "../../components/layout/DashboardLayout";
-import { AdminDashboardHome } from "../../pages/Admin/AdminDashboardHome";
+import { AdminDashboardHome } from "../../pages/admin/AdminDashboardHome";
 import { Doctors } from "../../pages/admin/Doctors";
 import { TotalPatientTable } from "../../pages/admin/TotalPatientTable";
 import { Billings } from "../../pages/admin/Billings";
