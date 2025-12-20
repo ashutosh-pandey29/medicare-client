@@ -3,7 +3,7 @@ import { Header } from "../common/dashboard/Header";
 import { Sidebar } from "../common/dashboard/Sidebar";
 import { useState } from "react";
 
-export const DashboardLayout = ({ role}) => {
+export const DashboardLayout = ({ role }) => {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
   const handleSidebarToggle = () => {
@@ -32,7 +32,7 @@ export const DashboardLayout = ({ role}) => {
         </header>
 
         {/* Scrollable content */}
-        <main className="flex-1  md:p-4  p-1 overflow-y-aut">
+        <main className="flex-1  md:p-4  p-1 overflow-y-auto ">
           <Outlet />
         </main>
       </div>

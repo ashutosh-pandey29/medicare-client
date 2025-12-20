@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { SidebarLinks } from "./SidebarLinks";
-
+import { useAuth } from "../../../context/AuthContext";
 // icons
 import { MdDashboard } from "react-icons/md";
 import { IoIosTime } from "react-icons/io";
@@ -12,6 +12,7 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 
 export const Sidebar = ({ handleSidebarToggle, role }) => {
   const links = SidebarLinks[role] || [];
+  // const { logout } = useAuth();
 
   return (
     <aside className="flex flex-col justify-between h-screen  p-3 bg-zinc-50">
@@ -33,11 +34,14 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
         {/* Links */}
         <ul className="mt-2 space-y-1 h-[74vh] overflow-y-auto pr-2">
           {links.map((item) => (
-              
             <li key={item.title}>
               <NavLink
                 to={item.path}
-                end={item.path === "/dashboard" || item.path === "/dashboard/doctor"  || item.path==="/admin/dashboard"}
+                end={
+                  item.path === "/dashboard" ||
+                  item.path === "/dashboard/doctor" ||
+                  item.path === "/admin/dashboard"
+                }
                 className={({ isActive }) =>
                   `flex items-center p-3 gap-3 rounded hover:bg-blue-600 hover:text-white transition-colors ${
                     isActive ? "bg-blue-600 text-white" : "text-slate-900"
@@ -59,13 +63,10 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
 
       {/* Bottom Section: Logout */}
       <div>
-        <NavLink
-          to="/logout"
-          className="flex items-center p-3 gap-3 rounded hover:bg-red-600 hover:text-white transition-colors text-slate-900"
-        >
+        <button className="flex items-center p-3 gap-3 rounded hover:bg-red-600 hover:text-white transition-colors text-slate-900">
           <RiLogoutBoxFill className="text-lg" />
           <span className="text-lg">Logout</span>
-        </NavLink>
+        </button>
       </div>
     </aside>
   );

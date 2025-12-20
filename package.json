@@ -1,5 +1,5 @@
 {
-  "name": "hsm-client",
+  "name": "hms-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,11 +15,14 @@
     "@mui/material": "^7.3.5",
     "@mui/x-data-grid": "^8.20.0",
     "@tailwindcss/vite": "^4.1.17",
+    "jwt-decode": "^4.0.0",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.6",
+    "react-toastify": "^11.0.5",
     "recharts": "^3.5.0",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

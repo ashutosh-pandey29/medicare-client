@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useModal } from "../../context/ModalContext";
+// import { useModal } from "../../context/ModalContext";
 import { FaFileDownload } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
 import paymentJSON from "../../assets/jsonData/payment.json";
 import { InfoCard } from "../../components/common/dashboard/card/InfoCard";
-import { ViewPaymentModel } from "../../components/model/ViewPaymentModel";
+// import { ViewPaymentModel } from "../../components/model/ViewPaymentModel";
 
 export const Payment = () => {
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
 
   const [filterStatus, setFilterStatus] = useState("All");
 
@@ -60,7 +60,6 @@ export const Payment = () => {
                   text: "",
                   icon: <FaEye />,
                   color: "blue",
-                  onClick: () => openModal(<ViewPaymentModel data={p} />),
                 },
                 {
                   text: "",

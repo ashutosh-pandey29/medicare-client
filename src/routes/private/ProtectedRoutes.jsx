@@ -1,21 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { PreLoader } from "../../components/UI/loaders/PreLoader";
+const ProtectedRoutes = ({ allowedRole }) => {
+  const { user, loading } = useAuth();
 
+  if (loading) return <PreLoader/>;
 
-const ProtectedRoutes = ({ isAuthenticated, allowedRole  , children}) => {
-  const allowedRoles = ["user", "doctor", "admin"];
+  // console.log("user:", user);
 
-
-  
-  if (!isAuthenticated ) {
-    return <Navigate to={"/auth"} replace/>
-  }
-  
-  if (!allowedRole && !allowedRoles.includes(allowedRole)) {
-        return <Navigate to="/unauthorized" replace />;
+  if (!user || !user.accessToken) {
+    return <Navigate to="/auth/login" replace />;
   }
 
-  return children;
+  if (allowedRole && user.role !== allowedRole) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-  
-}
-export default ProtectedRoutes
+  return <Outlet />;
+};
+
+export default ProtectedRoutes;

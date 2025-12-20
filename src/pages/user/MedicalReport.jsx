@@ -3,13 +3,13 @@ import medicalReportJSON from "../../assets/jsonData/medicalReport.json";
 import {InfoCard} from "../../components/common/dashboard/card/InfoCard"
 import { FaFileDownload } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
-import { useModal } from "../../context/ModalContext"
-import { ViewMedicalReportDetailsModel } from "../../components/model/ViewMedicalReportDetailsModel";
-ViewMedicalReportDetailsModel
+// import { useModal } from "../../context/ModalContext"
+// import { ViewMedicalReportDetailsModel } from "../../components/model/ViewMedicalReportDetailsModel";
+// ViewMedicalReportDetailsModel
 
 export const MedicalReport = () => {
   
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
 
   const [statusFilter, setStatusFilter] = useState("Issued");
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -61,7 +61,6 @@ export const MedicalReport = () => {
 
                     icon: <FaEye />,
                     color: "blue",
-                    onClick: () => openModal(<ViewMedicalReportDetailsModel data={ report} />),
                   },
                   {
                     text: "",
@@ -75,6 +74,9 @@ export const MedicalReport = () => {
           })}
         </div>
       </section>
+
+                    {/* onClick: () => openModal(<ViewMedicalReportDetailsModel data={ report} />), */}
+
     </>
   );
 };

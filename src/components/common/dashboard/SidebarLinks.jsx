@@ -26,7 +26,11 @@ export const SidebarLinks = {
 
   doctor: [
     { title: "Dashboard", icon: <MdDashboard className="text-lg" />, path: "/dashboard/doctor" },
-    { title: "Approve Appointments", icon: <IoIosTime className="text-lg" />, path: "approve-appointment" },
+    {
+      title: "Approve Appointments",
+      icon: <IoIosTime className="text-lg" />,
+      path: "approve-appointment",
+    },
     { title: "Patient Queue", icon: <FaCheckToSlot className="text-lg" />, path: "patient-queue" },
     { title: "Patient ", icon: <MdLocalHospital className="text-lg" />, path: "patient-table" },
     { title: "Update Report", icon: <IoDocuments className="text-lg" />, path: "report-entry" },
@@ -37,13 +41,17 @@ export const SidebarLinks = {
 
   admin: [
     { title: "Dashboard", icon: <MdDashboard className="text-lg" />, path: "/admin/dashboard" },
+    {
+      title: "Reports & Analytics",
+      icon: <MdDashboard className="text-lg" />,
+      path: "/admin/dashboard/analysis",
+    },
+    { title: "Notification", icon: <MdDashboard className="text-lg" />, path: "notification" },
     { title: "Department", icon: <MdDashboard className="text-lg" />, path: "department" },
     { title: "Doctor ", icon: <MdLocalHospital className="text-lg" />, path: "doctors" },
-    { title: "Patient ", icon: <MdLocalHospital className="text-lg" />, path: "patient" },
-    { title: "Reports", icon: <IoDocuments className="text-lg" />, path: "report-entry" },
     { title: "Billings ", icon: <MdLocalHospital className="text-lg" />, path: "billings" },
-    { title: "Profile", icon: <FaCircleUser className="text-lg" />, path: "profile" },
-    { title: "Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
-  
-  ]
+    { title: "Chat Center ", icon: <MdLocalHospital className="text-lg" />, path: "chat" },
+    { title: "Account", icon: <FaCircleUser className="text-lg" />, path: "account" },
+    { title: "System Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
+  ],
 };
