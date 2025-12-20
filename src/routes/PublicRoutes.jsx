@@ -30,23 +30,23 @@ const publicRouter = [
         element: <Home />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
       },
       {
-        path: "/services",
+        path: "services",
         element: <Services />,
       },
       {
-        path: "/doctors",
+        path: "doctors",
         element: <Doctors />,
       },
       {
-        path: "/contact",
+        path: "contact",
         element: <ContactUs />,
       },
       {
-        path: "/appointment",
+        path: "appointment",
         element: <BookAppointment />,
       },
     ],
