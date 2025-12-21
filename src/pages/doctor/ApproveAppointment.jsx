@@ -1,142 +1,103 @@
-import { DataGrid } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
 import { useState } from "react";
+import { CiExport, CiFilter } from "react-icons/ci";
+
 export const ApproveAppointment = () => {
-  const jsonData = [
-    {
-      appointmentId: "APT-001",
-      patientName: "Rohan Kumar",
-      problem: "High fever and weakness",
-      requestedAppointmentDate: "2025-11-28",
-      appliedDate: "2025-11-26",
-      status: "Pending",
-    },
-    {
-      appointmentId: "APT-002",
-      patientName: "Ayesha Khan",
-      problem: "Migraines and headache",
-      requestedAppointmentDate: "2025-11-29",
-      appliedDate: "2025-11-26",
-      status: "Pending",
-    },
-    {
-      appointmentId: "APT-003",
-      patientName: "Vikram Singh",
-      problem: "Joint pain and swelling",
-      requestedAppointmentDate: "2025-11-30",
-      appliedDate: "2025-11-25",
-      status: "Pending",
-    },
-    {
-      appointmentId: "APT-004",
-      patientName: "Meera Sharma",
-      problem: "Cold, cough, and throat pain",
-      requestedAppointmentDate: "2025-12-01",
-      appliedDate: "2025-11-26",
-      status: "Pending",
-    },
-    {
-      appointmentId: "APT-005",
-      patientName: "Amit Verma",
-      problem: "Stomach pain and acidity",
-      requestedAppointmentDate: "2025-12-02",
-      appliedDate: "2025-11-27",
-      status: "Pending",
-    },
-  ];
-
-  const columns = [
-    { field: "appointmentId", headerName: "Appointment ID", width: 140 },
-    { field: "patientName", headerName: "Patient Name", width: 180 },
-    { field: "problem", headerName: "Problem", width: 190 },
-    { field: "appliedDate", headerName: "Applied Date", width: 160 },
-    {
-      field: "requestedAppointmentDate",
-      headerName: "Requested Date",
-      width: 160,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 140,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => {
-        return (
-          <div className="flex items-center w-full  h-full justify-center">
-            <button
-              className=" h-8 w-fit px-3 py-1 flex items-center rounded  bg-green-500 text-white  hover:bg-green-600"
-              onClick={(e) => {
-                e.stopPropagation(); // stop selecting row
-                alert(`Button clicked for Patient: ${params.row.patientName}`);
-              }}
-            >
-              Approve
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
-
-  const paginationModel = { page: 0, pageSize: 10 };
-
   const [isOn, setIsOn] = useState(false);
 
   return (
-    <div className="w-6xl mx-auto overflow-x-auto p-3">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-slate-700">Appointment Requests</h2>
+    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
+      {/* Header */}
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="md:mb-8 mb-4">
+          <h2 className="text-base md:text-4xl lg:text-3xl font-extrabold bg-linear-to-r from-green-500 to-purple-500 bg-clip-text text-transparent">
+            Appointment Requests
+          </h2>
 
+          <p className="mt-1 text-sm text-gray-500">
+            Review and approve patient appointment requests
+          </p>
+        </div>
+
+        {/* Auto Approve Toggle */}
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 text-sm">Auto Approve</span>
+          <span className="text-sm text-gray-500">Auto Approve</span>
 
-          <label className="relative inline-flex items-center cursor-pointer">
+          <label className="relative inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
               className="sr-only peer"
               checked={isOn}
               onChange={() => setIsOn(!isOn)}
             />
-
-            <div
-              className="w-10 h-5 bg-red-400 peer-focus:outline-none rounded-full peer 
-        peer-checked:bg-green-500 transition-all duration-300 shadow-inner"
-            ></div>
-
-            <span
-              className="absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full transition-all duration-300 
-        peer-checked:translate-x-5 shadow-md"
-            ></span>
+            <div className="h-5 w-10 rounded-full bg-red-400 transition peer-checked:bg-green-500"></div>
+            <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
           </label>
         </div>
       </div>
 
-      <Paper
-        sx={{
-          height: 550,
-          width: "100%",
-          border: "none",
-          boxShadow: "none",
-          borderRadius: 0,
-        }}
-      >
-        <DataGrid
-          rows={jsonData}
-          columns={columns}
-          getRowId={(row) => row.appointmentId} // important (unique)
-          sx={{
-            border: 0,
-            "& .MuiDataGrid-cell": {
-              borderBottom: "1px solid #e5e7eb",
-            },
-          }}
-          pagination
-          checkboxSelection
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[10, 20, 30]}
-        />
-      </Paper>
+      <div className="w-full overflow-x-auto">
+        <div className="h-auto p-2 flex  gap-1.5 justify-end">
+          <input
+            type="text"
+            className="border rounded  border-indigo-100 outline-0 px-2 focus:border-indigo-500"
+            placeholder="Quick Search...."
+          />
+
+          <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
+            <CiFilter />
+          </span>
+
+          <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
+            <CiExport />
+          </span>
+        </div>
+
+        <table className="min-w-full table-auto border-collapse text-center">
+          {/* Table Head */}
+          <thead className="bg-indigo-500 text-indigo-100">
+            <tr className="border-b border-b-indigo-50">
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text- capitalize">
+                Name
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text- capitalize">
+                problem
+              </th>
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                booking date
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                appointment date
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                Status
+              </th>
+            </tr>
+          </thead>
+
+          {/* Table Body */}
+          <tbody className="text-xs sm:text-sm md:text-base">
+            {/* {doctors?.map((d, i) => (
+              <tr
+                key={i}
+                className="cursor-pointer transition duration-300 hover:bg-indigo-100 border-b border-b-zinc-100"
+                onClick={() => navigate(`profile/${d.userId}`, { state: { doctor: d } })}
+              >
+                <td className="px-2 py-2 sm:px-4 sm:py-4">{d.name}</td>
+                <td className="px-2 py-2 sm:px-4 sm:py-4">{d.department}</td>
+
+                <td className="px-2 py-2 sm:px-4 sm:py-4">
+                  <span className="px-2 py-1 sm:px-3 sm:py-1 text-[10px] sm:text-xs md:text-sm bg-green-100 text-green-600 rounded-full">
+                    Active
+                  </span>
+                </td>
+              </tr>
+            ))} */}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

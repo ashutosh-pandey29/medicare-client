@@ -44,6 +44,7 @@ export const DoctorList = () => {
         {/* table  */}
 
         <div className="overflow-x-auto rounded">
+
           <div className="h-auto p-2 flex  gap-1.5 justify-end">
             <input
               type="text"
@@ -95,6 +96,7 @@ export const DoctorList = () => {
               ))}
             </tbody>
           </table>
+          
         </div>
       </div>
     </>

@@ -1,63 +1,84 @@
-import { DataGrid } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
-import patients from "../../assets/jsonData/patients.json";
-
-const columns = [
-  { field: "patientId", headerName: "Patient ID", width: 120 },
-  { field: "name", headerName: "Name", width: 180 },
-  { field: "problem", headerName: "Problem", width: 190 },
-  { field: "age", headerName: "Age", width: 90, type: "number" },
-  { field: "appointmentDate", headerName: "Appointment Date", width: 160 },
-  {
-    field: "action",
-    headerName: "Action",
-    width: 120,
-    sortable: false,
-    filterable: false,
-    renderCell: (params) => {
-      return (
-        <div className="flex items-center w-full  h-full justify-center">
-          <button
-            className=" h-8 w-fit px-3 py-1 flex items-center rounded  bg-blue-500 text-white  hover:bg-blue-600"
-            onClick={(e) => {
-              e.stopPropagation(); // stop selecting row
-              alert(`Button clicked for Patient: ${params.row.name}`);
-            }}
-          >
-            view
-          </button>
-        </div>
-      );
-    },
-  },
-];
-
-const paginationModel = { page: 0, pageSize: 10 };
+import { useState } from "react";
+import { CiExport, CiFilter } from "react-icons/ci";
 
 export const PatientTable = () => {
-  return (
-    <div className="w-6xl mx-auto overflow-x-auto">
-      <h2 className="text-2xl font-semibold p-2 border-b border-zinc-100 ">Patient Table </h2>
+  const [isOn, setIsOn] = useState(false);
 
-      <Paper
-        className="w-full "
-        sx={{ height: 550, width: "100%", border: "none", boxShadow: "none", borderRadius: 0 }}
-      >
-        <DataGrid 
-          rows={patients}
-          columns={columns}
-          sx={{
-            border: "0",
-            "& .MuiDataGrid-cell": {
-              borderBottom: "1px solid #e5e7eb",
-            },
-          }}
-          pagination
-          checkboxSelection
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[10, 20, 30]}
-        />
-      </Paper>
+  return (
+    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
+      {/* Header */}
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-4 md:mb-8">
+          <h2 className="text-base md:text-4xl lg:text-3xl font-extrabold bg-linear-to-r from-green-500 to-purple-500 bg-clip-text text-transparent">
+            Patient Records
+          </h2>
+
+          <p className="mt-1 text-sm text-gray-500">
+            List of patients whose appointments have been successfully completed
+          </p>
+        </div>
+      </div>
+
+      <div className="w-full overflow-x-auto">
+        <div className="h-auto p-2 flex  gap-1.5 justify-end">
+          <input
+            type="text"
+            className="border rounded  border-indigo-100 outline-0 px-2 focus:border-indigo-500"
+            placeholder="Quick Search...."
+          />
+
+          <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
+            <CiFilter />
+          </span>
+
+          <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
+            <CiExport />
+          </span>
+        </div>
+
+        <table className="min-w-full table-auto border-collapse text-center">
+          {/* Table Head */}
+          <thead className="bg-indigo-500 text-indigo-100">
+            <tr className="border-b border-indigo-50">
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                Patient Name
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                Visit Date
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                Treatment Status
+              </th>
+
+              <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base capitalize">
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          {/* Table Body */}
+          <tbody className="text-xs sm:text-sm md:text-base">
+            {/* {doctors?.map((d, i) => (
+              <tr
+                key={i}
+                className="cursor-pointer transition duration-300 hover:bg-indigo-100 border-b border-b-zinc-100"
+                onClick={() => navigate(`profile/${d.userId}`, { state: { doctor: d } })}
+              >
+                <td className="px-2 py-2 sm:px-4 sm:py-4">{d.name}</td>
+                <td className="px-2 py-2 sm:px-4 sm:py-4">{d.department}</td>
+
+                <td className="px-2 py-2 sm:px-4 sm:py-4">
+                  <span className="px-2 py-1 sm:px-3 sm:py-1 text-[10px] sm:text-xs md:text-sm bg-green-100 text-green-600 rounded-full">
+                    Active
+                  </span>
+                </td>
+              </tr>
+            ))} */}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
