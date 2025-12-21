@@ -15,7 +15,7 @@ export const Appointment = () => {
   const { modalData, openModal, closeModal } = useModal();
   const [appointmentData, setAppointmentData] = useState([]);
   const { decodedUser } = useJwtDecode();
-
+ 
   const userId = decodedUser?.userId;
 
   const { data, error, loading } = useFetch(

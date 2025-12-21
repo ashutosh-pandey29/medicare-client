@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
-import { useForm } from "../../hooks/custom/useForm";
-import { departmentSchema } from "../../utils/validationSchema";
-import { useToken } from "../../hooks/custom/useToken";
+import { useForm } from "../../../hooks/custom/useForm";
+import { departmentSchema } from "../../../utils/validationSchema";
+import { useToken } from "../../../hooks/custom/useToken";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 export const DepartmentForm = () => {
   const token = useToken();
   const { departmentId } = useParams();
+  const navigate = useNavigate();
 
   const initialValue = {
     departmentName: "",
     fees: "",
   };
+  const API_URL = departmentId
+    ? `${import.meta.env.VITE_API_URL}/department/update/${departmentId}`
+    : `${import.meta.env.VITE_API_URL}/department/new`;
+
+  const REQ_METHOD = departmentId ? "PUT" : "POST";
 
   const onSubmit = async (value) => {
     try {
       // API request to add new department
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/department/new`, {
-        method: "POST",
+      const response = await fetch(`${API_URL}`, {
+        method: `${REQ_METHOD}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: token ? `Bearer ${token}` : "",
@@ -30,10 +36,11 @@ export const DepartmentForm = () => {
 
       // if response is ok and status is true
       if (response.ok && jsonResponse.status) {
-        toast.success(jsonResponse.message || "Department added successfully!");
+        toast.success(jsonResponse.message || "Department operation success!");
+        navigate(-1)
       } else {
         //Handle server errors (status false or 4xx/5xx)
-        toast.error(jsonResponse.message || "Failed to add department.");
+        toast.error(jsonResponse.message || "department operation Failed ");
       }
     } catch (err) {
       //Handle network or unexpected errors
@@ -51,7 +58,7 @@ export const DepartmentForm = () => {
     onSubmit
   );
 
-  // update department
+  // update department -  GET OLD DATA
   useEffect(() => {
     if (!departmentId) return;
 
@@ -70,9 +77,10 @@ export const DepartmentForm = () => {
           const jsonResponse = await response.json();
 
           if (response.ok && jsonResponse.status) {
+            console.log(jsonResponse.data[0].departmentName);
             setValue({
-              departmentName: jsonResponse.data.departmentName,
-              fees: jsonResponse.data.fees,
+              departmentName: jsonResponse.data[0].departmentName,
+              fees: jsonResponse.data[0].fees,
             });
           } else {
             throw new Error(`${jsonResponse.message}`);

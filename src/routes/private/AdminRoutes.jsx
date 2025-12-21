@@ -7,7 +7,7 @@ import { Department } from "../../pages/admin/Department";
 import { AddDoctor } from "../../pages/admin/AddDoctor";
 import { DoctorList } from "../../pages/admin/DoctorList";
 import { ViewDoctor } from "../../pages/admin/ViewDoctor";
-import { DepartmentForm } from "../../components/forms/DepartmentForm";
+import { DepartmentForm } from "../../components/forms/admin/DepartmentForm";
 import { DepartmentList } from "../../pages/admin/DepartmentList";
 import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
 import { DoctorRegisterForm } from "../../components/forms/DoctorRegisterForm";
@@ -37,7 +37,7 @@ const AdminRoutes = [
             element: <DepartmentForm />,
           },
           {
-            path: "edit-delete/:departmentId",
+            path: "edit/:departmentId",
             element: <DepartmentForm />,
           },
         ],

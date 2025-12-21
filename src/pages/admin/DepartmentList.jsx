@@ -1,28 +1,53 @@
 import { Heading } from "../../components/UI/Dashboard/Heading";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import { MdEditSquare, MdDelete } from "react-icons/md";
+import { FaEye, FaEdit, FaTrash, FaRupeeSign } from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { CiExport } from "react-icons/ci";
 import { CiFilter } from "react-icons/ci";
+import { Modal } from "../../components/modals/Modal";
+import { toast } from "react-toastify";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useModal } from "../../hooks/custom/useModal";
+import { DeleteConfirmationModel } from "../../components/modals/DeleteConfirmationModel";
 export const DepartmentList = () => {
   const [departmentName, setDepartmentName] = useState("");
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
+  const { modalData, openModal, closeModal } = useModal();
 
   useEffect(() => {
     const getDepartment = async () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/department/get`);
-
       const jsonResponse = await response.json();
-
-      console.log(jsonResponse.data);
-
+      // console.log(jsonResponse.data);
       setDepartments(jsonResponse.data);
     };
     getDepartment();
   }, []);
+
+  // handle delete
+
+  const handleDelete = async (itemId, endpoint) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}/${itemId}`, {
+        method: "DELETE",
+        // headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await response.json();
+
+      if (response.ok && json.status) {
+        toast.success("Deleted successfully!");
+        setDepartments((prev) => prev.filter((item) => item.departmentId !== itemId));
+
+        closeModal();
+      } else {
+        toast.error(json.message || "Delete failed");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong!");
+    }
+  };
 
   return (
     <>
@@ -82,7 +107,7 @@ export const DepartmentList = () => {
                 </th>
 
                 <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base">
-                  Total Doctor
+                  Action
                 </th>
               </tr>
             </thead>
@@ -91,20 +116,57 @@ export const DepartmentList = () => {
             <tbody className="text-xs sm:text-sm md:text-base">
               {departments.length > 0 &&
                 departments.map((d) => (
-                  <tr
-                    className="cursor-pointer transition duration-300 hover:bg-indigo-100 border-b border-b-zinc-100"
-                    onClick={() => navigate(`edit-delete/${d.departmentId}`)}
-                  >
+                  <tr className=" transition duration-300 hover:bg-indigo-50 border-b border-b-zinc-100">
                     <td className="px-2 py-2 sm:px-4 sm:py-4">{d.departmentId}</td>
                     <td className="px-2 py-2 sm:px-4 sm:py-4">{d.departmentName}</td>
-                    <td className="px-2 py-2 sm:px-4 sm:py-4">{d.fees}</td>
-                    <td className="px-2 py-2 sm:px-4 sm:py-4">Cardiology</td>
+                    <td className="px-2 py-2 sm:px-4 sm:py-4 items-center flex justify-center">
+                      <FaRupeeSign className="text-[13px]" /> {d.fees}
+                    </td>
+                    <td className="px-2 py-2 sm:px-4 sm:py-4">
+                      <div className="flex gap-2">
+                        <button
+                          className="cursor-pointer p-2 bg-green-100 text-green-500 rounded hover:bg-green-500 hover:text-white"
+                          onClick={() => navigate(`edit/${d.departmentId}`)}
+                        >
+                          <FaEdit />
+                        </button>
+
+                        <button
+                          className="cursor-pointer p-2 bg-red-100 text-red-600 rounded hover:bg-red-600
+                           hover:text-white"
+                          onClick={() =>
+                            openModal(
+                              <DeleteConfirmationModel
+                                title="Delete Department"
+                                message={
+                                  <>
+                                    Are you sure you want to delete the department{" "}
+                                    <span className="font-bold text-red-600">
+                                      {d.departmentName}
+                                    </span>
+                                    ? This action cannot be undone.
+                                  </>
+                                }
+                                onCancel={closeModal}
+                                onConfirm={() => handleDelete(d.departmentId, "department/delete")}
+                              />,
+                              "Confirm Deletion"
+                            )
+                          }
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* modal */}
+      <Modal data={modalData} onClose={closeModal} />
     </>
   );
 };

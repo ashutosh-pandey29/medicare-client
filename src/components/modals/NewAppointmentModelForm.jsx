@@ -5,7 +5,7 @@ import { appointmentSchema } from "../../utils/validationSchema";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LuLoaderCircle } from "react-icons/lu";
-import {useToken} from "../../hooks/custom/useToken";
+import { useToken } from "../../hooks/custom/useToken";
 
 export const NewAppointmentModelForm = () => {
   const [departments, setDepartments] = useState([]);
