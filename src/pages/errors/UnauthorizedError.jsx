@@ -1,21 +1,13 @@
-import React from 'react';
-import { FaLock, FaHome, FaSignInAlt, FaShieldAlt, FaUser } from 'react-icons/fa';
+import React from "react";
+import { FaLock, FaHome, FaSignInAlt, FaShieldAlt, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-export default function UnauthorizedError() {
-  const handleLogin = () => {
-    // Navigate to login page
-    window.location.href = '/login';
-  };
-
-  const handleGoHome = () => {
-    // Navigate to home page
-    window.location.href = '/';
-  };
+export const UnauthorizedError = () => {
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full text-center">
-        
         {/* Error Icon */}
         <div className="flex justify-center mb-6">
           <div className="relative">
@@ -29,9 +21,7 @@ export default function UnauthorizedError() {
         {/* Error Code */}
         <div className="mb-4">
           <h1 className="text-6xl sm:text-7xl font-bold text-gray-900 mb-2">401</h1>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-            Unauthorized Access
-          </h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Unauthorized Access</h2>
         </div>
 
         {/* Error Message */}
@@ -47,7 +37,7 @@ export default function UnauthorizedError() {
         {/* Info Card */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
           <div className="flex items-start text-left mb-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-50 mr-4 flex-shrink-0">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-50 mr-4 shrink-0">
               <FaShieldAlt className="w-5 h-5 text-orange-500" />
             </div>
             <div>
@@ -77,7 +67,7 @@ export default function UnauthorizedError() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <button
-            onClick={handleLogin}
+            onClick={() => navigate("/auth/login")}
             className="flex items-center justify-center px-6 py-3 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-all shadow-sm hover:shadow"
           >
             <FaSignInAlt className="w-4 h-4 mr-2" />
@@ -85,7 +75,7 @@ export default function UnauthorizedError() {
           </button>
 
           <button
-            onClick={handleGoHome}
+            onClick={() => navigate("/")}
             className="flex items-center justify-center px-6 py-3 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all"
           >
             <FaHome className="w-4 h-4 mr-2" />
@@ -98,7 +88,10 @@ export default function UnauthorizedError() {
           <div className="flex items-center justify-center text-orange-700">
             <FaUser className="w-4 h-4 mr-2" />
             <p className="text-sm font-medium">
-              Need help? <a href="/contact" className="underline hover:text-orange-800">Contact Support</a>
+              Need help?{" "}
+              <a href="/contact" className="underline hover:text-orange-800">
+                Contact Support
+              </a>
             </p>
           </div>
         </div>
@@ -106,13 +99,12 @@ export default function UnauthorizedError() {
         {/* Additional Info */}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-sm text-gray-500">
-            Error Code: <span className="font-mono font-semibold text-gray-700">ERR_401_UNAUTHORIZED</span>
+            Error Code:{" "}
+            <span className="font-mono font-semibold text-gray-700">ERR_401_UNAUTHORIZED</span>
           </p>
-          <p className="text-xs text-gray-400 mt-2">
-            Timestamp: {new Date().toLocaleString()}
-          </p>
+          <p className="text-xs text-gray-400 mt-2">Timestamp: {new Date().toLocaleString()}</p>
         </div>
       </div>
     </div>
   );
-}
+};

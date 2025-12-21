@@ -6,6 +6,7 @@ import AdminRoutes from "./routes/private/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NotFound } from "./pages/NotFound";
+import { UnauthorizedError } from "./pages/errors/UnauthorizedError";
 const router = createBrowserRouter([
   ...PublicRoutes,
   ...UserRoutes,
@@ -13,26 +14,30 @@ const router = createBrowserRouter([
   ...AdminRoutes,
 
   {
+    path: "/unauthorized",
+    element: <UnauthorizedError />,
+  },
+  {
     path: "*",
-    element:<NotFound/>
-  }
+    element: <NotFound />,
+  },
 ]);
 
 function App() {
   return (
     <>
-        <RouterProvider router={router} />;
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+      <RouterProvider router={router} />;
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
