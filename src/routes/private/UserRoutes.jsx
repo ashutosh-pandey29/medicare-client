@@ -8,6 +8,7 @@ import { MedicalReport } from "../../pages/user/MedicalReport";
 import { Payment } from "../../pages/user/Payment";
 import Support from "../../pages/user/Support";
 import Settings from "../../pages/user/Settings";
+import { SocketProvider } from "../../context/SocketContext";
 
 // const UserRoutes = [
 //   {
@@ -50,13 +51,14 @@ import Settings from "../../pages/user/Settings";
 
 // export default UserRoutes;
 
-
 const UserRoutes = [
   {
     path: "/dashboard/user",
     element: (
       <AuthProvider>
-        <ProtectedRoutes allowedRole="user" />
+        <SocketProvider>
+          <ProtectedRoutes allowedRole="user" />
+        </SocketProvider>
       </AuthProvider>
     ),
     children: [

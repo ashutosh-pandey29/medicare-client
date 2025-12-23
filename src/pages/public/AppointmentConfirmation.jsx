@@ -17,6 +17,7 @@ import {
 import { useNavigate, NavLink, useSearchParams } from "react-router-dom";
 import { PreLoader } from "../../components/UI/loaders/PreLoader";
 import { toast } from "react-toastify";
+import { useToken } from "../../hooks/custom/useToken";
 
 export const AppointmentConfirmation = () => {
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -24,7 +25,7 @@ export const AppointmentConfirmation = () => {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
+  const token = useToken();
   const appointmentId = searchParams.get("appointmentId");
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export const AppointmentConfirmation = () => {
           {
             method: "GET",
             credentials: "include",
+
           }
         );
 
@@ -74,9 +76,10 @@ export const AppointmentConfirmation = () => {
 
           headers: {
             "Content-Type": "application/json",
+            Authorization:   token ? `Bearer ${token}` : "",
           },
           body: JSON.stringify({
-            amount: appointmentData.departmentId.fees,
+            appointmentId: appointmentId,
           }),
         });
 
@@ -104,8 +107,14 @@ export const AppointmentConfirmation = () => {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
+                    Authorization: token ? `Bearer ${token}` : "",
                   },
-                  body: JSON.stringify(res),
+                  body: JSON.stringify({
+                    appointmentId: appointmentId,
+                    razorpay_order_id: res.razorpay_order_id,
+                    razorpay_payment_id: res.razorpay_payment_id,
+                    razorpay_signature: res.razorpay_signature,
+                  }),
                 }
               );
 
@@ -114,9 +123,12 @@ export const AppointmentConfirmation = () => {
               if (verifyData.status) {
                 console.log("verified");
 
-                navigate(`/appointment/payment/success?appointmentId=${appointmentId}&mode=${paymentMethod}`, {
-                  replace: true,
-                });
+                navigate(
+                  `/appointment/payment/success?appointmentId=${appointmentId}&mode=${paymentMethod}`,
+                  {
+                    replace: true,
+                  }
+                );
               } else {
                 console.log("verification failed");
               }
@@ -162,9 +174,12 @@ export const AppointmentConfirmation = () => {
         const jsonResponse = await response.json();
         if (response.ok && jsonResponse.status) {
           toast.success(jsonResponse.message);
-          navigate(`/appointment/payment/success?appointmentId=${appointmentId}&mode=${paymentMethod}`, {
-            replace: true,
-          });
+          navigate(
+            `/appointment/payment/success?appointmentId=${appointmentId}&mode=${paymentMethod}`,
+            {
+              replace: true,
+            }
+          );
         } else {
           throw new Error(response.message);
         }

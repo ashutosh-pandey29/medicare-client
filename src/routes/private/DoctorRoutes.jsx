@@ -6,12 +6,16 @@ import { PatientTable } from "../../pages/doctor/PatientTable";
 import { ReportEntry } from "../../pages/doctor/ReportEntry";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { AuthProvider } from "../../context/AuthContext";
+import { SocketProvider } from "../../context/SocketContext";
+
 const DoctorRoutes = [
   {
     path: "/dashboard/doctor",
     element: (
       <AuthProvider>
-        <ProtectedRoutes allowedRole="doctor" />
+        <SocketProvider role="doctor">
+          <ProtectedRoutes allowedRole="doctor" />
+        </SocketProvider>
       </AuthProvider>
     ),
     children: [

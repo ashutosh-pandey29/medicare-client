@@ -1,7 +1,28 @@
 import { FaBell } from "react-icons/fa";
 import { GrMenu } from "react-icons/gr";
+import { NotificationBell } from "./NotificationBell";
+import { useSocket } from "../../../context/SocketContext";
+import { useEffect, useState } from "react";
 
 export const Header = ({ handleSidebarToggle }) => {
+  const { socket } = useSocket();
+  const [notification, setNotification] = useState([]);
+
+  // appointment listener
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewAppointment = (data) => {
+      // console.log("New appointment:", data);
+      setNotification((prev) => [data, ...prev]);
+    };
+
+    socket.on("NEW_APPOINTMENT", handleNewAppointment);
+    return () => {
+      socket.off("NEW_APPOINTMENT", handleNewAppointment);
+    };
+  }, [socket]);
   return (
     <header className="bg-zinc-50 h-16 w-full flex items-center justify-between px-5">
       {/* Left Section (Optional: logo / page title) */}
@@ -13,21 +34,12 @@ export const Header = ({ handleSidebarToggle }) => {
       {/* Right Section: Notification + Profile */}
       <div className="flex items-center gap-4">
         {/* Notification */}
-        <div className="relative">
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-400 hover:bg-blue-500 text-white cursor-pointer transition-colors">
-            <FaBell className="text-lg" />
-            {/* Notification Badge */}
-            <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full shadow-lg animate-pulse">
-              3
-            </span>
-          </div>
-        </div>
+        <NotificationBell notifications={notification} />
 
         {/* Profile */}
         <div className="flex items-center gap-2 cursor-pointer">
           <div className="hidden md:flex items-center gap-3 content-center rounded px-3 py-2 text-gray-700 font-medium">
             <p>Welcome, Username</p>
-
           </div>
         </div>
 
