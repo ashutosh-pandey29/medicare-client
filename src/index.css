@@ -19,3 +19,36 @@
   scrollbar-width: none;              /* auto | thin | none */
   scrollbar-color: #059669 #f3f4f6;   /* thumb track */
 }
+
+
+/* dashboard color theme  */
+
+:root {
+  --sidebar-bg: #17bd33;
+  --header-bg: #FFFFFF;
+  --main-bg: #F8FAFC;
+  --accent: #2563EB;
+}
+
+body{
+  background-color: var(--main-bg);
+
+}
+
+
+.sidebar {
+  background-color: var(--sidebar-bg); /* value set from js  */
+}
+
+.header {
+  background-color: var(--header-bg);
+}
+
+.main {
+  background-color: var(--main-bg);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+}

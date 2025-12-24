@@ -7,6 +7,8 @@ import { ReportEntry } from "../../pages/doctor/ReportEntry";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { AuthProvider } from "../../context/AuthContext";
 import { SocketProvider } from "../../context/SocketContext";
+import { Profile } from "../../pages/doctor/Profile";
+import { Account } from "../../pages/doctor/Account";
 
 const DoctorRoutes = [
   {
@@ -42,6 +44,14 @@ const DoctorRoutes = [
             path: "report-entry",
             element: <ReportEntry />,
           },
+          {
+            path: "profile",
+            element:<Profile/>
+          },
+          {
+            path: "account",
+            element:<Account/>
+          }
         ],
       },
     ],

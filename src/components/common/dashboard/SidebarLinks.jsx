@@ -9,6 +9,7 @@ import { FaCheckToSlot } from "react-icons/fa6";
 import { IoDocuments } from "react-icons/io5";
 import { FaCircleUser } from "react-icons/fa6";
 import { MdLocalHospital } from "react-icons/md";
+import { MdManageAccounts } from "react-icons/md";
 
 export const SidebarLinks = {
   user: [
@@ -22,6 +23,7 @@ export const SidebarLinks = {
     { title: "Billing / Payment", icon: <MdPayments className="text-lg" />, path: "payment" },
     { title: "Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
     { title: "Support", icon: <MdContactSupport className="text-lg" />, path: "support" },
+    { title: "Account", icon: <MdManageAccounts className="text-lg" />, path: "account" },
   ],
 
   doctor: [
@@ -31,12 +33,19 @@ export const SidebarLinks = {
       icon: <IoIosTime className="text-lg" />,
       path: "approve-appointment",
     },
-    { title: "Patient Queue", icon: <FaCheckToSlot className="text-lg" />, path: "patient-queue" },
-    { title: "Patient ", icon: <MdLocalHospital className="text-lg" />, path: "patient-table" },
+    {
+      title: "Today’s Appointment Queue ",
+      icon: <FaCheckToSlot className="text-lg" />,
+      path: "patient-queue",
+    },
+    {
+      title: "My Treated Patients  ",
+      icon: <MdLocalHospital className="text-lg" />,
+      path: "patient-table",
+    },
     { title: "Update Report", icon: <IoDocuments className="text-lg" />, path: "report-entry" },
     { title: "Profile", icon: <FaCircleUser className="text-lg" />, path: "profile" },
-    { title: "Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
-    { title: "Support", icon: <MdContactSupport className="text-lg" />, path: "support" },
+    { title: "Account", icon: <MdManageAccounts className="text-lg" />, path: "account" },
   ],
 
   admin: [

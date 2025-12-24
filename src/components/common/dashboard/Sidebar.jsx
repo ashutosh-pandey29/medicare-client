@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { SidebarLinks } from "./SidebarLinks";
 import { useAuth } from "../../../context/AuthContext";
+import profileImg from "../../../assets/dummy-profile/user.png";
 // icons
 import { MdDashboard } from "react-icons/md";
 import { IoIosTime } from "react-icons/io";
@@ -9,30 +10,40 @@ import { MdPayments } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { MdContactSupport } from "react-icons/md";
 import { RiLogoutBoxFill } from "react-icons/ri";
+import { useJwtDecode } from "../../../hooks/custom/useJwtDecode";
 
 export const Sidebar = ({ handleSidebarToggle, role }) => {
   const links = SidebarLinks[role] || [];
+
+  const { decodedUser } = useJwtDecode();
   // const { logout } = useAuth();
 
+  console.log(decodedUser);
+
   return (
-    <aside className="flex flex-col justify-between h-screen  p-3 bg-zinc-50">
+    <aside className="flex flex-col justify-between h-screen  p-3 ">
       {/* Top Section */}
       <div>
         {/* Profile */}
-        <div className="flex items-center gap-4 mb-4 p-2">
+        <div className="flex items-center gap-4 mb-4 p-2 border-b border-green-500">
           <img
-            src="https://randomuser.me/img/creator_keith.png"
+            src={profileImg}
             alt="profile"
-            className="rounded-full w-10 h-10 outline-2 outline-green-500 outline-offset-2"
+            className="rounded-full w-10 h-10 outline-2 outline-zinc-100 outline-offset-2"
           />
           <div className="flex flex-col">
-            <span className="text-lg font-semibold text-slate-800">User Name</span>
-            <span className="text-orange-500 font-medium text-sm">User location</span>
+            <span className="text-lg font-semibold text-white">{decodedUser?.username}</span>
+            <span className="text-white font-medium text-sm">
+              <span className="flex items-center gap-1 text-sm text-gray-300">
+                <span className="h-2 w-2 bg-green-400 rounded-full"></span>
+                Available
+              </span>
+            </span>
           </div>
         </div>
 
         {/* Links */}
-        <ul className="mt-2 space-y-1 h-[74vh] overflow-y-auto pr-2">
+        <ul className="mt-2 space-y-1 h-[76vh] border-b border-b-green-400 overflow-y-auto pr-2 ">
           {links.map((item) => (
             <li key={item.title}>
               <NavLink
@@ -43,8 +54,8 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
                   item.path === "/admin/dashboard"
                 }
                 className={({ isActive }) =>
-                  `flex items-center p-3 gap-3 rounded hover:bg-blue-600 hover:text-white transition-colors ${
-                    isActive ? "bg-blue-600 text-white" : "text-slate-900"
+                  `flex items-center p-3 gap-3 rounded hover:bg-[#277963] hover:text-white transition-colors ${
+                    isActive ? "bg-[#277963] text-[#D1FAE5]" : "text-[#D1FAE5]"
                   }`
                 }
                 onClick={() => {
@@ -63,7 +74,7 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
 
       {/* Bottom Section: Logout */}
       <div>
-        <button className="flex items-center p-3 gap-3 rounded hover:bg-red-600 hover:text-white transition-colors text-slate-900">
+        <button className="flex items-center p-3 gap-3 rounded w-full hover:bg-red-600 hover:text-white transition-colors text-white">
           <RiLogoutBoxFill className="text-lg" />
           <span className="text-lg">Logout</span>
         </button>

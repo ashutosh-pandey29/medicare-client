@@ -14,11 +14,17 @@ import { DoctorRegisterForm } from "../../components/forms/DoctorRegisterForm";
 import { Settings } from "../../pages/admin/Settings";
 import { Chat } from "../../pages/admin/Chat";
 import {Notification} from "../../pages/admin/Notification";
+import { SocketProvider } from "../../context/SocketContext";
 
 const AdminRoutes = [
   {
     path: "/dashboard/admin",
-    element: <DashboardLayout role={"admin"} />,
+    element: (
+      <SocketProvider>
+      <DashboardLayout role={"admin"} />,
+      </SocketProvider>
+    ),
+    
     children: [
       {
         index: true,

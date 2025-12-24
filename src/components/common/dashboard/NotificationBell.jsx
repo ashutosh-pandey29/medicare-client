@@ -23,7 +23,8 @@ export const NotificationBell = ({ notifications }) => {
     <div className="relative inline-block" ref={dropdownRef}>
       {/* Bell Icon */}
       <div
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-400 hover:bg-blue-500 text-white cursor-pointer transition-colors"
+        className="w-10 h-10 flex items-center justify-center rounded-full   text-[#0f0722] 
+               hover:bg-[#d7cfdd] transition  cursor-pointer "
         onClick={() => setOpen(!open)}
       >
         <FaBell className="text-lg" />

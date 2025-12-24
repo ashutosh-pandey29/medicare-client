@@ -1,12 +1,16 @@
-import { FaBell } from "react-icons/fa";
 import { GrMenu } from "react-icons/gr";
+import { LuLanguages } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
+
 import { NotificationBell } from "./NotificationBell";
 import { useSocket } from "../../../context/SocketContext";
 import { useEffect, useState } from "react";
+import { useJwtDecode } from "../../../hooks/custom/useJwtDecode";
 
 export const Header = ({ handleSidebarToggle }) => {
   const { socket } = useSocket();
   const [notification, setNotification] = useState([]);
+  const { decodedUser } = useJwtDecode();
 
   // appointment listener
 
@@ -24,31 +28,53 @@ export const Header = ({ handleSidebarToggle }) => {
     };
   }, [socket]);
   return (
-    <header className="bg-zinc-50 h-16 w-full flex items-center justify-between px-5">
+    <header className="h-16 w-full flex items-center justify-between px-5 z-50">
       {/* Left Section (Optional: logo / page title) */}
       <div className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold text-gray-700  md:hidden">User name </h1>
-        <h1 className="text-xl font-semibold text-gray-700 hidden  md:block">Dashboard</h1>
+        <h1 className="text-xl font-semibold text-gray-700  md:hidden">{decodedUser?.username}</h1>
+        <h1 className="text-xl font-semibold text-gray-700 hidden  md:block">
+          <span className="text-2xl font-extrabold tracking-wide text-[#064226]">
+            Medicare <span className="text-[#10B981]">Hospital</span>
+          </span>
+        </h1>
       </div>
 
       {/* Right Section: Notification + Profile */}
-      <div className="flex items-center gap-4">
+
+      <div className="flex items-center gap-3">
         {/* Notification */}
         <NotificationBell notifications={notification} />
 
-        {/* Profile */}
-        <div className="flex items-center gap-2 cursor-pointer">
-          <div className="hidden md:flex items-center gap-3 content-center rounded px-3 py-2 text-gray-700 font-medium">
-            <p>Welcome, Username</p>
-          </div>
-        </div>
-
-        {/* toggle icon */}
+        {/* Language Switch */}
         <button
-          className="md:hidden bg-zinc-200 text-2xl rounded-lg py-3 px-5 cursor-pointer "
-          onClick={handleSidebarToggle}
+          className="hidden md:flex items-center gap-1 px-3 py-2 
+               rounded-lg text-[#0f0722] 
+               hover:bg-[#d7cfdd] transition"
+          title="Change language"
         >
-          <GrMenu />
+          <LuLanguages className="text-lg" />
+          <span className="text-sm">EN</span>
+        </button>
+
+        {/* Profile */}
+        <button
+          className="hidden md:flex items-center gap-2 px-3 py-2 
+               rounded-lg text-[#0f0722] 
+               hover:bg-[#d7cfdd] transition"
+          title="Profile"
+        >
+          <CgProfile className="text-xl" />
+          <span className="text-sm font-medium">{decodedUser?.username}</span>
+        </button>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden p-2 rounded-lg text-[#0f0722] 
+               hover:bg-[#047857] transition border border-zinc-100 bg-zinc-300"
+          onClick={handleSidebarToggle}
+          aria-label="Open menu"
+        >
+          <GrMenu className="text-2xl" />
         </button>
       </div>
     </header>

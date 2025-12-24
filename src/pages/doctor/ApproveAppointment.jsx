@@ -57,79 +57,108 @@ export const ApproveAppointment = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
-      {/* Header */}
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-b-zinc-100">
-        <div className="md:mb-8 mb-4">
-          <h2 className="text-base md:text-4xl lg:text-3xl font-extrabold bg-linear-to-r from-green-500 to-purple-500 bg-clip-text text-transparent">
-            Appointment Requests
-          </h2>
+    <div className="max-w-7xl mx-auto sm:px-4 ">
+      {/* page heading  */}
 
-          <p className="mt-1 text-sm text-gray-500">
-            Review and approve patient appointment requests
-          </p>
+      <div
+        className="relative w-full max-w-full rounded overflow-hidden shadow z-10"
+        style={{
+          background: "linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%)",
+        }}
+      >
+        {/* Decorative medical cross patterns */}
+        <div className="absolute top-4 right-8 w-16 h-16 opacity-10">
+          <div className="absolute w-4 h-16 bg-white left-6"></div>
+          <div className="absolute w-16 h-4 bg-white top-6"></div>
+        </div>
+        <div className="absolute bottom-8 left-8 w-12 h-12 opacity-10">
+          <div className="absolute w-3 h-12 bg-white left-4.5"></div>
+          <div className="absolute w-12 h-3 bg-white top-4.5"></div>
         </div>
 
-        {/* Auto Approve Toggle */}
-        {/* <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Auto Approve</span>
+        {/* Pulse line decoration */}
+        <svg className="absolute top-0 left-0 w-full h-full opacity-5 z-50" viewBox="0 0 1000 200">
+          <path
+            d="M0,100 L200,100 L220,60 L240,140 L260,100 L1000,100"
+            stroke="white"
+            strokeWidth="3"
+            fill="none"
+          />
+        </svg>
 
-          <label className="relative inline-flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={isOn}
-              onChange={() => setIsOn(!isOn)}
-            />
-            <div className="h-5 w-10 rounded-full bg-red-400 transition peer-checked:bg-green-500"></div>
-            <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
-          </label>
-        </div> */}
+        {/* Main Content */}
+        <div className="relative z-10 p-8">
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center">
+              <div className="ml-1 md:ml-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-xl md:text-4xl font-bold text-white">Appointment Requests</h2>
+                </div>
+
+                <p className="text-gray-100 text-base  font-semibold">
+                  Manage all patient appointments that are waiting for approval
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom wave decoration */}
+        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100" fill="none">
+          <path
+            d="M0,40L80,45C160,50,320,60,480,58C640,56,800,42,960,40C1120,38,1280,48,1360,53L1440,58L1440,100L0,100Z"
+            fill="rgba(255,255,255,0.15)"
+          />
+        </svg>
       </div>
 
-      <div className="w-full overflow-x-auto mt-10">
-        <div className="space-y-0">
+      <div className="max-w-full overflow-auto bg-white mt-5">
+        {/* Content */}
+        <div className="divide-y divide-gray-100  bg-white">
           {appointment?.length === 0 ? (
-            <NoDataFound message="No pending appointment requests at this time. " />
+            <NoDataFound message="No pending appointment requests at this time." />
           ) : (
             appointment?.map((d) => (
               <div
                 key={d._id}
-                className="bg-white  h-[10vh] border-b border-b-zinc-100 flex justify-between items-center"
+                className="bg-white px-4 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between hover:bg-gray-50 transition rounded"
               >
-                <div>
-                  <h4 className="font-bold">{d.patientName}</h4>
+                {/* Left Content */}
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-gray-900 text-base">{d.patientName}</h4>
 
-                  <p className="text-sm text-gray-800">
-                    Appointment request received from{" "}
-                    <span className="font-semibold">{d.name}</span> scheduled for{" "}
-                    <span className="font-semibold">
+                  <p className="text-[11px] md:text-sm  text-gray-700 leading-relaxed">
+                    Appointment request from{" "}
+                    <span className="font-medium text-gray-900">{d.name}</span> scheduled for{" "}
+                    <span className="font-medium text-gray-900">
                       {new Date(d.appointmentDate).toDateString()}
                     </span>{" "}
-                    for <span className="font-semibold">{d.problem}</span>.
+                    regarding <span className="font-medium text-gray-900">{d.problem}</span>.
                   </p>
                 </div>
 
-                <div className="flex gap-2">
+                {/* Actions */}
+                <div className="flex gap-3 mt-3 md:mt-0">
+                  {/* Approve */}
                   <div className="relative group">
                     <button
                       onClick={() => handleApprove(d.appointmentId)}
-                      className="cursor-pointer bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                      className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white
+                       p-2 rounded  shadow-sm transition cursor-pointer"
                     >
-                      <FaCheckCircle />
+                      <FaCheckCircle size={18} />
                     </button>
-
-                    <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2  scale-0 group-hover:scale-100 transition rounded bg-black text-white text-xs px-2 py-1">
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-black text-white text-xs px-2 py-1 rounded">
                       Approve
                     </span>
                   </div>
 
+                  {/* Reject */}
                   <div className="relative group">
-                    <button className="cursor-pointer bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
-                      <FaTimesCircle />{" "}
+                    <button className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded shadow-sm transition cursor-pointer">
+                      <FaTimesCircle size={18} />
                     </button>
-
-                    <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2  scale-0 group-hover:scale-100 transition rounded bg-black text-white text-xs px-2 py-1">
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-black text-white text-xs px-2 py-1 rounded">
                       Reject
                     </span>
                   </div>

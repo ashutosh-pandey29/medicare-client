@@ -3,10 +3,12 @@ import { GrMenu } from "react-icons/gr";
 import { RxCross1 } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo/logo.png";
+import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
 
 export const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
+  const { decodedUser } = useJwtDecode();
 
   useEffect(() => {
     const onScroll = () => {
@@ -20,18 +22,14 @@ export const Navbar = () => {
   const closeMenu = () => setToggleMenu(false);
 
   const linkClass = ({ isActive }) =>
-    `text-lg hover:text-blue-400 ${
-      isActive ? "text-blue-600 font-semibold" : "text-zinc-700"
-    }`;
+    `text-lg hover:text-blue-400 ${isActive ? "text-blue-600 font-semibold" : "text-zinc-700"}`;
 
   return (
     <>
       {/* NAVBAR */}
       <nav
         className={`fixed top-0 left-0 z-50 w-full h-[10vh] transition-all ${
-          isScroll
-            ? "backdrop-blur-md bg-white/70 shadow-sm"
-            : "bg-white"
+          isScroll ? "backdrop-blur-md bg-white/70 shadow-sm" : "bg-white"
         }`}
       >
         <section className="max-w-[1400px] mx-auto h-full flex items-center justify-between px-4">
@@ -48,21 +46,40 @@ export const Navbar = () => {
 
           {/* DESKTOP LINKS */}
           <ul className="hidden md:flex gap-6">
-            <NavLink to="/" className={linkClass}>Home</NavLink>
-            <NavLink to="/about" className={linkClass}>About</NavLink>
-            <NavLink to="/services" className={linkClass}>Services</NavLink>
-            <NavLink to="/doctors" className={linkClass}>Doctors</NavLink>
-            <NavLink to="/contact" className={linkClass}>Contact</NavLink>
+            <NavLink to="/" className={linkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/about" className={linkClass}>
+              About
+            </NavLink>
+            <NavLink to="/services" className={linkClass}>
+              Services
+            </NavLink>
+            <NavLink to="/doctors" className={linkClass}>
+              Doctors
+            </NavLink>
+            <NavLink to="/contact" className={linkClass}>
+              Contact
+            </NavLink>
           </ul>
 
           {/* DESKTOP BUTTON */}
           <div className="hidden md:block">
-            <NavLink
-              to="/auth/login"
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            >
-              Login
-            </NavLink>
+            {decodedUser ? (
+              <NavLink
+                to={`/dashboard/${decodedUser?.role}`}
+                className="bg-zinc-100 text-gray-700 px-4 py-2 rounded hover:bg-zinc-200"
+              >
+                {decodedUser?.username}
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/auth/login"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
+                Login
+              </NavLink>
+            )}
           </div>
 
           {/* MOBILE MENU BUTTON */}
@@ -82,11 +99,21 @@ export const Navbar = () => {
         }`}
       >
         <ul className="flex flex-col gap-6 p-6">
-          <NavLink to="/" onClick={closeMenu} className={linkClass}>Home</NavLink>
-          <NavLink to="/about" onClick={closeMenu} className={linkClass}>About</NavLink>
-          <NavLink to="/services" onClick={closeMenu} className={linkClass}>Services</NavLink>
-          <NavLink to="/doctors" onClick={closeMenu} className={linkClass}>Doctors</NavLink>
-          <NavLink to="/contact" onClick={closeMenu} className={linkClass}>Contact</NavLink>
+          <NavLink to="/" onClick={closeMenu} className={linkClass}>
+            Home
+          </NavLink>
+          <NavLink to="/about" onClick={closeMenu} className={linkClass}>
+            About
+          </NavLink>
+          <NavLink to="/services" onClick={closeMenu} className={linkClass}>
+            Services
+          </NavLink>
+          <NavLink to="/doctors" onClick={closeMenu} className={linkClass}>
+            Doctors
+          </NavLink>
+          <NavLink to="/contact" onClick={closeMenu} className={linkClass}>
+            Contact
+          </NavLink>
         </ul>
 
         <div className="flex flex-col gap-4 px-6">
@@ -98,13 +125,22 @@ export const Navbar = () => {
             Book Appointment
           </NavLink>
 
-          <NavLink
-            to="/auth/login"
-            onClick={closeMenu}
-            className="bg-green-500 text-white py-3 rounded-lg text-center hover:bg-green-600"
-          >
-            Login
-          </NavLink>
+         
+          {decodedUser ? (
+              <NavLink
+                to={`/dashboard/${decodedUser?.role}`}
+                className="bg-zinc-100 text-gray-700 px-4 py-2 rounded hover:bg-zinc-200"
+              >
+                {decodedUser?.username}
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/auth/login"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
+                Login
+              </NavLink>
+            )}
         </div>
       </div>
     </>
