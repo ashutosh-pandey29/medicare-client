@@ -1,5 +1,5 @@
 import React from "react";
-import pageBanner from "../../assets/hospitals/banner-3.png";
+import pageBanner from "../../assets/hospitals/Banner-3.png";
 
 export const PageBanner = ({ title, subText }) => {
   return (
