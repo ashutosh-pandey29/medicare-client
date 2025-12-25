@@ -1,7 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import heroBackground from "../../assets/hospitals/hero-banner.png";
+import { Button } from "../UI/Button";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <>
       <section
@@ -13,7 +15,6 @@ export const HeroSection = () => {
 
         {/* Content */}
         <div className=" w-full  md:max-w-[1200px] px-5 py-10  md:px-20 text-white flex flex-col  gap-4">
-          
           {/* Tagline */}
           <span className="bg-white/40 border border-white/40 backdrop-blur-md px-4 py-2 rounded-full w-fit text-sm md:text-base font-medium tracking-wide">
             ✨ Your Health, Our Priority
@@ -33,21 +34,15 @@ export const HeroSection = () => {
 
           {/* Buttons */}
           <div className="flex flex-col md:flex-row gap-4 mt-3">
-           
-              <NavLink to={"/appointment"} className=" text-center md:block cursor-pointer text-lg bg-orange-500 py-3 px-5 rounded-lg text-zinc-50 hover:bg-orange-600">
-              Book Appointment
-            </NavLink>
-
-
-            <NavLink to={"contact"} className=" text-center  py-3 px-5  border border-white rounded-lg font-semibold hover:bg-white hover:text-black duration-300">
-              Contact Us
-            </NavLink>
+            <Button
+              label={"Book Appointment"}
+              variant="primary"
+              onClick={() => navigate("/appointment")}
+            />
+            <Button label={"Contact Us"} variant="view" onClick={() => navigate("/contact")} />
           </div>
         </div>
       </section>
-
-
-      
     </>
   );
 };

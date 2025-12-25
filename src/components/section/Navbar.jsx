@@ -29,7 +29,7 @@ export const Navbar = () => {
       {/* NAVBAR */}
       <nav
         className={`fixed top-0 left-0 z-50 w-full h-[10vh] transition-all ${
-          isScroll ? "backdrop-blur-md bg-white/70 shadow-sm" : "bg-white"
+          isScroll ? "backdrop-blur-md bg-white/50 shadow-sm" : "bg-white"
         }`}
       >
         <section className="max-w-[1400px] mx-auto h-full flex items-center justify-between px-4">

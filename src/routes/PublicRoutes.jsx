@@ -1,7 +1,6 @@
 import PublicLayout from "../components/layout/PublicLayout";
 import { Home } from "../pages/public/Home";
 import { About } from "../pages/public/About";
-import { ContactUs } from "../components/section/ContactUs";
 import { Services } from "../pages/public/Services";
 import { Doctors } from "../pages/public/Doctors";
 import { BookAppointment } from "../pages/public/BookAppointment";
@@ -19,6 +18,7 @@ import { NotFound } from "../pages/NotFound";
 import { CashPaymentConfirmation } from "../pages/public/CashPaymentConfirmation";
 import { PaymentSuccess } from "../pages/public/PaymentSuccess";
 import PaymentFailed from "../pages/public/PaymentFailed";
+import { Contact } from "../pages/public/Contact";
 
 const publicRouter = [
   {
@@ -43,7 +43,7 @@ const publicRouter = [
       },
       {
         path: "contact",
-        element: <ContactUs />,
+        element: <Contact />,
       },
       {
         path: "appointment",

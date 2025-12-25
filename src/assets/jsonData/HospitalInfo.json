@@ -1,0 +1,82 @@
+{
+  "hospital": {
+    "name": "Medicre Hospital & Research Center",
+    "tagline": "Your Health, Our Priority",
+    "logo": "/assets/logo.png",
+
+    "contact": {
+      "address": {
+        "line1": "2nd Floor, Medicre Tower",
+        "line2": "Near City Medical Square",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "country": "India",
+        "pincode": "452001"
+      },
+
+      "phone": {
+        "primary": "+91-98765-43210",
+        "secondary": "+91-731-4567890"
+      },
+
+      "email": {
+        "support": "support@medicre.com",
+        "appointments": "appointments@medicre.com",
+        "admin": "admin@medicre.com"
+      },
+
+      "emergency": {
+        "number": "108",
+        "available": true
+      }
+    },
+
+    "workingHours": {
+      "opd": {
+        "mondayToFriday": "9:00 AM - 7:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "Closed"
+      },
+      "emergency": "24x7"
+    },
+
+    "departments": [
+      "Cardiology",
+      "Orthopedics",
+      "Neurology",
+      "Pediatrics",
+      "Dermatology",
+      "General Medicine"
+    ],
+
+    "socialLinks": {
+      "facebook": "https://facebook.com/medicre",
+      "instagram": "https://instagram.com/medicre",
+      "twitter": "https://twitter.com/medicre",
+      "linkedin": "https://linkedin.com/company/medicre"
+    },
+
+    "legal": {
+      "registrationNumber": "HOSP-MP-2024-01928",
+      "gstNumber": "23ABCDE1234F1Z5"
+    }
+  },
+
+  "system": {
+    "timezone": "Asia/Kolkata",
+    "currency": "INR",
+    "language": "en-IN"
+  },
+
+  "features": {
+    "onlineAppointments": true,
+    "opdBooking": true,
+    "ipdManagement": false,
+    "teleConsultation": false
+  },
+
+  "meta": {
+    "lastUpdated": "2025-01-01",
+    "version": "1.0.0"
+  }
+}

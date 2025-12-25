@@ -9,15 +9,6 @@ export const PatientQueue = () => {
   const token = useToken();
   const [patients, setPatients] = useState([]);
 
-  const markActive = (p) => {
-    const activeIdx = p.find((p) => p.status === "approved");
-
-    return p.map((p, i) => ({
-      ...p,
-      active: i === activeIdx,
-    }));
-  };
-
   // Fetch patient queue on mount
   useEffect(() => {
     const fetchPatientQueue = async () => {
@@ -31,10 +22,13 @@ export const PatientQueue = () => {
 
         const jsonResponse = await response.json();
 
-        const activePatient = markActive(jsonResponse.data);
-        setPatients(activePatient);
+        // mark first patient as active
+        const patientsWithActive = jsonResponse.data.map((p, i) => ({
+          ...p,
+          active: i === 0,
+        }));
 
-     
+        setPatients(patientsWithActive);
       } catch (error) {
         console.error("Error fetching patient queue:", error);
       }

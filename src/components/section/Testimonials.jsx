@@ -14,9 +14,9 @@ export const Testimonials = () => {
       if (width <= 768) {
         setLimitTestimonials(5);
       } else if (width < 1024) {
-        setLimitTestimonials(10);
+        setLimitTestimonials(8);
       } else {
-        setLimitTestimonials(20);
+        setLimitTestimonials(12);
       }
     };
 
@@ -29,7 +29,7 @@ export const Testimonials = () => {
   return (
     <>
       <section className="services ">
-        <div className="max-w-[1400px] mx-auto  h-auto  mt-20 ">
+        <div className="max-w-[1400px] mx-auto  h-auto mt-5  md:mt-20  ">
           <Heading
             subHeading={"Patient Stories & Feedback"}
             mainHeading={"Why Choose"}
@@ -38,7 +38,7 @@ export const Testimonials = () => {
 
           {/* testimonials card*/}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-10 gap-1.5 auto-rows-auto ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-5 px-2  md:px-10 md:mt-10 gap-1.5 auto-rows-auto ">
             {/* card */}
 
             {testimonials.slice(0, limitTestimonials).map((testimonial, index) => (

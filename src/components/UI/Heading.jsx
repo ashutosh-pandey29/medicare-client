@@ -8,7 +8,7 @@ export const Heading = ({ subHeading, mainHeading, name = "" }) => {
             </span>
 
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-6xl font-extrabold text-slate-800">
+            <h1 className="text-2xl md:text-6xl font-extrabold text-slate-800">
           {mainHeading} <span className="text-green-600">{name}</span>
             </h1>
 
