@@ -174,12 +174,7 @@ Implemented across **User, Doctor, and Admin** roles:
 
 ---
 
-## 🔮 Future Enhancements
-- Advanced analytics dashboards
-- Enhanced AI chatbot capabilities
-- Detailed reporting system
-- Mobile app support
 
 ---
 ### ⭐ Note
-This project is built as a **real-world hospital system MVP**, focusing on **scalability, security, and clean user experience**, following industry-level full-stack development practices.
+This project is a **real-world hospital system MVP**, built with careful attention to **security, scalability, and user experience**, while consciously following and applying **industry-standard development practices**.
