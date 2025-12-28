@@ -1,8 +1,8 @@
 import logo from "../assets/logo/logo.png";
 import leftImage from "../assets/hospitals/hospital.jpg"; // background image
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebookSquare } from "react-icons/fa";
-import { LuLoaderCircle } from "react-icons/lu";
+// import { FcGoogle } from "react-icons/fc";
+// import { FaFacebookSquare, FaUser } from "react-icons/fa";
+// import { LuLoaderCircle } from "react-icons/lu";
 import { NavLink, useNavigate, Navigate } from "react-router-dom";
 import { useForm } from "../hooks/custom/useForm";
 import { loginSchema } from "../utils/validationSchema";
@@ -10,6 +10,18 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaCheck,
+  FaGoogle,
+  FaFacebookF,
+  FaInstagram,
+  FaHospital,
+  FaFacebookSquare,
+} from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export const Login = () => {
   const [touchedField, setTouchedField] = useState({}); //  tracking user interaction
@@ -156,7 +168,7 @@ export const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 text-white font-semibold rounded-lg shadow transition 
+              className={`w-full py-3 text-white font-semibold rounded-lg shadow transition
                           ${
                             loading
                               ? "bg-green-300 cursor-not-allowed"
@@ -248,5 +260,6 @@ export const Login = () => {
         </div>
       </div>
     </div>
+
   );
 };
