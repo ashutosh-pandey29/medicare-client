@@ -1,6 +1,13 @@
 import logo from "../../assets/logo/logo.png";
 import { NavLink } from "react-router-dom";
-import { FaInstagram, FaFacebookF, FaLinkedinIn, FaYoutube, FaWhatsapp, FaInstagramSquare } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaLinkedinIn,
+  FaYoutube,
+  FaWhatsapp,
+  FaInstagramSquare,
+} from "react-icons/fa";
 import { IconButton } from "../UI/IconButton";
 
 export const Footer = () => {
@@ -23,29 +30,27 @@ export const Footer = () => {
               and care is our priority.
             </p>
 
-            
-              
             {/* footer social icon */}
             <div className="flex gap-2">
-                          <IconButton
-                            href={"#"}
-                            Icon={FaFacebookF}
-                            variant="outline"
-                            customClass={"hover:bg-blue-600 hover:text-white "}
-                          />
-                          <IconButton
-                            href={"#"}
-                            Icon={FaInstagram}
-                            variant="outline"
-                            customClass={"hover:from-purple-600 hover:to-pink-600 hover:text-white"}
-                          />
-                          <IconButton
-                            href={"#"}
-                            Icon={FaWhatsapp}
-                            variant="outline"
-                            customClass={"hover:bg-green-600 hover:text-white"}
-                          />
-                        </div>
+              <IconButton
+                href={"#"}
+                Icon={FaFacebookF}
+                variant="outline"
+                customClass={"hover:bg-blue-600 hover:text-white "}
+              />
+              <IconButton
+                href={"#"}
+                Icon={FaInstagram}
+                variant="outline"
+                customClass={"hover:from-purple-600 hover:to-pink-600 hover:text-white"}
+              />
+              <IconButton
+                href={"#"}
+                Icon={FaWhatsapp}
+                variant="outline"
+                customClass={"hover:bg-green-600 hover:text-white"}
+              />
+            </div>
           </div>
 
           {/* Department */}

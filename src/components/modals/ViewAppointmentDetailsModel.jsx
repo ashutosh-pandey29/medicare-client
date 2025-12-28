@@ -1,7 +1,7 @@
 import { PiCurrencyInrBold } from "react-icons/pi";
 
 export const ViewAppointmentDetailsModel = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <div className="space-y-6">
       {/* Title */}

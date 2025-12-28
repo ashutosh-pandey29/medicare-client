@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useFetch } from "../../hooks/custom/useFetch";
 import { useForm } from "../../hooks/custom/useForm";
 import { appointmentSchema } from "../../utils/validationSchema";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { LuLoaderCircle } from "react-icons/lu";
 import { useToken } from "../../hooks/custom/useToken";
+import { Button } from "../UI/Button";
 
 export const NewAppointmentModelForm = () => {
   const [departments, setDepartments] = useState([]);
@@ -113,7 +112,7 @@ export const NewAppointmentModelForm = () => {
   return (
     <>
       <div className="p-1">
-        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 lg:space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-1">
           {/* Department & Service */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
             {/* Department Select */}
@@ -233,25 +232,16 @@ export const NewAppointmentModelForm = () => {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 text-white font-semibold rounded-lg shadow transition 
-      ${
-        loading
-          ? "bg-green-300 cursor-not-allowed"
-          : "bg-linear-to-r from-green-500 to-green-400 hover:shadow-lg cursor-pointer"
-      }`}
-          >
-            {loading ? (
-              <div className="flex items-center gap-2 justify-center text-green-700">
-                <LuLoaderCircle className="animate-spin w-6 h-6" />
-                Booking...
-              </div>
-            ) : (
-              "Book Appointment"
-            )}
-          </button>
+
+          <div className="flex items-center justify-end mt-2">
+            <Button
+              type="submit"
+              variant="submit"
+              disabled={loading}
+              label={`${loading ? "Booking..." : "Book Appointment"}`}
+              customCss={`${loading ? "bg-green-100 cursor-not-allowed" : ""}`}
+            />
+          </div>
         </form>
       </div>
     </>

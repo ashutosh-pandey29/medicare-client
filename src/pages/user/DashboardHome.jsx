@@ -1,180 +1,119 @@
-import { FaCalendarAlt, FaFileMedical, FaFlask, FaPills } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import {
+  FaBell,
+  FaCalendarAlt,
+  FaFileMedical,
+  FaRegCalendarAlt,
+  FaUser,
+  FaWallet,
+} from "react-icons/fa";
+import { MiniCard } from "../../components/common/dashboard/card/MiniCard";
+import { UserPageHeading } from "../../components/common/dashboard/heading/UserPageHeading";
+import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
+import { Button } from "../../components/UI/Button";
+import { NewAppointmentModelForm } from "../../components/modals/NewAppointmentModelForm";
+import { Modal } from "../../components/modals/Modal";
+import { useModal } from "../../hooks/custom/useModal";
+import { CardRow } from "../../components/common/dashboard/card/CardRow";
+import { useState } from "react";
+import { NoDataFound } from "../../components/basic/DataNotFound";
 
-export const DashboardHome = () => {
+export const DashboardHome = ({ appointment }) => {
+  const { decodedUser } = useJwtDecode();
+  const { modalData, openModal, closeModal } = useModal();
+  const [upcomingAppointment, setUpComingAppointment] = useState([]);
+
   return (
-    <>
-      <section className=" p-1  w-full ">
-        {/* Top Grid Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaCalendarAlt className="text-3xl sm:text-4xl text-blue-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Next Appointment</h2>
-              <p className="text-[10px] sm:text-sm text-slate-600">25 Nov • 4:30 PM</p>
+    <section className=" w-full h-auto bg-white">
+      {/* ================= PAGE HEADER ================= */}
+
+      <div className="p-1 md:p-3 flex flex-col sm:flex-row items-center justify-between  gap-3 w-full md:w-full">
+        {/* heading  */}
+        <UserPageHeading
+          title={`Hello ${decodedUser?.username}`}
+          subText="Book appointments, view history, track payments, and access your medical reports — all in one place.
+"
+          icon={<FaUser />}
+          button={
+            <>
+              <Button
+                label={"schedule Appointment"}
+                onClick={() => openModal(<NewAppointmentModelForm />, "New Appointment")}
+                customCss={"hidden md:block"}
+              />
+
+              <Button
+                label={<FaCalendarAlt className="text-xl" />}
+                onClick={() => openModal(<NewAppointmentModelForm />, "New Appointment")}
+                customCss={"block md:hidden"}
+              />
+            </>
+          }
+        />
+      </div>
+
+      {/* ================= QUICK CARD APPOINTMENT HERO ================= */}
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-0 md:mt-10 p-1 md:p-5">
+        {" "}
+        <MiniCard title="UpComing Appointment" subText={"10"} icon={<FaRegCalendarAlt />} />{" "}
+        <MiniCard title="Total Appointments" subText={"10"} icon={<FaCalendarAlt />} />{" "}
+        <MiniCard title="Reports" subText={"10"} icon={<FaFileMedical />} />{" "}
+        <MiniCard title="Payments" subText={"₹14,500"} icon={<FaWallet />} />{" "}
+      </div>
+
+      {/* ================= UPCOMING APPOINTMENT HERO ================= */}
+
+      <div className="flex justify-center mt-5 md:p-5 p-1">
+        <div className="max-w-7xl w-full md:p-0  border rounded border-zinc-100">
+          <div className="bg-white rounded overflow-hidden">
+            {/* Header */}
+
+            <div className=" bg-[#2563EB] p-2 md:p-6 text-white flex items-center gap-4 rounded-t">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <FaCalendarAlt className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-sm opacity-90">Upcoming</p>
+                <h2 className="text-base md:text-2xl font-bold ">Your Upcoming Appointment</h2>
+              </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaFileMedical className="text-3xl sm:text-4xl text-green-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Medical Reports</h2>
-              <p className="text-[10px] sm:text-sm text-slate-600">2 pending • 16 Available</p>
-            </div>
-          </div>
+            {/* Content */}
+            <div className="space-y-2  h-120 overflow-y-auto">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-1 ">
+                {/* card row */}
 
-          <div className="bg-white rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaFlask className="text-3xl sm:text-4xl text-indigo-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Lab Tests</h2>
-              <p className="text-[10px] sm:text-sm text-slate-600">2 Pending • 14 Done</p>
-            </div>
-          </div>
+                {upcomingAppointment.length === 0 ? (
+                  <NoDataFound message="No upcoming appointments scheduled." />
+                ) : (
+                  <div className="bg-white w-full rounded-md border-l-4 border-yellow-400 transition hover:bg-zinc-50">
+                    <div className="p-3 md:p-4 space-y-2">
+                      {/* Status */}
+                      <span className="inline-block px-3 py-1 text-xs font-semibold capitalize rounded bg-yellow-200 text-yellow-800">
+                        status
+                      </span>
 
-          <div className="bg-white rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaPills className="text-3xl sm:text-4xl text-pink-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Medications</h2>
-              <p className="text-[10px] sm:text-sm text-slate-600">Next dose 8:00 PM</p>
-            </div>
-          </div>
-        </div>
+                      {/* Content */}
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-800">
+                          Lorem ipsum dolor sit amet.
+                        </h3>
 
-        {/* Upcoming Appointment */}
-
-        <section className="bg-white rounded-sm shadow p-4 sm:p-1  mb-6">
-          <div className="flex items-center justify-between content-center border-b border-b-zinc-100 md:p-3 flex-col md:flex-row">
-            <h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-3">
-              Upcoming Appointment
-            </h2>
-
-            <div className="flex gap-0.5 mb-3">
-              <button className="px-2 sm:px-3 py-2 text-sm sm:text-sm bg-green-500 text-white rounded hover:bg-green-600">
-                Re-schedule
-              </button>
-
-              <button className="px-2 sm:px-3 py-2 text-sm sm:text-sm bg-red-500 text-white rounded hover:bg-red-600">
-                Cancel
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center md:p-3 sm:p-1 mt-1 rounded-sm gap-3 sm:gap-0">
-            <div>
-              <h3 className="text-base sm:text-lg font-bold">Dr. John Doe (Cardiologist)</h3>
-              <p className="text-xs sm:text-sm text-slate-600">25 Nov 2025 • 25/100</p>
-            </div>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 w-full sm:w-auto">
-              View Details
-            </button>
-          </div>
-        </section>
-
-        {/* Recent Appointments */}
-
-        <div className="bg-white shadow rounded-sm p-3 sm:p-4 mt-5 md:block hidden">
-          <div className="flex items-center justify-between content-center border-b border-b-zinc-100 md:p-3">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Recent Appointments</h2>
-            <button className="px-2 sm:px-3 py-2 text-sm sm:text-sm bg-orange-500 text-white rounded hover:bg-orange-600">
-              New
-            </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600">
-                  <th className="p-2 sm:p-3">Doctor</th>
-                  <th className="p-2 sm:p-3">Department</th>
-                  <th className="p-2 sm:p-3">Date</th>
-                  <th className="p-2 sm:p-3">Slot</th>
-                  <th className="p-2 sm:p-3">Status</th>
-                  <th className="p-2 sm:p-3 text-center">Action</th>
-                </tr>
-              </thead>
-
-              <tbody className="text-gray-700">
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="p-2 sm:p-3 font-medium">Dr. Rohan Mehta</td>
-                  <td className="p-2 sm:p-3">Cardiology</td>
-                  <td className="p-2 sm:p-3">25 Nov 2025</td>
-                  <td className="p-2 sm:p-3">26</td>
-                  <td className="p-2 sm:p-3">
-                    <span className="bg-yellow-200 text-yellow-700 px-2 py-1 rounded text-[10px] sm:text-xs font-semibold">
-                      Upcoming
-                    </span>
-                  </td>
-                  <td className="p-2 sm:p-3 text-center">
-                    <button className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
-                      View
-                    </button>
-                  </td>
-                </tr>
-
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="p-2 sm:p-3 font-medium">Dr. Anjali Sharma</td>
-                  <td className="p-2 sm:p-3">Pediatrics</td>
-                  <td className="p-2 sm:p-3">18 Nov 2025</td>
-                  <td className="p-2 sm:p-3">46</td>
-                  <td className="p-2 sm:p-3">
-                    <span className="bg-green-200 text-green-700 px-2 py-1 rounded text-[10px] sm:text-xs font-semibold">
-                      Completed
-                    </span>
-                  </td>
-                  <td className="p-2 sm:p-3 text-center">
-                    <button className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-800 text-white rounded hover:bg-gray-900">
-                      Details
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* mobile view  */}
-
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:hidden">
-          <div className="bg-white rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition text-center ">
-            <FaCalendarAlt className="text-3xl sm:text-4xl text-blue-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Payment Report</h2>
-              <NavLink
-                to={""}
-                className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                View
-              </NavLink>
-            </div>
-          </div>
-
-          <div className="bg-white text-center rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaFileMedical className="text-3xl sm:text-4xl text-green-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">Medical Reports</h2>
-              <NavLink
-                to={""}
-                className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                View
-              </NavLink>
-            </div>
-          </div>
-
-          <div className="bg-white text-center rounded-sm shadow-md p-4 sm:p-5 flex items-center flex-col md:flex-row gap-4 hover:shadow-lg transition">
-            <FaFlask className="text-3xl sm:text-4xl text-indigo-600" />
-            <div>
-              <h2 className="text-[13px] sm:text-lg font-semibold">All Appointment </h2>
-              <button
-                to={""}
-                className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                View
-              </button>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, et!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* modal */}
+      <Modal data={modalData} onClose={closeModal} />
+    </section>
   );
 };

@@ -7,12 +7,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NotFound } from "./pages/NotFound";
 import { UnauthorizedError } from "./pages/errors/UnauthorizedError";
+import { UnexpectedError } from "./pages/errors/UnexpectedError";
 const router = createBrowserRouter([
   ...PublicRoutes,
   ...UserRoutes,
   ...DoctorRoutes,
   ...AdminRoutes,
 
+  {
+    path: "/unexpected-error",
+    element:<UnexpectedError/>
+  },
   {
     path: "/unauthorized",
     element: <UnauthorizedError />,

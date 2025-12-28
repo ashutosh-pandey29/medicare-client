@@ -58,10 +58,7 @@ const publicRouter = [
     path: "/appointment/confirmation",
     element: <AppointmentConfirmation />,
   },
-  {
-    path: "/appointment/payment/cash",
-    element: <CashPaymentConfirmation />,
-  },
+
   {
     path: "/appointment/payment/success",
     element: <PaymentSuccess />,

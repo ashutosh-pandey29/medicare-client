@@ -1,24 +1,61 @@
 @import "tailwindcss";
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Hide scrollbar everywhere but keep scroll */
+* {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE & Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari */
+}
+
+
 
 /* WebKit (Chrome, Edge, Safari) */
-.custom-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
-.custom-scroll::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; -ms-border-radius: 0px; -o-border-radius: 0px; }
+.custom-scroll::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
+}
+
 .custom-scroll::-webkit-scrollbar-thumb {
-  background:whitesmoke;
-  border-radius:0px;
+  background: whitesmoke;
+  border-radius: 0px;
   border: 0px solid #f3f4f6;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   -ms-border-radius: 0px;
   -o-border-radius: 0px;
 }
-.custom-scroll::-webkit-scrollbar-thumb:hover { filter: brightness(0.9); -webkit-filter: brightness(0.9); }
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  filter: brightness(0.9);
+  -webkit-filter: brightness(0.9);
+}
 
 /* Firefox */
 .custom-scroll {
-  scrollbar-width: none;              /* auto | thin | none */
-  scrollbar-color: #059669 #f3f4f6;   /* thumb track */
+  scrollbar-width: none;
+  /* auto | thin | none */
+  scrollbar-color: #059669 #f3f4f6;
+  /* thumb track */
 }
 
 
@@ -31,14 +68,15 @@
   --accent: #2563EB;
 }
 
-body{
+body {
   background-color: var(--main-bg);
 
 }
 
 
 .sidebar {
-  background-color: var(--sidebar-bg); /* value set from js  */
+  background-color: var(--sidebar-bg);
+  /* value set from js  */
 }
 
 .header {
@@ -52,4 +90,14 @@ body{
 .btn-primary {
   background-color: var(--accent);
   color: white;
+}
+
+
+/* for printing */
+
+
+@media print {
+  .no-print {
+    display: none !important;
+  } 
 }

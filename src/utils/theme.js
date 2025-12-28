@@ -12,11 +12,16 @@ export const roleTheme = {
     header: "#FFFFFF",
     main: "#F0FDF4",
     accent: "#10B981",
+    active: "#277963",
+    text: "#D1FAE5",
   },
   user: {
-    sidebar: "#1E293B",
+    sidebar: "#FFFFFF",
     header: "#FFFFFF",
     main: "#F9FAFB",
     accent: "#38BDF8",
+    active: "#10B981",
+    hover: "#10B981",
+    text: "#2563EB",
   },
 };

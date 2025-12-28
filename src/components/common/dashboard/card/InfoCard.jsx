@@ -4,7 +4,7 @@ import { FaEye } from "react-icons/fa6";
 export const InfoCard = ({ title, subText, status, buttons }) => {
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white shadow p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 w-full space-y-3 md:space-y-0">
+      <div className="flex flex-col rounded md:flex-row justify-between items-start md:items-center hover:bg-blue-100  p-2 border-b border-gray-100  transition-all duration-300 w-full space-y-3 md:space-y-0">
         {/* Left side */}
         <div className="flex-1 space-y-2">
           <p className="text-base font-semibold text-gray-800"> {title}</p>

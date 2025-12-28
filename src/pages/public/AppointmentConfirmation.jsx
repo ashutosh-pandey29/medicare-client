@@ -39,7 +39,6 @@ export const AppointmentConfirmation = () => {
           {
             method: "GET",
             credentials: "include",
-
           }
         );
 
@@ -76,7 +75,7 @@ export const AppointmentConfirmation = () => {
 
           headers: {
             "Content-Type": "application/json",
-            Authorization:   token ? `Bearer ${token}` : "",
+            Authorization: token ? `Bearer ${token}` : "",
           },
           body: JSON.stringify({
             appointmentId: appointmentId,
@@ -198,17 +197,20 @@ export const AppointmentConfirmation = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto ">
-        {/* Success Section */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <FaCheckCircle className="w-20 h-20 text-green-500" />
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100 py-1 md:py-10 px-1 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* SUCCESS HEADER */}
+        <div className="text-center mb-12">
+          <div className="flex justify-center mb-5 ">
+            <div className="flex items-center justify-center md:w-24 md:h-24 w-15 h-15 rounded-full bg-green-100">
+              <FaCheckCircle className="md:w-14 md:h-14 w-6 h-6 text-green-600  " />
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+
+          <h1 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-900">
             Appointment Scheduled Successfully
           </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
             Thank you for choosing us! Your appointment has been scheduled.
             <br />
             <span className="text-green-600 font-semibold">Complete your payment</span> to confirm
@@ -216,180 +218,139 @@ export const AppointmentConfirmation = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-10  ">
-          {/* col 1 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {/* LEFT COLUMN - APPOINTMENT DETAILS */}
+          <div className="bg-white rounded shadow border border-gray-200 p-4 sm:p-9">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Appointment Summary</h2>
 
-          <div>
-            {/* Appointment Summary Card */}
-            <div className="bg-white rounded shadow-sm border border-gray-200 p-6 sm:p-8 mb-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Appointment Details</h2>
-
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaUser className="w-5 h-5 text-green-600" />
+            <div className="space-y-5">
+              {[
+                {
+                  icon: <FaUser />,
+                  label: "Patient Name",
+                  value: appointmentData?.name || "—",
+                },
+                {
+                  icon: <FaStethoscope />,
+                  label: "Doctor",
+                  value: appointmentData?.doctorId?.doctorName || "—",
+                },
+                {
+                  icon: <FaBuilding />,
+                  label: "Department",
+                  value: appointmentData?.departmentId?.departmentName || "—",
+                },
+                {
+                  icon: <FaCalendarAlt />,
+                  label: "Date & Time",
+                  value: appointmentData?.appointmentDate
+                    ? new Date(appointmentData.appointmentDate).toLocaleDateString("en-IN")
+                    : "—",
+                },
+                {
+                  icon: <FaHashtag />,
+                  label: "Appointment ID",
+                  value: appointmentData?.appointmentId || "—",
+                },
+                {
+                  icon: <FaPhone />,
+                  label: "Contact Number",
+                  value: appointmentData?.phone || "—",
+                },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-50 text-green-600 mr-4">
+                    {item.icon}
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Patient Name</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.name || "----"}
-                    </p>
+                  <div>
+                    <p className="text-sm text-gray-500">{item.label}</p>
+                    <p className="font-medium text-gray-900">{item.value}</p>
                   </div>
                 </div>
+              ))}
 
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaStethoscope className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Doctor Name</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.doctorId?.doctorName || "----"}
-                    </p>
-                  </div>
+              {/* FEES */}
+              <div className="pt-5 border-t border-gray-200 flex items-center">
+                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-50 text-green-600 mr-4">
+                  <FaRupeeSign />
                 </div>
-
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaBuilding className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Department</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.departmentId?.departmentName || "--"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaCalendarAlt className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Appointment Date & Time</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.appointmentDate
-                        ? new Date(appointmentData.appointmentDate).toLocaleDateString("en-IN")
-                        : "--"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaHashtag className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Appointment ID</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.appointmentId}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaPhone className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Phone Number</p>
-                    <p className="text-base font-semibold text-gray-900">
-                      {appointmentData?.phone}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center pt-4 border-t border-gray-200">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-50 mr-4">
-                    <FaRupeeSign className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-500">Consultation Fees</p>
-                    <p className="text-xl font-bold text-green-600">
-                      {appointmentData?.departmentId?.fees || "----"}
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-sm text-gray-500">Consultation Fee</p>
+                  <p className="text-2xl font-semibold text-green-600">
+                    ₹{appointmentData?.departmentId?.fees || "—"}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* col 2 */}
+          {/* RIGHT COLUMN – PAYMENT */}
+          <div className="mt-0 md:mt-10">
+            <h2 className="text-xl font-semibold text-gray-900 mb-5">Payment Method</h2>
 
-          <div>
-            {/* Payment Selection */}
-            <div className="mb-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Choose Payment Method</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+              {/* ONLINE */}
+              <button
+                onClick={() => setPaymentMethod("online")}
+                className={`relative rounded-2xl border-2 p-6 text-left transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer
+              ${
+                paymentMethod === "online"
+                  ? "border-green-500 bg-green-50"
+                  : "border-gray-200 bg-white"
+              }`}
+              >
+                {paymentMethod === "online" && (
+                  <FaCheckCircle className="absolute top-4 right-4 text-green-500 w-5 h-5" />
+                )}
+                <FaCreditCard className="text-green-600 w-7 h-7 mb-4" />
+                <h3 className="font-semibold text-gray-900">Online Payment</h3>
+                <p className="text-sm text-gray-600 mt-1">UPI, Debit/Credit Card, Net Banking</p>
+              </button>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Online Payment Card */}
-                <button
-                  onClick={() => setPaymentMethod("online")}
-                  className={`relative bg-white rounded-xl border-2 p-6 text-left transition-all hover:shadow-md ${
-                    paymentMethod === "online"
-                      ? "border-green-500 shadow-md"
-                      : "border-gray-200 hover:border-green-300"
-                  }`}
-                >
-                  {paymentMethod === "online" && (
-                    <div className="absolute top-4 right-4">
-                      <FaCheckCircle className="w-6 h-6 text-green-500" />
-                    </div>
-                  )}
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-50 mb-4">
-                    <FaCreditCard className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Online Payment</h3>
-                  <p className="text-sm text-gray-600">Pay now via UPI, Card, Net Banking</p>
-                </button>
-
-                {/* Pay at Hospital Card */}
-                <button
-                  onClick={() => setPaymentMethod("hospital")}
-                  className={`relative bg-white rounded-xl border-2 p-6 text-left transition-all hover:shadow-md ${
-                    paymentMethod === "hospital"
-                      ? "border-green-500 shadow-md"
-                      : "border-gray-200 hover:border-green-300"
-                  }`}
-                >
-                  {paymentMethod === "hospital" && (
-                    <div className="absolute top-4 right-4">
-                      <FaCheckCircle className="w-6 h-6 text-green-500" />
-                    </div>
-                  )}
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-50 mb-4">
-                    <FaMoneyBillWave className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Pay at Hospital</h3>
-                  <p className="text-sm text-gray-600">Pay during visit at reception counter</p>
-                </button>
-              </div>
+              {/* HOSPITAL */}
+              <button
+                onClick={() => setPaymentMethod("hospital")}
+                className={`relative rounded-2xl border-2 p-6 text-left transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer
+              ${
+                paymentMethod === "hospital"
+                  ? "border-green-500 bg-green-50"
+                  : "border-gray-200 bg-white"
+              }`}
+              >
+                {paymentMethod === "hospital" && (
+                  <FaCheckCircle className="absolute top-4 right-4 text-green-500 w-5 h-5" />
+                )}
+                <FaMoneyBillWave className="text-green-600 w-7 h-7 mb-4" />
+                <h3 className="font-semibold text-gray-900">Pay at Hospital</h3>
+                <p className="text-sm text-gray-600 mt-1">Pay at reception during visit</p>
+              </button>
             </div>
 
-            {/* Call to Action */}
+            {/* CTA */}
             <div className="space-y-4">
               <button
                 onClick={handleConfirmation}
                 disabled={!paymentMethod}
-                className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all ${
-                  paymentMethod
-                    ? "bg-green-500 hover:bg-green-600 shadow-sm hover:shadow"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
+                className={`w-full py-4 rounded-xl text-white font-semibold transition-all  cursor-pointer
+              ${
+                paymentMethod
+                  ? "bg-green-600 hover:bg-green-700 shadow-sm"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
               >
                 {paymentMethod === "online"
-                  ? "Proceed to Payment"
+                  ? "Proceed to Secure Payment"
                   : paymentMethod === "hospital"
                   ? "Confirm Appointment"
-                  : "Select Payment Method"}
+                  : "Select a Payment Method"}
               </button>
 
               <NavLink
-                to={"/dashboard/user/appointment"}
-                className="w-full py-4 px-6 rounded-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all flex items-center justify-center"
+                to="/dashboard/user/appointments"
+                className="w-full py-4 rounded-xl border border-gray-300 bg-white text-gray-700 font-medium flex items-center justify-center hover:shadow-sm"
               >
-                <FaHome className="w-5 h-5 mr-2" />
-                Back to Home
+                <FaHome className="mr-2" />
+                Go to Dashboard
               </NavLink>
             </div>
           </div>

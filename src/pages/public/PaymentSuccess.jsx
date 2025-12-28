@@ -1,44 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+
 import {
   FaMoneyBillWave,
   FaHospital,
   FaUserMd,
   FaCalendarCheck,
-  FaClock,
   FaMapMarkerAlt,
   FaInfoCircle,
   FaCheckCircle,
 } from "react-icons/fa";
 import { MdPrint } from "react-icons/md";
 import { IoMdAlert } from "react-icons/io";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { PreLoader } from "../../components/UI/loaders/PreLoader";
+import { AppointmentSlip } from "../../components/invoice-slips/AppointmentSlip";
 
 export const PaymentSuccess = () => {
+  const navigate = useNavigate();
   const [params] = useSearchParams();
-
+  const VALID_PAYMENT_MODE = ["online", "hospital"];
   const appointmentId = params.get("appointmentId");
-  const mode = params.get("mode");
+  const receivedMode = params.get("mode");
+  const paymentMode = VALID_PAYMENT_MODE.includes(receivedMode)
+    ? receivedMode
+    : navigate("/unexpected-error");
 
   // fetch all detail using appointment id
   const [appointmentData, setAppointmentData] = useState(null);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
-
     const fetchAppointmentData = async () => {
-      console.log(appointmentId);
+      // console.log(appointmentId);
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/appointment/get/${appointmentId}`,
           {
             method: "GET",
+            // "Authorization": token ? `${token}` : null,
           }
         );
 
         const jsonResponse = await response.json();
-        console.log(jsonResponse.data);
+        // console.log(jsonResponse.data);
         setAppointmentData(jsonResponse.data);
       } catch (err) {
         console.log(err);
@@ -46,60 +51,77 @@ export const PaymentSuccess = () => {
         setLoading(false);
       }
     };
-    fetchAppointmentData();
-  }, []);
 
-  if (!loading && !appointmentData) {
+    fetchAppointmentData();
+  }, [appointmentId]);
+
+  // handling slip print
+
+  const printRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: `Appointment_${appointmentData?.appointmentId}`,
+    onAfterPrint: () => {
+      console.log("Print completed");
+    },
+  });
+
+  // console.log("current :", printRef.current);
+
+  if (loading && !appointmentData) {
     return <PreLoader />;
   }
+
+  //
+
+  const paymentInfo =
+    paymentMode === "online" ? (
+      <>
+        Your online payment of{" "}
+        <span className="font-bold text-lg">₹{appointmentData?.paymentAmount}</span> has been
+        completed successfully. Your appointment is fully confirmed and no further payment is
+        required at the hospital.
+      </>
+    ) : (
+      <>
+        You need to pay <span className="font-bold text-lg">₹{appointmentData?.paymentAmount}</span>{" "}
+        in cash at the hospital reception counter. Your appointment will be confirmed only after the
+        payment is completed.{" "}
+        <strong>
+          If payment is not made within 24 hours, the appointment will be automatically canceled.
+        </strong>
+      </>
+    );
+
   return (
     <>
-      <div className="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-amber-50 flex items-center justify-center p-4">
-        <div className="max-w-2xl w-full bg-white rounded-xl shadow overflow-hidden">
+      <div className="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-amber-50 flex items-center justify-center md:p-4 ">
+        <div className="max-w-2xl w-full bg-white rounded  overflow-hidden page-container">
           {/* Header */}
-          <div className="bg-linear-to-r from-green-500 to-amber-500 text-white p-8 text-center">
-            <div className="flex justify-center mb-4">
-              <FaCheckCircle className="text-7xl animate-bounce" />
-            </div>
-
-            <h1 className="text-3xl font-bold mb-2">Appointment Booked!</h1>
+          <div className="flex justify-center flex-row items-center bg-linear-to-r from-green-500 to-amber-500 text-white p-8 text-center">
+            <h1 className="text-2xl md:text-2xl lg:text-3xl font-bold mb-2">Appointment Booked!</h1>
           </div>
 
           {/* Main Content */}
-          <div className="p-8">
+          <div className="p-1 md:p-4">
             {/* Important Alert */}
 
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-5 mb-6 rounded-r-lg">
-              <div className="flex items-start">
+            <div className="bg-amber-100 border-l-4 border-amber-500 p-1 md:p-2 mb-6 rounded-r-lg">
+              {/* icon + title */}
+              <div className="flex items-center mb-1  ">
                 {" "}
-                {mode == "cash" ? (
-                  <IoMdAlert className="text-amber-600 text-3xl mr-3 shrink-0 mt-1" />
+                {paymentMode == "hospital" ? (
+                  <IoMdAlert className="text-amber-600 text-3xl mr-3 shrink-0 mt-1 animate-pulse" />
                 ) : (
-                  <FaCheckCircle className="text-3xl mr-3 shrink-0 mt-1 text-green-600" />
+                  <FaCheckCircle className="text-3xl mr-3 shrink-0 mt-1 text-green-600 animate-pulse" />
                 )}
-                <div>
-                  <h3 className="font-bold text-amber-900 text-lg mb-2">
-                    Payment {mode == "cash" ? "Pending" : "Success"}
-                  </h3>
-                  <p className="text-amber-800 text-sm leading-relaxed">
-                    {mode === "cash" ? (
-                      <>
-                        You need to pay{" "}
-                        <span className="font-bold text-lg">₹{appointmentData?.paymentAmount}</span>{" "}
-                        in cash at the hospital reception counter. Your appointment will be
-                        confirmed only after the payment is completed.
-                      </>
-                    ) : (
-                      <>
-                        Your online payment of{" "}
-                        <span className="font-bold text-lg">₹{appointmentData?.paymentAmount}</span>{" "}
-                        has been completed successfully. Your appointment is fully confirmed and no
-                        further payment is required at the hospital.
-                      </>
-                    )}
-                  </p>
-                </div>
+                <h3 className="font-bold text-amber-900 text-lg ">
+                  Payment {paymentMode == "hospital" ? "Pending" : "Success"}
+                </h3>
               </div>
+
+              <p className="text-amber-800 text-sm leading-relaxed">{paymentInfo}</p>
             </div>
 
             {/* Booking ID */}
@@ -109,7 +131,7 @@ export const PaymentSuccess = () => {
                 {appointmentData?.appointmentId}
               </p>
               <p className="text-gray-500 text-xs mt-2">
-                {mode === "cash"
+                {paymentMode === "hospital"
                   ? "Please present this ID at the reception counter and complete the payment"
                   : "Please keep this ID for future reference"}
               </p>
@@ -161,7 +183,13 @@ export const PaymentSuccess = () => {
                   <div className="flex-1">
                     <p className="text-gray-600 text-sm">Appointment Date</p>
                     <p className="text-gray-900 font-semibold">
-                      {appointmentData?.appointmentDate}
+                      {appointmentData?.appointmentDate
+                        ? new Date(appointmentData.appointmentDate).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "—"}
                     </p>
                   </div>
                 </div>
@@ -232,17 +260,31 @@ export const PaymentSuccess = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 bg-linear-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center transition duration-300">
-                <MdPrint className="mr-2 text-xl" />
-                Print Details
+            <div className="flex flex-col-reverse sm:flex-row gap-3 no-print">
+              <button onClick={()=>navigate("/dashboard/user/")} className="flex-1 bg-blue-100 hover:bg-blue-200 text-black font-bold py-3 px-6 rounded-lg transition duration-300 cursor-pointer">
+                back to Home
               </button>
-              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
-                view Appointments
+
+              <button
+                onClick={() => handlePrint()}
+                disabled={!appointmentData}
+                className={`flex-1 font-bold py-3 px-6 rounded-lg flex items-center justify-center transition duration-300
+                ${
+                  !appointmentData
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                }`}
+              >
+                <MdPrint className="mr-2 text-xl" />
+                Print Slip
               </button>
             </div>
           </div>
         </div>
+      </div>
+
+      <div ref={printRef}>
+        <AppointmentSlip appointmentData={appointmentData} paymentInfo={paymentInfo} />
       </div>
     </>
   );

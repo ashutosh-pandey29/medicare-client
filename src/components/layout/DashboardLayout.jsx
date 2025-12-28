@@ -8,7 +8,7 @@ export const DashboardLayout = ({ role }) => {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
   const handleSidebarToggle = () => {
-    console.log(isSidebarActive);
+    // console.log(isSidebarActive);
     setIsSidebarActive(!isSidebarActive);
   };
 
@@ -25,11 +25,12 @@ export const DashboardLayout = ({ role }) => {
   }, [theme]);
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex overflow-x-hidden">
       {/* Sidebar */}
+
       <aside
-        className={`fixed top-0 left-0 md:w-80 w-full border-r border-zinc-100 h-scree z-20  md:block 
-          ${isSidebarActive ? "sm:block top-[10vh]" : "hidden"} `}
+        className={` fixed top-0 left-0 md:w-80 w-full h-screen z-999 transform transition-transform duration-300 ease-in-out ${isSidebarActive ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+  `}
         style={{ backgroundColor: "var(--sidebar-bg)" }}
       >
         <Sidebar handleSidebarToggle={handleSidebarToggle} role={role} />
@@ -42,7 +43,7 @@ export const DashboardLayout = ({ role }) => {
       >
         {/* Header */}
         <header
-          className="fixed top-0 left-0 right-0 ml-0 md:ml-80 md:mr-0  h-16 border-b border-zinc-100  z-9999"
+          className="fixed top-0 left-0 right-0 ml-0 md:ml-80 md:mr-0  h-16 border-b border-zinc-100  z-50"
           style={{ backgroundColor: "var(--header-bg)" }}
         >
           <Header handleSidebarToggle={handleSidebarToggle} />

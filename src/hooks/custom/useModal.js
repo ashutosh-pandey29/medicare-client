@@ -5,7 +5,7 @@ export const useModal = () => {
 
   const openModal = (content, title) => {
     setModalData({content, title});
-    console.log(modalData);
+    // console.log(modalData);
   };
 
   const closeModal = () => {

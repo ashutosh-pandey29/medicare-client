@@ -23,8 +23,10 @@ export const NotificationBell = ({ notifications }) => {
     <div className="relative inline-block" ref={dropdownRef}>
       {/* Bell Icon */}
       <div
-        className="w-10 h-10 flex items-center justify-center rounded-full   text-[#0f0722] 
-               hover:bg-[#d7cfdd] transition  cursor-pointer "
+        className="w-11 h-11 flex items-center justify-center rounded  cursor-pointer
+              bg-linear-to-br from-blue-400 to-cyan-400
+               text-white text-2xl md:text-3xl
+              ring-1 ring-white/40 shrink-0 "
         onClick={() => setOpen(!open)}
       >
         <FaBell className="text-lg" />
@@ -38,7 +40,9 @@ export const NotificationBell = ({ notifications }) => {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-64 h-[60vh] md:w-80 lg:w-96 bg-white  shadow-lg rounded overflow-y-auto z-9999">
+        // <div className="absolute right-0 mt-2 w-64 h-[60vh] md:w-80 lg:w-96 bg-white  shadow-lg rounded overflow-y-auto z-9999">
+        <div
+          className=" fixed sm:absolute inset-x-2 sm:inset-x-auto top-16 sm:top-auto sm:right-0  sm:mt-2  w-auto sm:w-80 lg:w-96  max-h-[70vh]  bg-white shadow-xl  rounded-xl  overflow-hidden  z-9999" >
           <div className="max-h-96 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4">

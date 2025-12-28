@@ -13,17 +13,15 @@ import { MdManageAccounts } from "react-icons/md";
 
 export const SidebarLinks = {
   user: [
-    { title: "Dashboard", icon: <MdDashboard className="text-lg" />, path: "/dashboard" },
+    { title: "Dashboard", icon: <MdDashboard className="text-lg" />, path: "/dashboard/user" },
     { title: "Appointments", icon: <IoIosTime className="text-lg" />, path: "appointments" },
     {
       title: "Medical Records",
       icon: <FaBookMedical className="text-lg" />,
       path: "medical-records",
     },
-    { title: "Billing / Payment", icon: <MdPayments className="text-lg" />, path: "payment" },
-    { title: "Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
-    { title: "Support", icon: <MdContactSupport className="text-lg" />, path: "support" },
-    { title: "Account", icon: <MdManageAccounts className="text-lg" />, path: "account" },
+    { title: "Payment", icon: <MdPayments className="text-lg" />, path: "payment" },
+    { title: "Account ", icon: <MdManageAccounts className="text-lg" />, path: "account" },
   ],
 
   doctor: [

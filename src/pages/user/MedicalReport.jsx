@@ -1,82 +1,78 @@
 import { useState } from "react";
 import medicalReportJSON from "../../assets/jsonData/medicalReport.json";
-import {InfoCard} from "../../components/common/dashboard/card/InfoCard"
-import { FaFileDownload } from "react-icons/fa";
-import { FaEye } from "react-icons/fa6";
-// import { useModal } from "../../context/ModalContext"
-// import { ViewMedicalReportDetailsModel } from "../../components/model/ViewMedicalReportDetailsModel";
-// ViewMedicalReportDetailsModel
+import { FaDownload, FaShareAlt } from "react-icons/fa";
+import { FaBookMedical, FaEye } from "react-icons/fa6";
+import { CardRow } from "../../components/common/dashboard/card/CardRow";
+import { UserPageHeading } from "../../components/common/dashboard/heading/UserPageHeading";
+import { FilterDropdown } from "../../components/UI/Dashboard/FilterDropdown";
+import { DownloadTimerModal } from "../../components/modals/DownloadTimerModal";
+import { useModal } from "../../hooks/custom/useModal";
+import { Modal } from "../../components/modals/Modal";
+import { ShareOptionsModal } from "../../components/modals/ShareOptionsModal ";
 
-export const MedicalReport = () => {
-  
-  // const { openModal } = useModal();
+export const MedicalReport = (data) => {
+  const { modalData, openModal, closeModal } = useModal();
 
-  const [statusFilter, setStatusFilter] = useState("Issued");
-  const [categoryFilter, setCategoryFilter] = useState("All");
+  // const MEDICAL_REPORT_ACTIONS = [
+  //   { label: "View Report", icon: FaEye, onClick: () => alert("View clicked") },
+  //   { label: "Download PDF", icon: FaDownload, onClick: () => alert("Edit clicked") },
+  //   { label: "Share Report ", icon: FaShareAlt, onClick: () => alert("Delete clicked") },
+  // ];
 
-
-  const reports = [
-    { name: "Blood Test Report", status: "Issued", category: "Pathology" },
-    { name: "X-Ray Scan", status: "Pending", category: "Radiology" },
-    { name: "MRI Scan", status: "Delivered", category: "Radiology" },
-    { name: "ECG Report", status: "Issued", category: "Cardiology" },
-    { name: "CT Scan", status: "Pending", category: "Radiology" },
-    { name: "Ultrasound", status: "Delivered", category: "Pathology" },
+  const getMedicalReportAction = () => [
+    { label: "View Report", icon: FaEye, onClick: () => alert("View clicked") },
+    {
+      label: "Download PDF",
+      icon: FaDownload,
+      onClick: () =>
+        openModal(
+          <DownloadTimerModal duration={10} onClose={closeModal} />,
+          "Preparing your report"
+        ),
+    },
+    {
+      label: "Share Report ",
+      icon: FaShareAlt,
+      onClick: () => openModal(<ShareOptionsModal />, "Share Your Medical Report"),
+    },
   ];
 
-  const filteredReports = reports.filter(
-    (item) =>
-      item.status === statusFilter && (categoryFilter === "All" || item.category === categoryFilter)
-  );
+  const MEDICAL_REPORT_FILTER = [
+    { label: "All", value: "all" },
+    { label: "Pending", value: "pending" },
+    { label: "Completed", value: "completed" },
+  ];
 
   return (
     <>
-      <section className="bg-white rounded-sm shadow p-1  md:p-3  w-full h-auto">
-        <div className="flex items-start md:items-center md:justify-between p-3 flex-col md:flex-row">
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-3">Medical Reports</h2>
-
-          {/* filter */}
-          <div className="flex items-center justify-center gap-5">
-            <input
-              type="search"
-              placeholder="Search record...."
-              name="search"
-              id="search"
-              className="border px-3 py-1 outline-0 border-zinc-100 focus:border-blue-500 w-70 "
-            />
-          </div>
+      <section className=" w-full h-auto bg-white ">
+        <div className="p-3 flex flex-col  md:justify-between md:items-center gap-4 border-b border-b-zinc-100 ">
+          {/* heading  */}
+          <UserPageHeading
+            title="Medical Reports"
+            subText="Access and download your medical reports and test results securely."
+            icon={<FaBookMedical />}
+            button={
+              <>
+                <FilterDropdown filters={MEDICAL_REPORT_FILTER} />
+              </>
+            }
+          />
         </div>
 
-        <div className="grid grid-cols-1 gap-3">
-          {medicalReportJSON.map((report) => {
-            return (
-              <InfoCard
-                key={report.id}
-                title={report.message}
-                subText={`${report.doctorName} | ${report.department} | Appointment: ${report.appointmentDate}`}
-                status={report.status}
-                buttons={[
-                  {
-                    text: "",
-
-                    icon: <FaEye />,
-                    color: "blue",
-                  },
-                  {
-                    text: "",
-                    icon: < FaFileDownload/>,
-                    color: "orange",
-                    onClick: () => console.log("download report"),
-                  },
-                ]}
-              />
-            );
-          })}
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mt-5 p-3">
+          {medicalReportJSON.length > 0 ? (
+            medicalReportJSON.map((mr, index) => (
+              <CardRow key={index} data={mr} actions={getMedicalReportAction()} />
+            ))
+          ) : (
+            <NoDataFound message="No upcoming appointments available" />
+          )}
         </div>
+
+        {/* modal  */}
+        <Modal data={modalData} onClose={closeModal} />
       </section>
-
-                    {/* onClick: () => openModal(<ViewMedicalReportDetailsModel data={ report} />), */}
-
     </>
   );
 };
