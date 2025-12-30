@@ -1,10 +1,17 @@
-export const Button = ({ type = "button", disabled , label, variant = "primary", onClick, customCss }) => {
+export const Button = ({
+  type = "button",
+  disabled,
+  label,
+  variant = "primary",
+  onClick,
+  customCss,
+}) => {
   const styles = {
     primary: "bg-green-600 hover:bg-green-700 text-white",
     secondary: "border border-green-600 text-green-700 hover:bg-green-50",
     view: "border border-gray-300 text-gray-700 hover:bg-gray-100",
     submit: "bg-green-700 hover:bg-green-800 text-white",
-    light: "bg-zinc-100 text-gray-800",
+    light: "bg-zinc-50 text-gray-800 border border-zinc-100",
     outline:
       "border border-green-600 text-green-700 hover:bg-green-600 hover:text-white focus:ring-2 focus:ring-green-300",
     danger: "bg-red-600 hover:bg-red-700 text-white",
@@ -15,11 +22,17 @@ export const Button = ({ type = "button", disabled , label, variant = "primary",
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={` px-6 py-3 rounded cursor-pointer font-semibold
+      className={`
+    px-6 py-3 rounded font-semibold
     transition-all duration-300 ease-out
-    hover:shadow-xl hover:-translate-y-1
-    active:scale-95 active:shadow-md
-    focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2   ${styles[variant]} ${customCss}`}
+    focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+    ${
+      disabled
+        ? "cursor-not-allowed opacity-60"
+        : "cursor-pointer hover:shadow-xl hover:-translate-y-1 active:scale-95 active:shadow-md"
+    }
+    ${styles[variant]} ${customCss}
+  `}
     >
       {label}
     </button>

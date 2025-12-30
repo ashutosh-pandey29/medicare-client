@@ -17,9 +17,11 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
 
   // console.log(decodedUser);
 
+  console.log(role);
+
   return (
     <>
-      <aside className="flex flex-col justify-between h-screen p-1 md:p-3 border-r border-zinc-100">
+      <aside className="flex flex-col justify-between h-screen p-1 md:p-3 ">
         {/* Top Section */}
         <div>
           {/* Profile */}
@@ -98,6 +100,26 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
                     <span className="text-lg">{item.title}</span>
                   </NavLink>
                 )}
+
+                {role === "admin" && (
+                  <NavLink
+                    to={item.path}
+                    end={item.path === "/dashboard/doctor"}
+                    className={({ isActive }) =>
+                      `flex items-center p-3 gap-3 rounded hover:bg-slate-900 hover:text-blue-500 transition-colors ${
+                        isActive ? "bg-violet-700 text-[#D1FAE5]" : "text-gray-400"
+                      }`
+                    }
+                    onClick={() => {
+                      if (window.innerWidth < 1024) {
+                        handleSidebarToggle();
+                      }
+                    }}
+                  >
+                    {item.icon}
+                    <span className="text-lg">{item.title}</span>
+                  </NavLink>
+                )}
               </li>
             ))}
           </ul>
@@ -105,10 +127,29 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
 
         {/* Bottom Section: Logout */}
         <div className="px-2">
-          <button className=" group flex items-center w-full gap-3 px-4 py-2.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
-            <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
-            <span className="text-base">Logout</span>
-          </button>
+          {role === "doctor" && (
+            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-white hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+              <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
+              <span className="text-base">Logout</span>
+            </button>
+          )}
+
+          {role === "user" && (
+            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+              <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
+              <span className="text-base">Logout</span>
+            </button>
+          )}
+
+
+             {role === "admin" && (
+            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+              <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
+              <span className="text-base">Logout</span>
+            </button>
+          )}
+
+
         </div>
       </aside>
     </>

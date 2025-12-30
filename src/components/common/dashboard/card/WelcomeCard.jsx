@@ -2,14 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BsActivity, BsAward, BsCalendar, BsCalendar2 } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
 import { FaStethoscope } from "react-icons/fa6";
-import { MiniCard } from "./MiniCard";
-import {
-  FaCalendarCheck,
-  FaHashtag,
-  FaHospitalUser,
-  FaUserCheck,
-  FaUserClock,
-} from "react-icons/fa6";
 
 export default function WelcomeCard() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -69,7 +61,7 @@ export default function WelcomeCard() {
         </svg>
 
         {/* Main Content */}
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-4">
           <div className="flex items-start justify-between mb-6">
             {/* Doctor Info Section */}
             <div className="flex items-center">
@@ -124,32 +116,6 @@ export default function WelcomeCard() {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6 mt-3">
-            <MiniCard
-              title="Today's Appointments"
-              icon={<FaCalendarCheck className="text-green-600" size={22} />}
-              subText="18"
-            />
-
-            <MiniCard
-              title="Waiting Patients"
-              icon={<FaUserClock className="text-yellow-500" size={22} />}
-              subText="5"
-            />
-
-            <MiniCard
-              title="Completed Today"
-              icon={<FaUserCheck className="text-emerald-600" size={22} />}
-              subText="13"
-            />
-
-            <MiniCard
-              title="Current Token"
-              icon={<FaHashtag className="text-blue-600" size={22} />}
-              subText="6"
-            />
           </div>
         </div>
 

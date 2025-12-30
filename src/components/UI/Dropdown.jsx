@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { useModal } from "../../hooks/custom/useModal";
+import { IoIosArrowDown } from "react-icons/io";
 
-export const Dropdown = ({ actions = [] }) => {
+export const Dropdown = ({ label, actions = [] }) => {
   const [open, setOpen] = useState(false);
   const dropdownMenuRef = useRef();
 
@@ -25,12 +26,29 @@ export const Dropdown = ({ actions = [] }) => {
       <div className="relative" ref={dropdownMenuRef}>
         {/* dot button */}
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="p-1 hover:bg-zinc-300  rounded text-gray-500 w-8 h-8 flex items-center justify-center cursor-pointer"
-        >
-          <BsThreeDotsVertical className="text-lg font-medium" />
-        </button>
+        {label ? (
+          <>
+            <button
+              onClick={() => setOpen(!open)}
+              className=" flex items-center justify-between gap-2 px-4 py-2 bg-white/20 text-gray-900 rounded cursor-pointer transition-all duration-300 hover:bg-zinc-40 "
+            >
+              <span>{label}</span>
+              <IoIosArrowDown
+                className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"}`}
+                size={18}
+              />
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-1 hover:bg-zinc-300  rounded text-gray-500 w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <BsThreeDotsVertical className="text-lg font-medium" />
+            </button>
+          </>
+        )}
 
         {open && (
           <div className="absolute right-0 top-full mt-2 w-60  bg-white border border-gray-200 rounded-md shadow-xl z-10 ">

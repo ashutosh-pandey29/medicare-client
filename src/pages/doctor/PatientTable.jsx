@@ -4,6 +4,10 @@ import { FaDownload, FaEye } from "react-icons/fa6";
 import { useToken } from "../../hooks/custom/useToken";
 import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
 import { NoDataFound } from "../../components/basic/DataNotFound";
+import { Dropdown } from "../../components/UI/Dropdown";
+import { MdHealing } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { Button } from "../../components/UI/Button";
 
 export const PatientTable = () => {
   const [isOn, setIsOn] = useState(false);
@@ -14,29 +18,62 @@ export const PatientTable = () => {
   //fetch all patient
 
   console.log(decodedUser);
-  useEffect(() => {
-    const fetchPatient = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/patient`, {
-          method: "GET",
-          headers: {
-            Authorization: token ? `Bearer ${token}` : null,
-          },
-        });
-        const jsonResponse = await response.json();
+  // useEffect(() => {
+  //   const fetchPatient = async () => {
+  //     try {
+  //       const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/patient`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Authorization": token ? `${token}` : null,
+  //         },
+  //       });
+  //       const jsonResponse = await response.json();
 
-        // console.log(jsonResponse);
-        setPatients(jsonResponse.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  //       // console.log(jsonResponse);
+  //       setPatients(jsonResponse.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
 
-    fetchPatient();
-  }, []);
+  //   fetchPatient();
+  // }, []);
+
+  // console.log(patients);
+
+  const actions = [
+    {
+      label: "View Summary",
+      icon: FaEye,
+    },
+    {
+      label: "Report & Prescription",
+      icon: FaEdit,
+    },
+  ];
+
+  const tableDropdownAction = [
+    {
+      label: "Print Table",
+      icon: FaEdit,
+    },
+    {
+      label: "Download CSV",
+      icon: FaEdit,
+    },
+    {
+      label: "Download Excel",
+      icon: FaEdit,
+    },
+
+    {
+      label: "Download PDF",
+      icon: FaEdit,
+    },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
+    <div className="max-w-7xl mx-auto ">
       {/* Header */}
 
       <div
@@ -66,10 +103,10 @@ export const PatientTable = () => {
         </svg>
 
         {/* Main Content */}
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-4">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center">
-              <div className="ml-1 md:ml-6">
+              <div className="ml-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h2 className="text-xl md:text-4xl font-bold text-white">Patient History</h2>
                 </div>
@@ -94,115 +131,252 @@ export const PatientTable = () => {
       {/* table */}
       <div className="w-full overflow-x-auto">
         <div className="max-w-screen overflow-auto  md:p-0">
-          <div className="min-h-screen bg-linear-to-br from-blue-50 to-cyan-50  mt-5 p-1 md:p-0">
+          <div className="min-h-screen mt-5 p-1 md:p-0">
             <div className="max-w-7xl mx-auto ">
-              <div className="bg-white rounded shadow overflow-hidden">
+              <div className="bg-white rounded  overflow-hidden">
                 {/* Header */}
                 <div className="bg-linear-to-r from-[#059669] to-[#3ad28b] md:px-6  md:py-2 px-2">
-                  <div className="flex items-center  justify-between  ">
-                    <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-white flex  items-center gap-2">
-                        Patients Table
-                      </h2>
-                      <p className="text-cyan-50 text-sm mt-1"></p>
-                    </div>
+                  <div className="flex flex-col md:flex-row md:items-center  md:justify-between ">
+                    <input
+                      type="text"
+                      className="w-full mt-1 md:mt-0 md:w-1/2 rounded-lg px-2 py-3 text-sm bg-white/20 text-white placeholder-white/70 border border-white/30 backdrop-blur-md outline-none focus:border-white focus:bg-white/30 transition"
+                      placeholder="Quick Search...."
+                    />
 
                     <div className="h-auto p-2 flex  gap-1.5 justify-end">
-                      <input
-                        type="text"
-                        className="border rounded  border-gray-100 outline-0 px-2 focus:border-green-300"
-                        placeholder="Quick Search...."
-                      />
-
-                      <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
-                        <CiFilter />
-                      </span>
-
-                      <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
-                        <CiExport />
-                      </span>
+                      <Dropdown label={"Action"} actions={tableDropdownAction} />
                     </div>
                   </div>
                 </div>
 
                 {/* Table */}
                 <div className="overflow-x-auto">
-                  {patients.length === 0 ? (
+                  {/* {patients.length === 0 ? (
                     <NoDataFound message="No Patient Found" />
-                  ) : (
-                    <table className="w-full">
-                      <thead>
-                        <tr className="bg-gray-50 border-b border-gray-200">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            <div className="flex items-center gap-2">Sr.No.</div>
-                          </th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            <div className="flex items-center gap-2">Patient Name</div>
-                          </th>
+                  ) : ( */}
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-gray-200 border-b border-gray-200">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          <div className="flex items-center gap-2">Sr.No.</div>
+                        </th>
+                        <th className="px-6 py-4  text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          <div className="flex items-center gap-2  ">Patient Name</div>
+                        </th>
 
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          <div className="flex items-center gap-2">
                             Treatment Status
-                          </th>
+                          </div>
+                        </th>
 
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            <div className="flex items-center gap-2">Action</div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {patients?.map((p, index) => (
-                          <tr className="hover:bg-blue-50 transition-colors">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                                0{index + 1}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center gap-3">
-                                <div>
-                                  <p className="text-sm font-semibold text-gray-900">{p.name}</p>
-                                  <p className="text-xs text-gray-500">Apt ID: {p.appointmentId}</p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900 font-medium">
-                                <span
-                                  className={`rounded-full px-3 py-2 capitalize ${
-                                    p.status === "completed"
-                                      ? "bg-green-300 text-green-700"
-                                      : p.status === "missed"
-                                      ? "bg-red-100 text-red-700"
-                                      : "bg-yellow-100 text-yellow-700"
-                                  }`}
-                                >
-                                  {p.status}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap flex items-center gap-1.5">
-                              <button className=" bg-blue-500 hover:bg-blue-600 text-white p-2 rounded shadow-sm transition cursor-pointer">
-                                <FaEye size={18} />
-                              </button>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          <div className="flex items-center gap-2">Visit Date</div>
+                        </th>
 
-                              <button className="flex items-center justify-between gap-1.5 bg-green-500 hover:bg-green-600 text-white p-2 rounded shadow-sm transition cursor-pointer">
-                                <FaDownload size={18} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {/* Row 1 */}
+                      <tr className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
+                            01
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Rahul Sharma</p>
+                            <p className="text-xs text-gray-500">Apt ID: APT-001</p>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
+                            Completed
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          12 Dec 2024
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-end">
+                          <Dropdown actions={actions} />
+                        </td>
+                      </tr>
+
+                      {/* Row 2 */}
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
+                            02
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Anita Verma</p>
+                            <p className="text-xs text-gray-500">Apt ID: APT-002</p>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
+                            Completed
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          13 Dec 2024
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Dropdown />
+                        </td>
+                      </tr>
+
+                      {/* Row 3 */}
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
+                            03
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Mohit Kumar</p>
+                            <p className="text-xs text-gray-500">Apt ID: APT-003</p>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
+                            Completed
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          14 Dec 2024
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Dropdown />
+                        </td>
+                      </tr>
+
+                      {/* Row 4 */}
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
+                            04
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Priya Singh</p>
+                            <p className="text-xs text-gray-500">Apt ID: APT-004</p>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
+                            Completed
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          15 Dec 2024
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Dropdown />
+                        </td>
+                      </tr>
+
+                      {/* Row 5 */}
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
+                            05
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">Amit Patel</p>
+                            <p className="text-xs text-gray-500">Apt ID: APT-005</p>
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
+                            Completed
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          16 Dec 2024
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Dropdown />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {/* )} */}
                 </div>
 
                 {/* Footer */}
-                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 text-center">
-                    Showing <span className="font-semibold text-cyan-600">5</span> of{" "}
-                    <span className="font-semibold text-cyan-600">28</span> patients scheduled for
-                    today
-                  </p>
+                <div className=" px-6 py-4 border-t border-gray-200">
+                  <div class="flex items-center gap-8  justify-center">
+                    <button
+                      disabled
+                      class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      type="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+
+                    <p class="text-slate-600">
+                      Page <strong class="text-slate-800">1</strong> of&nbsp;
+                      <strong class="text-slate-800">10</strong>
+                    </p>
+
+                    <button
+                      class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      type="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

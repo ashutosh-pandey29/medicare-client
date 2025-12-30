@@ -5,10 +5,13 @@ import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
 import { useToken } from "../../hooks/custom/useToken";
 import { toast } from "react-toastify";
 import { NoDataFound } from "../../components/basic/DataNotFound";
+import { CardRow } from "../../components/common/dashboard/card/CardRow";
+import { Button } from "../../components/UI/Button";
 
 export const ApproveAppointment = () => {
   const [isOn, setIsOn] = useState(false);
   const [appointment, setAppointment] = useState([]);
+  const [AutoApproval, setAutoApproval] = useState(false);
   const token = useToken();
   const { decodedUser } = useJwtDecode();
   const userId = decodedUser?.userId;
@@ -56,8 +59,32 @@ export const ApproveAppointment = () => {
     }
   };
 
+
+  // handle auto approval
+
+  const handleToggleAutoApproval = () => {
+    alert("implementing later");
+  }
+  
+
+  // action
+
+  const getAppointmentAction = (aptId) => [
+    {
+      label: "Approve ",
+      icon: FaCheckCircle,
+      onClick: () => handleApprove(aptId),
+    },
+
+    {
+      label: "Reject ",
+      icon: FaTimesCircle,
+      onClick: () => alert("aa"),
+    },
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto sm:px-4 ">
+    <div className="max-w-7xl mx-auto ">
       {/* page heading  */}
 
       <div
@@ -87,16 +114,44 @@ export const ApproveAppointment = () => {
         </svg>
 
         {/* Main Content */}
-        <div className="relative z-10 p-8">
+        {/* <div className="relative z-10 p-4">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center">
-              <div className="ml-1 md:ml-6">
-                <div className="flex items-center gap-2 mb-1">
+              <div className="ml-1">
+                <div className="flex items-center justify-between   gap-2 mb-1">
                   <h2 className="text-xl md:text-4xl font-bold text-white">Appointment Requests</h2>
                 </div>
 
                 <p className="text-gray-100 text-base  font-semibold">
                   Manage all patient appointments that are waiting for approval
+
+                </p>
+
+                <p className="text-zinc-100 text-sm mt-2 animate-pulse">
+                  * Enable Auto Approval to automatically confirm appointment requests and reduce manual effort.
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+        <div className="relative z-10 p-4">
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center">
+              <div className="ml-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-xl md:text-4xl font-bold text-white">Appointment Requests</h2>
+                </div>
+
+                <p className="text-emerald-100 text-base font-medium">
+                  Manage all patient appointments that are waiting for approval
+                </p>
+
+                <p className="text-emerald-200 text-sm mt-2">
+                  <span className="font-semibold text-white"></span> Enable{" "}
+                  <span className="font-semibold text-white  animate-pulse">Auto Approval</span> to
+                  automatically confirm appointment requests and reduce manual effort.
                 </p>
               </div>
             </div>
@@ -112,58 +167,24 @@ export const ApproveAppointment = () => {
         </svg>
       </div>
 
-      <div className="max-w-full overflow-auto bg-white mt-5">
+      <div className="max-w-full   mt-5  ">
         {/* Content */}
-        <div className="divide-y divide-gray-100  bg-white">
+
+        <div className=" space-y-1.5 divide-gray-100 ">
           {appointment?.length === 0 ? (
-            <NoDataFound message="No pending appointment requests at this time." />
-          ) : (
-            appointment?.map((d) => (
-              <div
-                key={d._id}
-                className="bg-white px-4 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between hover:bg-gray-50 transition rounded"
-              >
-                {/* Left Content */}
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-gray-900 text-base">{d.patientName}</h4>
-
-                  <p className="text-[11px] md:text-sm  text-gray-700 leading-relaxed">
-                    Appointment request from{" "}
-                    <span className="font-medium text-gray-900">{d.name}</span> scheduled for{" "}
-                    <span className="font-medium text-gray-900">
-                      {new Date(d.appointmentDate).toDateString()}
-                    </span>{" "}
-                    regarding <span className="font-medium text-gray-900">{d.problem}</span>.
-                  </p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-3 mt-3 md:mt-0">
-                  {/* Approve */}
-                  <div className="relative group">
-                    <button
-                      onClick={() => handleApprove(d.appointmentId)}
-                      className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white
-                       p-2 rounded  shadow-sm transition cursor-pointer"
-                    >
-                      <FaCheckCircle size={18} />
-                    </button>
-                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-black text-white text-xs px-2 py-1 rounded">
-                      Approve
-                    </span>
-                  </div>
-
-                  {/* Reject */}
-                  <div className="relative group">
-                    <button className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded shadow-sm transition cursor-pointer">
-                      <FaTimesCircle size={18} />
-                    </button>
-                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-black text-white text-xs px-2 py-1 rounded">
-                      Reject
-                    </span>
-                  </div>
-                </div>
+            <>
+              <NoDataFound message="No pending appointment requests at this time." />
+              <div className=" text-center">
+                <Button
+                  label={AutoApproval ? "Disable Auto Approval" : " Enable Auto Approval"}
+                  variant="outline"
+                  onClick={()=>handleToggleAutoApproval()}
+                />
               </div>
+            </>
+          ) : (
+            appointment?.map((appointment, index) => (
+              <CardRow key={index} actions={getAppointmentAction(appointment.appointmentId)} />
             ))
           )}
         </div>

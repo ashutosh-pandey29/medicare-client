@@ -5,6 +5,8 @@ import { useToken } from "../../hooks/custom/useToken";
 import { toast } from "react-toastify";
 import { useForm } from "../../hooks/custom/useForm";
 import { useFetch } from "../../hooks/custom/useFetch";
+import { Button } from "../UI/Button";
+import { LuLoaderCircle } from "react-icons/lu";
 export const DoctorProfileForm = () => {
   const [loading, setLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -226,34 +228,18 @@ export const DoctorProfileForm = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold bg-linear-to-r from-green-500 to-purple-500 text-transparent bg-clip-text">
-          Add New Doctor
-        </h1>
-        <p className="text-gray-500 text-sm mt-1">
-          Please register the member first, then proceed to fill in their personal and professional
-          details.
-        </p>
-      </div>
-
+    <>
       {/* ---------------- professional and personal   Info ---------------- */}
-      <div className="bg-white p-5 shadow rounded mb-8">
-        <div className="border-b border-b-zinc-200 pb-3 mb-3">
-          <h2 className="text-lg font-semibold capitalize">professional & Personal Information</h2>
-          <p className="text-sm text-gray-500">
-            Make sure the member account is already registered.
-          </p>
-        </div>
-
+      <div className="bg-white p-5 shadow rounded mb-8 mt-5">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-sm text-gray-600">Doctor Name:</label>
+              <label className="text-sm text-gray-600">Name:</label>
               <input
                 type="text"
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                 name="doctorName"
                 id="doctorName"
                 value={value.doctorName}
@@ -265,7 +251,9 @@ export const DoctorProfileForm = () => {
               <label className="text-sm text-gray-600">Phone:</label>
               <input
                 type="text"
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                 name="phone"
                 id="phone"
                 value={value.phone}
@@ -274,9 +262,39 @@ export const DoctorProfileForm = () => {
             </div>
 
             <div>
+              <label className="text-sm text-gray-600">Date Of Birth:</label>
+              <input
+                type="text"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
+                name="dob"
+                id="dob"
+                value={value.dob}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-600">Address:</label>
+              <input
+                type="text"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
+                name="address"
+                id="address"
+                value={value.address}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
               <label className="text-sm text-gray-600">Department:</label>
               <select
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                 name="departmentId"
                 id="departmentId"
                 onChange={handleChange}
@@ -292,10 +310,13 @@ export const DoctorProfileForm = () => {
             </div>
 
             <div>
-              <label className="text-sm text-gray-600">Experience:</label>
+              <label className="text-sm text-gray-600">Experience(Year):</label>
               <input
                 type="text"
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
+                placeholder="12"
+                className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                 name="experience"
                 id="experience"
                 value={value.experience}
@@ -317,7 +338,9 @@ export const DoctorProfileForm = () => {
                   id="degree"
                   placeholder="Degree"
                   value={edu.degree}
-                  className="border border-zinc-300 h-10 px-3 rounded outline-none"
+                  className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                   onChange={(e) => handleEducationChange(index, e)}
                 />
                 <input
@@ -325,7 +348,9 @@ export const DoctorProfileForm = () => {
                   name="year"
                   id="year"
                   value={edu.year}
-                  className="border border-zinc-300 h-10 px-3 rounded outline-none"
+                  className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                   onChange={(e) => handleEducationChange(index, e)}
                 />
                 <input
@@ -333,7 +358,9 @@ export const DoctorProfileForm = () => {
                   id="college"
                   placeholder="College"
                   value={edu.college}
-                  className="border border-zinc-300 h-10 px-3 rounded outline-none"
+                  className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                   onChange={(e) => handleEducationChange(index, e)}
                 />
               </div>
@@ -348,7 +375,9 @@ export const DoctorProfileForm = () => {
           <div className="mt-5">
             <label className="text-sm text-gray-600">Working Days:</label>
             <select
-              className="border border-zinc-300 w-full h-10 px-3 rounded mt-2 outline-none"
+              className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
               name="day"
               id="day"
               onChange={handleWorkingDays}
@@ -363,11 +392,10 @@ export const DoctorProfileForm = () => {
           {/* Slot Time */}
           {/* day wise slot render  */}
           <div className="mt-5">
-            <label className="text-sm text-gray-600">Slot Timing:</label>
-
             {value.workingTime.map((dayItem, dayIndex) => (
               <div key={dayIndex} className="mt-3">
-                <h4 className="font-semibold text-sm mb-2">{dayItem.day}</h4>
+                {/* <h4 className="font-semibold text-sm mb-2">{dayItem.day}</h4> */}
+                <label className="text-sm text-gray-600">Slot Timing: ({dayItem.day})</label>
 
                 {dayItem.slots.map((slot, slotIndex) => (
                   <div className="flex items-center gap-2 mt-2" key={slotIndex}>
@@ -375,7 +403,9 @@ export const DoctorProfileForm = () => {
                       type="time"
                       name="from"
                       id="from"
-                      className="border border-zinc-300 h-10 px-3 rounded outline-none w-full"
+                      className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                       value={slot.from}
                       onChange={(e) => handleSlot(dayIndex, slotIndex, e)}
                     />
@@ -386,7 +416,9 @@ export const DoctorProfileForm = () => {
                       type="time"
                       name="to"
                       id="to"
-                      className="border border-zinc-300 h-10 px-3 rounded outline-none w-full"
+                      className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
                       value={slot.to}
                       onChange={(e) => handleSlot(dayIndex, slotIndex, e)}
                     />
@@ -408,7 +440,9 @@ export const DoctorProfileForm = () => {
           <div className="mt-5">
             <label className="text-sm text-gray-600">Bio:</label>
             <textarea
-              className="border border-zinc-300 w-full mt-2 px-3 py-2 rounded outline-none"
+              className="h-11 w-full mt-2 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition"
               name="bio"
               id="bio"
               value={value.bio}
@@ -417,28 +451,25 @@ export const DoctorProfileForm = () => {
           </div>
 
           <div className="text-right mt-5">
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 text-white font-semibold rounded-lg shadow transition 
-                                  ${
-                                    loading
-                                      ? "bg-green-300 cursor-not-allowed"
-                                      : "bg-linear-to-r from-green-500 to-green-400 hover:shadow-lg cursor-pointer"
-                                  }`}
-            >
-              {loading ? (
-                <div className="flex items-center gap-2 justify-center text-green-700">
-                  <LuLoaderCircle className="animate-spin w-6 h-6 " />
-                  Registering...
-                </div>
-              ) : (
-                "Register"
-              )}
-            </button>
+              label={
+                loading ? (
+                  <>
+                    <div className="flex items-center justify-center ">
+                      <LuLoaderCircle className="animate-spin w-6 h-6 " />
+                      Registering...
+                    </div>
+                  </>
+                ) : (
+                  "Create Profile"
+                )
+              }
+            />
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };

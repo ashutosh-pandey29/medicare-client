@@ -18,13 +18,13 @@ export const UserPageHeading = ({ icon, title, subText, button }) => {
         <div className="lg:w-6xl">
           {/* heading(title) + button  */}
           {/* title */}
-         <div className="flex justify-between items-center">
-  <h1 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-semibold text-slate-800 relative">
-    {title}
-  </h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-semibold text-slate-800 relative">
+              {title}
+            </h1>
 
-  {button}
-</div>
+            {button}
+          </div>
 
           {/* subtext */}
           <p className="w-full text-sm sm:text-base text-blue-700 ">{subText}</p>

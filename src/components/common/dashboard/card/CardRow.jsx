@@ -19,6 +19,7 @@ export const CardRow = ({ data, actions = [] }) => {
       border: "border-yellow-500",
       badge: "bg-yellow-100 text-yellow-700",
     },
+    
   };
 
   const styles = statusStyles[data] || {

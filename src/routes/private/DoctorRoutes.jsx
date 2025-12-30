@@ -1,7 +1,6 @@
 import { DashboardLayout } from "../../components/layout/DashboardLayout";
 import { ApproveAppointment } from "../../pages/doctor/ApproveAppointment";
 import { DashboardHome } from "../../pages/doctor/DashboardHome";
-import { PatientQueue } from "../../pages/doctor/PatientQueue";
 import { PatientTable } from "../../pages/doctor/PatientTable";
 import { ReportEntry } from "../../pages/doctor/ReportEntry";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -9,6 +8,9 @@ import { AuthProvider } from "../../context/AuthContext";
 import { SocketProvider } from "../../context/SocketContext";
 import { Profile } from "../../pages/doctor/Profile";
 import { Account } from "../../pages/doctor/Account";
+import { PatientConsultation } from "../../pages/doctor/PatientConsultation";
+import { Settings } from "../../pages/doctor/Settings";
+import { CreateProfile } from "../../pages/doctor/CreateProfile";
 
 const DoctorRoutes = [
   {
@@ -33,8 +35,8 @@ const DoctorRoutes = [
             element: <ApproveAppointment />,
           },
           {
-            path: "patient-queue",
-            element: <PatientQueue />,
+            path: "patient-consultation",
+            element: <PatientConsultation />,
           },
           {
             path: "patient-table",
@@ -46,12 +48,21 @@ const DoctorRoutes = [
           },
           {
             path: "profile",
-            element:<Profile/>
+            element: <Profile />,
           },
           {
+            path: "profile/:mode/:id?",
+            element: <CreateProfile />,
+          },
+
+          {
             path: "account",
-            element:<Account/>
-          }
+            element: <Account />,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
+          },
         ],
       },
     ],

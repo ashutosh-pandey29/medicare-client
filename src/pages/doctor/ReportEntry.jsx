@@ -1,8 +1,11 @@
 import { FaPaperclip, FaPlus, FaTrash } from "react-icons/fa";
+import { Button } from "../../components/UI/Button";
+import { useNavigate } from "react-router-dom";
 
 export const ReportEntry = () => {
+  const navigate = useNavigate();
   return (
-    <section className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
+    <section className="max-w-7xl mx-auto ">
       {/* page heading  */}
 
       <div
@@ -32,16 +35,18 @@ export const ReportEntry = () => {
         </svg>
 
         {/* Main Content */}
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-4">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center">
-              <div className="ml-1 md:ml-6">
+              <div className="ml-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-xl md:text-4xl font-bold text-white">Patient Case & Report Entry</h2>
+                  <h2 className="text-xl md:text-4xl font-bold text-white">
+                    Patient Case & Report Entry
+                  </h2>
                 </div>
 
                 <p className="text-gray-100 text-base  font-semibold">
-                Manage and update the patient’s complete set of medical reports and files.
+                  Manage and update the patient’s complete set of medical reports and files.
                 </p>
               </div>
             </div>
@@ -58,91 +63,87 @@ export const ReportEntry = () => {
       </div>
 
       <div className="shadow rounded bg-white p-5 mt-5">
-        
-      <form className="space-y-6">
-        {/* Patient Selector */}
-        <div>
-          <label className="text-sm font-medium text-slate-600">Patient I'd</label>
-          <input
-            type="text"
-            className="w-full border border-slate-300 rounded-lg px-4 py-3 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter Patient I'd"
-          />
-        </div>
-
-        {/* patient profile overview */}
-
-        {/* Solution / Diagnosis */}
-        <div>
-          <label className="text-sm font-medium text-slate-600">Diagnosis / Treatment Plan</label>
-          <textarea
-            rows="3"
-            className="w-full border border-slate-300 rounded-lg px-4 py-3 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Eg. Viral fever suspected. Suggest rest, hydration..."
-          ></textarea>
-        </div>
-
-        {/* Medicine List */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-600">Medicines</label>
-
-          {/* Medicine Item */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-center">
+        <form className="space-y-6">
+          {/* Patient Selector */}
+          <div>
+            <label className="text-sm font-medium text-slate-600">Patient / Appointment I'd</label>
             <input
-              className="border rounded-lg px-3 py-2 text-sm  border-slate-300  outline-none focus:ring-2 focus:ring-blue-600 "
-              placeholder="Medicine Name"
-            />
-            <input
-              className="border rounded-lg px-3 py-2 text-sm border-slate-300  outline-none  focus:ring-2 focus:ring-blue-600"
-              placeholder="Dosage (e.g. 500mg)"
-            />
-            <input
-              className="border rounded-lg px-3 py-2 text-sm border-slate-300  outline-none  focus:ring-2 focus:ring-blue-600"
-              placeholder="Times/day (e.g. 2)"
-            />
-            <input
-              className="border rounded-lg px-3 py-2 text-sm border-slate-300  outline-none  focus:ring-2 focus:ring-blue-600"
-              placeholder="Duration (e.g. 5 days)"
+              type="text"
+              className=" mt-3 w-full border border-slate-300 rounded-lg px-4 py-3  text-sm   focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 focus:border-0"
+              placeholder="Enter Patient I'd"
             />
           </div>
 
-          <button
-            type="button"
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          >
-            <FaPlus /> Add More Medicine
-          </button>
-        </div>
+          {/* patient profile overview */}
 
-        {/* Notes */}
-        <div>
-          <label className="text-sm font-medium text-slate-600">Additional Notes</label>
-          <textarea
-            rows="4"
-            className="w-full border border-slate-300 rounded-lg px-4 py-3 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Eg. Come for review after 7 days... 
-Eg. Take after meals, avoid cold food, drink water frequently...
-            "
-          ></textarea>
-        </div>
+          {/* Solution / Diagnosis */}
+          <div>
+            <label className="text-sm font-medium text-slate-600">Diagnosis / Treatment Plan</label>
+            <textarea
+              rows="3"
+              className="mt-3 w-full border border-slate-300 rounded-lg px-4 py-3  text-sm   focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 focus:border-0"
+              placeholder="Eg. Viral fever suspected. Suggest rest, hydration..."
+            ></textarea>
+          </div>
 
-        {/* File Upload */}
-        <div className="flex flex-col gap-1">
-          <label className="border border-slate-300 px-4 py-3 rounded-lg cursor-pointer flex items-center gap-3 text-sm w-fit hover:bg-slate-100">
-            <FaPaperclip className="text-slate-600" /> Attach Report File
-            <input type="file" hidden />
-          </label>
-          <span className="text-xs text-gray-500">*Optional</span>
-        </div>
+          {/* Medicine List */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-600">Medicines</label>
 
-        {/* Submit */}
-        <button className="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-sm">
-          Save Patient Record
-        </button>
-      </form>
-        </div>
+            {/* Medicine Item */}
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-center mt-3">
+              <input
+                className="h-11 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition focus:border-0 "
+                placeholder="Medicine Name"
+              />
+              <input
+                className="h-11 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition focus:border-0"
+                placeholder="Dosage (e.g. 500mg)"
+              />
+              <input
+                className="h-11 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition focus:border-0"
+                placeholder="Times/day (e.g. 2)"
+              />
+              <input
+                className="h-11 px-3 rounded-md border border-zinc-300
+        focus:outline-none focus:ring-2 focus:ring-green-500/40
+        focus:border-green-500 transition focus:border-0"
+                placeholder="Duration (e.g. 5 days)"
+              />
+            </div>
 
+            <button
+              type="button"
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+            >
+              <FaPlus /> Add More Medicine
+            </button>
+          </div>
 
+          {/* File Upload */}
+          <div className="flex flex-col gap-1">
+            <label className="border border-slate-300 px-4 py-3 rounded-lg cursor-pointer flex items-center gap-3 text-sm w-fit hover:bg-slate-100">
+              <FaPaperclip className="text-slate-600" /> Attach Report File
+              <input type="file" hidden />
+            </label>
+            <span className="text-xs text-gray-500">*Optional</span>
+          </div>
+
+          {/* Submit */}
+
+          <div className="text-right">
+            <Button label={"Upload Report"} variant="primary" type="submit" onClick={()=>navigate(`mode/:123456?`)} />
+          </div>
+        </form>
+      </div>
     </section>
   );
 };

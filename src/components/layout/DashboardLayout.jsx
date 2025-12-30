@@ -43,7 +43,7 @@ export const DashboardLayout = ({ role }) => {
       >
         {/* Header */}
         <header
-          className="fixed top-0 left-0 right-0 ml-0 md:ml-80 md:mr-0  h-16 border-b border-zinc-100  z-50"
+          className="fixed top-0 left-0 right-0 ml-0 md:ml-80 md:mr-0  h-16  z-50"
           style={{ backgroundColor: "var(--header-bg)" }}
         >
           <Header handleSidebarToggle={handleSidebarToggle} />

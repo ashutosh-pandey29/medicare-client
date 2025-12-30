@@ -2,10 +2,14 @@
 
 export const roleTheme = {
   admin: {
-    sidebar: "#0F172A",
-    header: "#FFFFFF",
-    main: "#F8FAFC",
-    accent: "#2563EB",
+    sidebar: "#0B1220",   // Deep navy (control & authority)
+  header: "#111827",    // Dark slate (layer separation)
+  main: "#020617",      // Very dark background (content focus)
+  accent: "#3B82F6",    // Medical blue (actions, links)
+  active: "#1E40AF",
+  text: "#E5E7EB",
+  muted: "#94A3B8",
+  border: "#1F2937",
   },
   doctor: {
     sidebar: "#059669",

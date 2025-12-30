@@ -32,11 +32,10 @@ export const Header = ({ handleSidebarToggle }) => {
       <div className="flex items-center gap-3">
         <h1 className="text-xl font-semibold text-gray-700  md:hidden">{decodedUser?.username}</h1>
         <h1 className="hidden md:block text-2xl font-extrabold tracking-wide">
-  <span className="bg-linear-to-r from-[#064226] to-[#10B981] bg-clip-text text-transparent">
-    Medicare Hospital
-  </span>
-</h1>
-
+          <span className="bg-linear-to-r from-[#064226] to-[#10B981] bg-clip-text text-transparent">
+            Medicare Hospital
+          </span>
+        </h1>
       </div>
 
       {/* Right Section: Notification + Profile */}
