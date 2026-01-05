@@ -3,14 +3,17 @@ import { BsBell } from "react-icons/bs";
 import { FaBell } from "react-icons/fa";
 import { LuCheckCheck } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
-export const NotificationBell = ({ notifications }) => {
+
+export const NotificationBell = ({ notifications = [], theme = "light" }) => {
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef();
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  // Close dropdown on outside click
+
+  const isDark = theme === "dark";
+
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
     };
@@ -19,20 +22,26 @@ export const NotificationBell = ({ notifications }) => {
   }, []);
 
   const unreadCount = notifications.length;
+
   return (
     <div className="relative inline-block" ref={dropdownRef}>
       {/* Bell Icon */}
       <div
-        className="w-11 h-11 flex items-center justify-center rounded  cursor-pointer
-              bg-linear-to-br from-blue-400 to-cyan-400
-               text-white text-2xl md:text-3xl
-              ring-1 ring-white/40 shrink-0 "
         onClick={() => setOpen(!open)}
+        className={`
+          w-11 h-11 flex items-center justify-center rounded-full cursor-pointer
+          text-white shrink-0 ring-1
+          ${
+            isDark
+              ? "bg-slate-800 ring-white/10 hover:bg-slate-700"
+              : "bg-linear-to-br from-blue-500 to-cyan-500 ring-white/40"
+          }
+        `}
       >
         <FaBell className="text-lg" />
-        {/* Notification Badge */}
+
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full shadow-lg animate-pulse">
+          <span className="absolute top-0 right-0 w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full flex items-center justify-center animate-pulse">
             {unreadCount}
           </span>
         )}
@@ -40,41 +49,64 @@ export const NotificationBell = ({ notifications }) => {
 
       {/* Dropdown */}
       {open && (
-        // <div className="absolute right-0 mt-2 w-64 h-[60vh] md:w-80 lg:w-96 bg-white  shadow-lg rounded overflow-y-auto z-9999">
         <div
-          className=" fixed sm:absolute inset-x-2 sm:inset-x-auto top-16 sm:top-auto sm:right-0  sm:mt-2  w-auto sm:w-80 lg:w-96  max-h-[70vh]  bg-white shadow-xl  rounded-xl  overflow-hidden  z-9999" >
+          className={`
+            fixed sm:absolute inset-x-2 sm:inset-x-auto top-12 sm:right-0
+            sm:mt-2 w-auto sm:w-80 lg:w-96 max-h-[70vh]
+            rounded-xl shadow-xl overflow-hidden z-50
+            ${isDark ? "bg-slate-900 text-white" : "bg-white text-gray-800"}
+          `}
+        >
           <div className="max-h-96 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4">
-                <div className="w-16 h-16 rounded-full bg-linear-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-3">
-                  <LuCheckCheck className="w-8 h-8 text-blue-500" />
+                <div
+                  className={`
+                    w-16 h-16 rounded-full flex items-center justify-center mb-3
+                    ${isDark ? "bg-slate-800" : "bg-linear-to-br from-blue-100 to-indigo-100"}
+                  `}
+                >
+                  <LuCheckCheck
+                    className={`w-8 h-8 ${isDark ? "text-green-400" : "text-blue-500"}`}
+                  />
                 </div>
-                <p className="text-gray-800 font-medium">All clear!</p>
-                <p className="text-gray-500 text-sm mt-1">No new notifications</p>
+                <p className="font-medium">All clear!</p>
+                <p className="text-sm opacity-70 mt-1">No new notifications</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-white/10">
                 {notifications.map((n) => (
                   <div
                     key={`${n.appointmentId}-${n.createdAt}`}
-                    className={`p-4 transition-all cursor-pointer group
-            ${!n.read ? "bg-blue-50" : "hover:bg-linear-to-r hover:from-blue-50 hover:to-indigo-50"}
-          `}
+                    onClick={() => navigate("approve-appointment")}
+                    className={`
+                      p-4 cursor-pointer transition
+                      ${
+                        isDark
+                          ? !n.read
+                            ? "bg-slate-800 hover:bg-slate-700"
+                            : "hover:bg-slate-800"
+                          : !n.read
+                          ? "bg-blue-50"
+                          : "hover:bg-blue-50"
+                      }
+                    `}
                   >
                     <div className="flex gap-3">
-                      <div className="shrink-0 w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
-                        <BsBell className="w-5 h-5 text-white" />
+                      <div
+                        className={`
+                          w-10 h-10 rounded-full flex items-center justify-center shrink-0
+                          ${
+                            isDark ? "bg-indigo-600" : "bg-linear-to-br from-blue-500 to-indigo-600"
+                          }
+                        `}
+                      >
+                        <BsBell className="text-white w-5 h-5" />
                       </div>
 
-                      <div
-                        className="flex-1 min-w-0"
-                        onClick={() => navigate("approve-appointment")}
-                      >
-                        <p className="text-sm font-medium leading-relaxed text-gray-800 group-hover:text-blue-700">
-                          {n.message}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
-                          <span className="w-1 h-1 rounded-full bg-gray-400"></span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium leading-relaxed">{n.message}</p>
+                        <p className="text-xs opacity-60 mt-1">
                           {n.createdAt
                             ? new Date(n.createdAt).toLocaleString("en-IN", {
                                 day: "numeric",
@@ -93,8 +125,12 @@ export const NotificationBell = ({ notifications }) => {
           </div>
 
           {notifications.length > 0 && (
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-              <button className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div
+              className={`px-4 py-3 border-t ${
+                isDark ? "border-white/10 bg-slate-800" : "border-gray-200 bg-gray-50"
+              }`}
+            >
+              <button className="w-full py-2 text-sm font-medium text-blue-500 hover:bg-blue-500/10 rounded-lg">
                 View all notifications
               </button>
             </div>

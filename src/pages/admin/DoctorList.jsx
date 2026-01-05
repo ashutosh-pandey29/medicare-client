@@ -1,104 +1,205 @@
-import { CiExport } from "react-icons/ci";
-import { CiFilter } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
-import { useFetch } from "../../hooks/custom/useFetch";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AdminPageHeading } from "../../components/common/dashboard/heading/AdminPageHeading";
+import {
+  MdLocalHospital,
+  MdLockReset,
+  MdOutlineNoAccounts,
+  MdOutlinePublishedWithChanges,
+} from "react-icons/md";
+import { Dropdown } from "../../components/UI/Dropdown";
+import { FilterDropdown } from "../../components/UI/Dashboard/FilterDropdown";
+import {
+  FaDownload,
+  FaEdit,
+  FaEye,
+  FaFileExcel,
+  FaFilePdf,
+  FaHistory,
+  FaPrint,
+} from "react-icons/fa";
 
 export const DoctorList = () => {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
+
   useEffect(() => {
     const getDoctor = async () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/get`);
-
       const jsonResponse = await response.json();
-
-      console.log(jsonResponse.data);
-
       setDoctors(jsonResponse.data);
     };
     getDoctor();
   }, []);
 
-  return (
-    <>
-      <div className=" sm:max-w-sm md:min-w-full  mx-auto overflow-x-auto p-1">
-        <div className="flex flex-start  md:justify-between md:items-center flex-col md:flex-row">
-          <div className="md:mb-8 mb-4">
-            <h2 className="text-base md:text-4xl lg:text-3xl  font-extrabold bg-linear-to-r from-green-500 to-purple-400 text-transparent bg-clip-text">
-              Doctors Management
-            </h2>
-            <p className="text-gray-500 text-sm">Manage departments, doctors and access levels</p>
-          </div>
+  const actions = [
+    {
+      label: "view Profile",
+      icon: FaEye,
+    },
+    {
+      label: "Change role",
+      icon: MdOutlinePublishedWithChanges,
+    },
+    {
+      label: "Activity History",
+      icon: FaHistory,
+    },
+    {
+      label: "Deactivate Account",
+      icon: MdOutlineNoAccounts,
+    },
+    {
+      label: "Reset Password",
+      icon: MdLockReset,
+    },
+  ];
 
-          <div className="btn-box flex gap-1">
-            <button
-              className="px-3 py-1 text-lg bg-indigo-500 hover:bg-indigo-600 text-white rounded duration-200"
-              onClick={() => navigate("new")}
-            >
-              Add new
-            </button>
+  const tableDropdownAction = [
+    {
+      label: "Print Table",
+      icon: FaPrint,
+    },
+    {
+      label: "Download CSV",
+      icon: FaDownload,
+    },
+    {
+      label: "Download Excel",
+      icon: FaFileExcel,
+    },
+
+    {
+      label: "Download PDF",
+      icon: FaFilePdf,
+    },
+  ];
+
+  const filters = [
+    {
+      label: "All",
+      value: "all",
+    },
+    {
+      label: "Active Doctors",
+      value: "active",
+    },
+    {
+      label: "Inactive Doctors",
+      value: "inactive",
+    },
+    {
+      label: "Verified Doctors",
+      value: "verified",
+    },
+    {
+      label: "Pending Verification",
+      value: "pending_verified",
+    },
+    {
+      label: "Blocked Doctors",
+      value: "blocked",
+    },
+    {
+      label: "By Department",
+      value: "department",
+    },
+  ];
+
+  return (
+    <div className="sm:max-w-sm md:min-w-full mx-auto p-1 h-auto">
+      {/* Heading */}
+      <AdminPageHeading
+        title="Doctor Management"
+        subtitle="Manage doctor profiles, review approvals, and register new doctors efficiently across all departments."
+        icon={MdLocalHospital}
+        rightContent={
+          <button
+            onClick={() => navigate("new")}
+            className="
+    inline-flex h-12 items-center justify-center rounded-md border border-slate-800
+    bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size[200%_100%]
+    px-6 font-medium text-slate-100 transition-all duration-300
+    hover:bg-[linear-gradient(110deg,#1e2631,45%,#000103,55%,#1e2631)]
+    hover:scale-105 hover:shadow-lg
+    active:scale-95 active:shadow-inner
+    focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50
+    cursor-pointer
+    animate-shimmer
+  "
+          >
+            new Member
+          </button>
+        }
+      />
+
+      {/* Table Container */}
+      <div className="bg-gray-900 rounded-md border border-gray-800 shadow-lg mt-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 gap-2 sm:gap-0">
+          <h2 className="text-xl font-bold text-white">Doctors List</h2>
+          <div className="flex gap-1.5">
+            <Dropdown label="Download" theme="dark" actions={tableDropdownAction} />
+            <FilterDropdown theme="dark" filters={filters} />
           </div>
         </div>
 
-        {/* table  */}
-
-        <div className="overflow-x-auto rounded">
-
-          <div className="h-auto p-2 flex  gap-1.5 justify-end">
-            <input
-              type="text"
-              className="border rounded  border-indigo-100 outline-0 px-2 focus:border-indigo-500"
-              placeholder="Quick Search...."
-            />
-
-            <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
-              <CiFilter />
-            </span>
-
-            <span className="block w-fit bg-zinc-100 font-semibold text-2xl rounded  px-1 py-1 mb-1 hover:bg-orange-500 hover:text-white cursor-pointer ">
-              <CiExport />
-            </span>
-          </div>
-
-          <table className="min-w-full table-auto border-collapse text-center">
-            {/* Table Head */}
-            <thead className="bg-indigo-500 text-indigo-100">
-              <tr className="border-b border-b-indigo-50">
-                <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base">Name</th>
-
-                <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base">
+        {/* Table */}
+        <div className="">
+          <table className="min-w-[600px] w-full border-collapse text-left">
+            <thead className="bg-gray-800 border-b border-gray-700">
+              <tr>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
+                  Avatar
+                </th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[150px]">
+                  Name
+                </th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[150px]">
                   Department
                 </th>
-                <th className="px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm md:text-base">
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
                   Status
+                </th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[120px]">
+                  Phone
+                </th>
+                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
+                  Actions
                 </th>
               </tr>
             </thead>
 
-            {/* Table Body */}
-            <tbody className="text-xs sm:text-sm md:text-base">
+            <tbody className="text-white text-sm md:text-base">
               {doctors?.map((d, i) => (
-                <tr
-                  key={i}
-                  className="cursor-pointer transition duration-300 hover:bg-indigo-100 border-b border-b-zinc-100"
-                  onClick={() => navigate(`profile/${d.userId}`, { state: { doctor: d } })}
-                >
-                  <td className="px-2 py-2 sm:px-4 sm:py-4">{d.name}</td>
-                  <td className="px-2 py-2 sm:px-4 sm:py-4">{d.department}</td>
-
-                  <td className="px-2 py-2 sm:px-4 sm:py-4">
-                    <span className="px-2 py-1 sm:px-3 sm:py-1 text-[10px] sm:text-xs md:text-sm bg-green-100 text-green-600 rounded-full">
-                      Active
-                    </span>
+                <tr key={i} className="hover:bg-gray-800 transition-colors duration-200">
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
+                    <img
+                      src={d.avatar || "https://img.icons8.com/?size=96&id=kDoeg22e5jUY&format=png"}
+                      alt="avatar"
+                      className="h-12 w-12 rounded-full object-cover border border-slate-500"
+                    />
+                  </td>
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.name}</td>
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.department}</td>
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
+                    <div class="mt-1 flex items-center gap-x-1.5">
+                      <div class="flex-none rounded-full bg-green-500/20 p-1">
+                        <div class="size-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                      </div>
+                      <p class="text-xs/5 text-gray-500">Online</p>
+                    </div>
+                  </td>
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.phone}</td>
+                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
+                    <Dropdown actions={actions} theme="dark" />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          
         </div>
       </div>
-    </>
+    </div>
   );
 };

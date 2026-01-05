@@ -34,9 +34,8 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
               />
               <div className="flex flex-col">
                 <span
-                  className={`text-lg font-semibold ${role === "doctor" && "text-white"} ${
-                    role === "user" && "text-gray-800"
-                  }  `}
+                  className={`text-lg font-semibold ${role === "doctor" && "text-white"} ${role === "user" && "text-gray-800" 
+                  }  ${role === "admin" && "text-white"} `}
                 >
                   {decodedUser?.username}
                 </span>
@@ -104,7 +103,7 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
                 {role === "admin" && (
                   <NavLink
                     to={item.path}
-                    end={item.path === "/dashboard/doctor"}
+                    end={item.path === "/dashboard/admin"}
                     className={({ isActive }) =>
                       `flex items-center p-3 gap-3 rounded hover:bg-slate-900 hover:text-blue-500 transition-colors ${
                         isActive ? "bg-violet-700 text-[#D1FAE5]" : "text-gray-400"
@@ -141,15 +140,12 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
             </button>
           )}
 
-
-             {role === "admin" && (
+          {role === "admin" && (
             <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
               <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
               <span className="text-base">Logout</span>
             </button>
           )}
-
-
         </div>
       </aside>
     </>

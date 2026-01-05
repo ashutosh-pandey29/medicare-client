@@ -8,6 +8,9 @@ import { registerSchema } from "../../utils/validationSchema";
 import { LuLoaderCircle } from "react-icons/lu";
 import { toast } from "react-toastify";
 import { useToken } from "../../hooks/custom/useToken";
+import { AdminPageHeading } from "../common/dashboard/heading/AdminPageHeading";
+import { Button } from "../UI/Button";
+import { FaRegAddressCard } from "react-icons/fa";
 
 export const DoctorRegisterForm = () => {
   const [password, setPassword] = useState("");
@@ -72,118 +75,119 @@ export const DoctorRegisterForm = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <>
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold bg-linear-to-r from-green-500 to-purple-500 text-transparent bg-clip-text">
-          Add New Doctor
-        </h1>
-        <p className="text-gray-500 text-sm mt-1">
-          Please register the member first, then proceed to fill in their personal and professional
-          details.
-        </p>
-      </div>
+      <AdminPageHeading
+        icon={FaRegAddressCard}
+        title="Add Hospital Staff"
+        subtitle="Create staff login credentials. Each staff member can log in, complete their profile, and manage their respective tasks from their dashboard based on their role."
+      />
 
-      {/* ---------------- Basic Info ---------------- */}
-      <div className="bg-white p-5 shadow rounded mb-8">
-        <h2 className="text-lg font-semibold border-b border-zinc-300 pb-2 mb-3">
-          Register Member
-        </h2>
-
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label className="text-sm text-gray-600">Username:</label>
-              <input
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
-                name="username"
-                id="username"
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touchedField.username && errors.username && (
-                <span className="text-red-500 text-sm px-2">{errors.username}</span>
-              )}
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-600">Email:</label>
-              <input
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
-                name="email"
-                id="email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touchedField.email && errors.email && (
-                <span className="text-red-500 text-sm px-2">{errors.email}</span>
-              )}
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-600">Password:</label>
-              <div className="flex gap-2 mt-1">
+      <div className="sm:max-w-sm md:min-w-full mx-auto p-4 bg-gray-900  text-gray-200">
+        {/* ================= Website Branding ================= */}
+        <div className="bg-gray-800 rounded-md shadow p-6">
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 gap-5  pb-5">
+              {/* Username */}
+              <div>
+                <label className="text-sm text-slate-400">Username</label>
                 <input
-                  placeholder="Generate password..."
-                  className="border border-zinc-300 w-full h-10 px-3 rounded outline-none"
-                  name="password"
-                  id="password"
-                  value={value.password}
+                  className="w-full border rounded px-4 py-3 border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  name="username"
+                  id="username"
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <button
-                  type="button"
-                  className="w-12 flex justify-center items-center border border-zinc-300 rounded hover:bg-orange-500 hover:text-white transition"
-                  onClick={handleGeneratePassword}
-                >
-                  <FaArrowsRotate />
-                </button>
+                {touchedField.username && errors.username && (
+                  <span className="text-red-400 text-sm">{errors.username}</span>
+                )}
               </div>
-              {touchedField.password && errors.password && (
-                <span className="text-red-500 text-sm px-2">{errors.password}</span>
-              )}
-            </div>
 
-            <div>
-              <label className="text-sm text-gray-600">Role:</label>
-              <select
-                className="border border-zinc-300 w-full h-10 px-3 rounded mt-1 outline-none"
-                name="role"
-                id="role"
-                value={value.role}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              >
-                <option value={""}>Select Role</option>
-                <option value={"doctor"}>Doctor</option>
-              </select>
-            </div>
-          </div>
+              {/* Email */}
+              <div>
+                <label className="text-sm text-slate-400">Email</label>
+                <input
+                  className="w-full border rounded px-4 py-3 border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  name="email"
+                  id="email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touchedField.email && errors.email && (
+                  <span className="text-red-400 text-sm">{errors.email}</span>
+                )}
+              </div>
 
-          <div className="text-right mt-5">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-3 text-white font-semibold rounded-lg shadow transition 
-                         ${
-                           loading
-                             ? "bg-green-300 cursor-not-allowed"
-                             : "bg-linear-to-r from-green-500 to-green-400 hover:shadow-lg cursor-pointer"
-                         }`}
-            >
-              {loading ? (
-                <div className="flex items-center gap-2 justify-center text-green-700">
-                  <LuLoaderCircle className="animate-spin w-6 h-6 " />
-                  Registering...
+              {/* Password */}
+              <div>
+                <label className="text-sm text-slate-400">Password</label>
+                <div className="flex gap-2 mt-1">
+                  <input
+                    placeholder="Generate password..."
+                    className="w-full border rounded px-4 py-3 border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                    name="password"
+                    id="password"
+                    value={value.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleGeneratePassword}
+                    className="w-12 flex items-center justify-center rounded-md 
+                       bg-slate-800 border border-slate-600 text-slate-300
+                       hover:bg-green-500 hover:text-white transition"
+                  >
+                    <FaArrowsRotate />
+                  </button>
                 </div>
-              ) : (
-                "Register"
-              )}
-            </button>
-          </div>
-        </form>
+                {touchedField.password && errors.password && (
+                  <span className="text-red-400 text-sm">{errors.password}</span>
+                )}
+              </div>
+
+              {/* Role */}
+              <div>
+                <label className="text-sm text-slate-400">Role</label>
+                <select
+                  className="w-full border rounded px-4 py-3 border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  name="role"
+                  id="role"
+                  value={value.role}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                >
+                  <option value="">Select Role</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <div className="">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow
+          ${
+            loading
+              ? "bg-green-700 cursor-not-allowed"
+              : "bg-linear-to-r from-blue-500 to-blue-400 hover:shadow-lg"
+          }`}
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <LuLoaderCircle className="animate-spin w-5 h-5" />
+                    Registering...
+                  </div>
+                ) : (
+                  "Register"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

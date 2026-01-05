@@ -12,9 +12,10 @@ import { DepartmentList } from "../../pages/admin/DepartmentList";
 import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
 import { DoctorRegisterForm } from "../../components/forms/DoctorRegisterForm";
 import { Settings } from "../../pages/admin/Settings";
-import { Chat } from "../../pages/admin/Chat";
 import {Notification} from "../../pages/admin/Notification";
 import { SocketProvider } from "../../context/SocketContext";
+import { Analysis } from "../../pages/admin/Analysis";
+import {Account} from "../../pages/admin/Account";
 
 const AdminRoutes = [
   {
@@ -35,7 +36,7 @@ const AdminRoutes = [
         element: <Notification />,
       },
       {
-        path: "department",
+        path: "departments",
         children: [
           { index: true, element: <DepartmentList /> },
           {
@@ -84,8 +85,16 @@ const AdminRoutes = [
         element: <Billings />,
       },
       {
-        path: "chat",
-        element: <Chat />,
+        path: "reports-and-analytics",
+        element:<Analysis/>
+      },
+      {
+        path: "notifications",
+        element: <Notification />,
+      },
+      {
+        path: "accounts",
+        element:<Account/>
       },
       {
         path: "settings",

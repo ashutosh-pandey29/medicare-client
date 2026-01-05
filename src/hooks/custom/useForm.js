@@ -1,44 +1,72 @@
 import { useState } from "react";
-import { useZodValidation } from "./useZodValidation";
-import { toast } from "react-toastify";
 
-export const useForm = (initialValue = {}, validationSchema, callback) => {
-  const [value, setValue] = useState(initialValue);
-  const { errors, validateOnSubmit } = useZodValidation(value, validationSchema);
-
-  // console.log(errors);
-
-  // handleInput change
+export const useForm = (initialValue = {}, validationSchema) => {
+  const [values, setValues] = useState(initialValue);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setValue((prev) => ({ ...prev, [name]: value }));
+
+    setValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (!validationSchema) return;
+
+    const result = validationSchema.pick({ [name]: true }).safeParse({ [name]: value.trim() });
+
+    if (!result.success) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: result.error.issues[0].message,
+      }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
-  // handle submit
+  // validation on submit because user may be not touch an field try to direct submit
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateOnSubmit = (value) => {
+    if (!validationSchema) return {};
 
-    const submitErrors = validateOnSubmit();
+    const result = validationSchema.safeParse(value);
 
+    if (!result.success) {
+      const formattedErrors = {};
 
-    if (Object.keys(submitErrors).length > 0) {
-      Object.values(submitErrors).forEach((msg) => toast.error(msg));
+      result.error.issues.forEach(({ path, message }) => {
+        formattedErrors[path[0]] = message;
+      });
 
-      return;
+      console.log(formattedErrors);
+      setErrors(formattedErrors);
+      return formattedErrors;
     }
 
-    if (callback) {
-      callback(value);
-    }
+    // Success case
+    setErrors({});
+    return {};
   };
-
-  // reset form
 
   const resetForm = () => {
-    setValue(initialValue);
+    setValues(initialValue);
+    setErrors({});
   };
 
-  return { value, setValue, errors, handleChange, handleSubmit, resetForm };
+  console.log(errors);
+
+  return {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleChange,
+    validateOnSubmit,
+    resetForm,
+  };
 };

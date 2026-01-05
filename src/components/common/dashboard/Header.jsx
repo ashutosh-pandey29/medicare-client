@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useJwtDecode } from "../../../hooks/custom/useJwtDecode";
 import { AiOutlineLogout } from "react-icons/ai";
 
-export const Header = ({ handleSidebarToggle }) => {
+export const Header = ({ handleSidebarToggle, role }) => {
   const { socket } = useSocket();
   const [notification, setNotification] = useState([]);
   const { decodedUser } = useJwtDecode();
@@ -42,7 +42,10 @@ export const Header = ({ handleSidebarToggle }) => {
 
       <div className="flex items-center gap-3">
         {/* Notification */}
-        <NotificationBell notifications={notification} />
+        <NotificationBell
+          notifications={notification}
+          theme={role === "admin" ? "dark" : "light"}
+        />
 
         {/* Mobile Menu Toggle */}
         <button
@@ -54,7 +57,10 @@ export const Header = ({ handleSidebarToggle }) => {
           <GrMenu className="text-3xl" />
         </button>
 
-        <Button label="Logout" customCss="bg-red-500 hover:bg-red-600 md:block hidden" />
+        
+        <Button label="Logout" customCss="bg-red-500 hover:bg-red-600 md:block hidden"  />
+
+
       </div>
     </header>
   );

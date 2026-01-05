@@ -1,6 +1,6 @@
-import { MdDashboard } from "react-icons/md";
+import { MdApartment, MdDashboard, MdInsights, MdNotificationsActive } from "react-icons/md";
 import { IoIosTime } from "react-icons/io";
-import { FaBookMedical } from "react-icons/fa";
+import { FaBookMedical, FaUserInjured, FaUsersCog } from "react-icons/fa";
 import { MdPayments } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { MdContactSupport } from "react-icons/md";
@@ -69,18 +69,54 @@ export const SidebarLinks = {
   ],
 
   admin: [
-    { title: "Dashboard", icon: <MdDashboard className="text-lg" />, path: "/admin/dashboard" },
+    {
+      title: "Dashboard",
+      icon: <MdDashboard className="text-lg" />,
+      path: "/dashboard/admin",
+    },
+
+
+
+    {
+      title: "Doctors",
+      icon: <MdLocalHospital className="text-lg" />,
+      path: "doctors",
+    },
+
+    {
+      title: "Departments",
+      icon: <MdApartment className="text-lg" />,
+      path: "departments",
+    },
+
+    {
+      title: "Billing & Payments",
+      icon: <MdPayments className="text-lg" />,
+      path: "billings",
+    },
+
     {
       title: "Reports & Analytics",
-      icon: <MdDashboard className="text-lg" />,
-      path: "/admin/dashboard/analysis",
+      icon: <MdInsights className="text-lg" />,
+      path: "reports-and-analytics",
     },
-    { title: "Notification", icon: <MdDashboard className="text-lg" />, path: "notification" },
-    { title: "Department", icon: <MdDashboard className="text-lg" />, path: "department" },
-    { title: "Doctor ", icon: <MdLocalHospital className="text-lg" />, path: "doctors" },
-    { title: "Billings ", icon: <MdLocalHospital className="text-lg" />, path: "billings" },
-    { title: "Chat Center ", icon: <MdLocalHospital className="text-lg" />, path: "chat" },
-    { title: "Account", icon: <FaCircleUser className="text-lg" />, path: "account" },
-    { title: "System Settings", icon: <IoMdSettings className="text-lg" />, path: "settings" },
+
+    {
+      title: "Notifications",
+      icon: <MdNotificationsActive className="text-lg" />,
+      path: "notifications",
+    },
+
+    {
+      title: "Accounts & Roles",
+      icon: <FaUsersCog className="text-lg" />,
+      path: "accounts",
+    },
+
+    {
+      title: "System Settings",
+      icon: <IoMdSettings className="text-lg" />,
+      path: "settings",
+    },
   ],
 };

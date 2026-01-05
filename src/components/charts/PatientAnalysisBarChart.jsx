@@ -13,7 +13,6 @@ import patientAnalysis from "../../assets/jsonData/patientAnalysis.json";
 
 export const PatientAnalysisBarChart = () => {
   return (
-    <div className="p-1">
         <ResponsiveContainer width="100%" height={350}>
         <BarChart data={patientAnalysis}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -28,6 +27,5 @@ export const PatientAnalysisBarChart = () => {
           <Bar dataKey="lost" fill="#ef4444" name="Lost Patients" />
         </BarChart>
       </ResponsiveContainer>
-    </div>
   );
 };
