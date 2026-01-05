@@ -1,50 +1,38 @@
 import { useState } from "react";
-import { loginService } from "../../services/auth/auth.service";
+import { forgotPasswordService } from "../../services/auth/auth.service";
 import { toast } from "react-toastify";
 
-export const useLogin = () => {
+export const useForgotPassword = () => {
   const [loading, setLoading] = useState(false);
-
-  const login = async (payload, setErrors) => {
+  const forgotPassword = async (payload, setErrors) => {
     setLoading(true);
-
     try {
-      const response = await loginService(payload);
-
-      // console.log("response", response);
+      const response = await forgotPasswordService(payload, setErrors);
 
       if (!response.success) {
-        throw new Error(response.message || "Login Failed");
+        throw new Error(response.message || "Email can't be send. please try again letter");
       }
+
       return response;
     } catch (err) {
-      // Field errors
-
       if (err.errors && setErrors) {
         const formattedErrors = {};
-
-        err.errors.forEach((e) => {
+        err.errors.map((e) => {
           if (formattedErrors[e.field]) {
             formattedErrors[e.field] += `, ${e.message}`;
           } else {
             formattedErrors[e.field] = e.message;
           }
         });
-
-        setErrors(formattedErrors);
       }
 
       if (err.message) {
         toast.error(err.message);
       }
-
-      // throw err;
-
-      // console.log(err);
     } finally {
       setLoading(false);
     }
   };
 
-  return { login, loading };
+  return { loading, forgotPassword };
 };

@@ -22,7 +22,7 @@ export const Login = () => {
     e.preventDefault();
 
     const formErrors = validateOnSubmit(values);
-    if (Object.keys(formErrors).length > 0) return; 
+    if (Object.keys(formErrors).length > 0) return;
 
     const response = await login(values, setErrors);
 
@@ -34,7 +34,6 @@ export const Login = () => {
 
       // save access token in cookie
       // console.log(response.data.accessToken);
-
 
       // navigate based on role
       const redirect = {
@@ -96,10 +95,15 @@ export const Login = () => {
                 value={values.password}
                 onChange={handleChange}
               />
-              <NavLink to={""} className={"text-blue-800  w-full block text-right"}>
-                Forgot Password
-              </NavLink>
-              {errors.password && <span className="text-sm text-red-700">{errors.password}</span>}
+              <div className="flex justify-between items-center ">
+                {errors.password && <span className="text-sm text-red-700  w-full">{errors.password}</span>}
+                <NavLink
+                  to={"../forgot-password"}
+                  className={"text-blue-800  w-full  text-right"}
+                >
+                  Forgot Password
+                </NavLink>
+              </div>
             </div>
           </div>
 

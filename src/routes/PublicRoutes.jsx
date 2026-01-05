@@ -19,6 +19,7 @@ import { CashPaymentConfirmation } from "../pages/public/CashPaymentConfirmation
 import { PaymentSuccess } from "../pages/public/PaymentSuccess";
 import PaymentFailed from "../pages/public/PaymentFailed";
 import { Contact } from "../pages/public/Contact";
+import { ForgotPassword } from "../auth/forgotPassword";
 
 const publicRouter = [
   {
@@ -96,6 +97,10 @@ const publicRouter = [
         path: "register",
         element: <Register />,
       },
+      {
+        path: "forgot-password",
+        element:<ForgotPassword/>
+      }
     ],
   },
 ];

@@ -6,3 +6,7 @@ export const registerService = (payload) => {
 export const loginService = (payload) => {
   return api.post("/auth/login", payload);
 };
+
+export const forgotPasswordService = (payload) => {
+  return api.post("/auth/forgot-password", payload);
+};
