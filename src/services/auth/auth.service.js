@@ -10,3 +10,8 @@ export const loginService = (payload) => {
 export const forgotPasswordService = (payload) => {
   return api.post("/auth/forgot-password", payload);
 };
+
+
+export const RefreshTokenService = () => {
+  return api.get("/auth/refresh-token");
+}

@@ -3,9 +3,13 @@ import { loginSchema } from "../utils/validationSchema";
 import { toast } from "react-toastify";
 import { useForm } from "../hooks/custom/useForm";
 import { useLogin } from "../hooks/auth/useLogin";
+import { useAuth } from "../context/AuthContext";
+import { PreLoader } from "../components/UI/loaders/PreLoader";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const { values, setValues, errors, setErrors, handleChange, resetForm, validateOnSubmit } =
     useForm(
       {
@@ -26,7 +30,8 @@ export const Login = () => {
 
     const response = await login(values, setErrors);
 
-    console.log(response);
+    // console.log(response);
+
     if (response?.success) {
       // reset form
       resetForm();
@@ -45,13 +50,25 @@ export const Login = () => {
         navigate(`${redirect.user}`);
       } else if (response.data.role === "doctor") {
         navigate(`${redirect.doctor}`);
-      } else if (response.data === "admin") {
+      } else if (response.data.role === "admin") {
         navigate(`${redirect.admin}`);
       } else {
         navigate("/unauthorized");
       }
     }
   };
+
+  if (user) {
+    if (user.role === "user") {
+      return <Navigate to="/" replace />;
+    } else if (user.role === "doctor") {
+      return <Navigate to="/dashboard/doctor" replace />;
+    } else if (user.role === "admin") {
+      return <Navigate to="/dashboard/admin" replace />;
+    } else {
+      navigate("/unauthorized");
+    }
+  }
 
   return (
     <>
@@ -96,11 +113,10 @@ export const Login = () => {
                 onChange={handleChange}
               />
               <div className="flex justify-between items-center ">
-                {errors.password && <span className="text-sm text-red-700  w-full">{errors.password}</span>}
-                <NavLink
-                  to={"../forgot-password"}
-                  className={"text-blue-800  w-full  text-right"}
-                >
+                {errors.password && (
+                  <span className="text-sm text-red-700  w-full">{errors.password}</span>
+                )}
+                <NavLink to={"../forgot-password"} className={"text-blue-800  w-full  text-right"}>
                   Forgot Password
                 </NavLink>
               </div>

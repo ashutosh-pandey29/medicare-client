@@ -22,7 +22,7 @@ const AdminRoutes = [
     path: "/dashboard/admin",
     element: (
       <SocketProvider>
-      <DashboardLayout role={"admin"} />,
+      <DashboardLayout allowedRoles={["admin"]} />,
       </SocketProvider>
     ),
     

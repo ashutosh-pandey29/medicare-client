@@ -14,7 +14,7 @@ const UserRoutes = [
     element: (
       <AuthProvider>
         <SocketProvider>
-          <ProtectedRoutes allowedRole="user" />
+          <ProtectedRoutes allowedRoles={["user"]} />
         </SocketProvider>
       </AuthProvider>
     ),

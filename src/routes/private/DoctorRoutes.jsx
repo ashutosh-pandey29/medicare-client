@@ -18,7 +18,7 @@ const DoctorRoutes = [
     element: (
       <AuthProvider>
         <SocketProvider role="doctor">
-          <ProtectedRoutes allowedRole="doctor" />
+          <ProtectedRoutes allowedRoles={["doctor" ]}/>
         </SocketProvider>
       </AuthProvider>
     ),
