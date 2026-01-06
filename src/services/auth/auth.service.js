@@ -12,6 +12,13 @@ export const forgotPasswordService = (payload) => {
 };
 
 
+
+
 export const RefreshTokenService = () => {
   return api.get("/auth/refresh-token");
+}
+
+
+export const myAccount = () => {
+  return api.get("/auth/me");
 }
