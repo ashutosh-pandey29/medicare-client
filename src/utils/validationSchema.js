@@ -36,6 +36,16 @@ export const loginSchema = z.object({
   password: z.string().nonempty("Password field is required."),
 });
 
+
+
+
+
+
+
+
+
+
+
 /**
  * ====================================
  * !APPOINTMENT VALIDATION  SCHEMA
@@ -75,3 +85,5 @@ export const departmentSchema = z.object({
     .number({ invalid_type_error: "Fees must be a number" })
     .positive("Fees must be a positive number"),
 });
+
+

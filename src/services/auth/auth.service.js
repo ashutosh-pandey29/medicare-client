@@ -3,11 +3,9 @@ export const registerService = (payload) => {
   return api.post("/auth/register", payload);
 };
 
-
 export const verifyEmailService = (token) => {
-  return api.get(`/auth/verify-email/${token}`)
-}
-
+  return api.get(`/auth/verify-email/${token}`);
+};
 
 export const loginService = (payload) => {
   return api.post("/auth/login", payload);
@@ -15,6 +13,10 @@ export const loginService = (payload) => {
 
 export const forgotPasswordService = (payload) => {
   return api.post("/auth/forgot-password", payload);
+};
+
+export const resetPasswordService = (payload) => {
+  return api.post("/auth/reset-password", payload);
 };
 
 export const RefreshTokenService = () => {

@@ -20,6 +20,7 @@ import { CashPaymentConfirmation } from "../pages/public/CashPaymentConfirmation
 import { PaymentSuccess } from "../pages/public/PaymentSuccess";
 import PaymentFailed from "../pages/public/PaymentFailed";
 import { Contact } from "../pages/public/Contact";
+import { ResetPassword } from "../auth/ResetPassword";
 
 const publicRouter = [
   {
@@ -103,7 +104,7 @@ const publicRouter = [
       },
       {
         path: "reset-password",
-        element: "resetpassword",
+        element: <ResetPassword/>,
       },
     ],
   },
