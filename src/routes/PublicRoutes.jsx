@@ -12,6 +12,7 @@ import { Login } from "../auth/Login";
 import { Register } from "../auth/Register";
 import { VerifyEmailReminder } from "../auth/VerifyEmailRemainder";
 import { VerifyEmail } from "../auth/VerifyEmail";
+import { ForgotPassword } from "../auth/ForgotPassword";
 import { AuthProvider } from "../context/AuthContext";
 import { AuthLayout } from "../auth/AuthLayout";
 import { NotFound } from "../pages/NotFound";
@@ -19,7 +20,6 @@ import { CashPaymentConfirmation } from "../pages/public/CashPaymentConfirmation
 import { PaymentSuccess } from "../pages/public/PaymentSuccess";
 import PaymentFailed from "../pages/public/PaymentFailed";
 import { Contact } from "../pages/public/Contact";
-import { ForgotPassword } from "../auth/forgotPassword";
 
 const publicRouter = [
   {
@@ -99,8 +99,12 @@ const publicRouter = [
       },
       {
         path: "forgot-password",
-        element:<ForgotPassword/>
-      }
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password",
+        element: "resetpassword",
+      },
     ],
   },
 ];
