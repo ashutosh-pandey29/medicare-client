@@ -1,137 +1,86 @@
 import { useEffect, useState } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { GoXCircleFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
+import { useVerifyEmail } from "../hooks/auth/useVerifyEmail";
+import { toast } from "react-toastify";
 
 export const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
+
   const token = searchParams.get("token");
 
+  const { verifyEmail, loading } = useVerifyEmail();
+
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
   useEffect(() => {
-    const verifyEmail = async () => {
+    const verify = async () => {
       if (!token) {
-        setLoading(false);
-        setMessage("Invalid verification link.");
+        setIsSuccess(false);
+        setMessage("Invalid or expired verification link.");
         return;
       }
 
       try {
-        setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify?token=${token}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const jsonResponse = await response.json();
-
-        if (!response.ok) {
-          throw new Error(jsonResponse.message || "Internal Server Error");
-        }
-        if (jsonResponse.status) {
-          setMessage(jsonResponse.message);
-          setIsSuccess(true);
-        } else {
-          setMessage(jsonResponse.message);
-        }
+        const response = await verifyEmail(token);
+        setIsSuccess(true);
+        setMessage(response?.message || "Email verified successfully");
+        setTimeout(() => {
+          navigate("/auth/login");
+        }, 2000);
       } catch (err) {
-        setMessage(err.message);
-      } finally {
-        setLoading(false);
+        setIsSuccess(false);
+        console.log(err.message);
+        setMessage(err?.message || "Email verification failed");
       }
     };
-
-    verifyEmail();
-  }, [token]);
+    verify();
+  }, []);
 
   return (
-    <>
-      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-          {loading ? (
-            <div className="text-center space-y-6">
-              {/* Animated Mail Icon */}
-              <div className="flex justify-center">
-                <div className="relative">
-                  <MdEmail className="w-20 h-20 text-indigo-500" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-24 h-24 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Loading Text */}
-              <div className="space-y-3">
-                <h2 className="text-2xl font-bold text-gray-800">Verifying Your Email</h2>
-                <p className="text-gray-600">Please wait while we verify your email address...</p>
-              </div>
-
-              {/* Animated Dots */}
-              <div className="flex justify-center space-x-2">
-                <div
-                  className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0ms" }}
-                ></div>
-                <div
-                  className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "150ms" }}
-                ></div>
-                <div
-                  className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "300ms" }}
-                ></div>
-              </div>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="bg-white rounded shadow p-8 max-w-md w-full">
+        {loading ? (
+          <div className="text-center space-y-6">
+            <div className="flex justify-center relative">
+              <MdEmail className="w-20 h-20 text-indigo-500" />
+              <div className="absolute w-24 h-24 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin"></div>
             </div>
-          ) : (
-            <div className="text-center space-y-6">
-              {/* Success/Error Icon */}
-              <div className="flex justify-center">
-                {isSuccess ? (
-                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-pulse">
-                    <FaCheckCircle className="w-12 h-12 text-green-500" />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center animate-pulse">
-                    <GoXCircleFill className="w-12 h-12 text-red-500" />
-                  </div>
-                )}
-              </div>
 
-              {/* Message */}
-              <div className="space-y-3">
-                <h2
-                  className={`text-2xl font-bold ${isSuccess ? "text-green-600" : "text-red-600"}`}
-                >
-                  {isSuccess ? "Verification Successful!" : "Verification Failed"}
-                </h2>
-                <p className="text-gray-600">{message}</p>
-              </div>
-
-              {/* Action Button */}
-
+            <h2 className="text-2xl font-bold">Verifying Your Email</h2>
+            <p className="text-gray-600">Please wait...</p>
+          </div>
+        ) : (
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
               {isSuccess ? (
-                <NavLink
-                  to={"/auth/login"}
-                  className={`bg-green-500 hover:bg-green-600 w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200`}
-                >
-                  Continue to Login
-                </NavLink>
+                <FaCheckCircle className="w-16 h-16 text-green-500" />
               ) : (
-                <button
-                  className={` bg-red-500 hover:bg-red-600 w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 `}
-                >
-                  Try Again
-                </button>
+                <GoXCircleFill className="w-16 h-16 text-red-500" />
               )}
             </div>
-          )}
-        </div>
+
+            <h2 className={`text-2xl font-bold ${isSuccess ? "text-green-600" : "text-red-600"}`}>
+              {isSuccess ? "Verification Successful!" : "Verification Failed"}
+            </h2>
+
+            <p className="text-gray-600">{message}</p>
+
+            {!isSuccess && (
+              <button
+                disabled={true}
+                className="bg-red-500 hover:bg-red-600 w-full py-3 px-6 rounded-lg font-semibold text-white block"
+              >
+                Resend Verification Email
+              </button>
+            )}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };

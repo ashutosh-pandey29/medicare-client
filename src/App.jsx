@@ -16,7 +16,7 @@ const router = createBrowserRouter([
 
   {
     path: "/unexpected-error",
-    element:<UnexpectedError/>
+    element: <UnexpectedError />,
   },
   {
     path: "/unauthorized",
@@ -32,7 +32,16 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
     </>
   );

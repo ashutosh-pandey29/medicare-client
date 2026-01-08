@@ -8,12 +8,13 @@ import { Modal } from "../../modals/Modal";
 import { useModal } from "../../../hooks/custom/useModal";
 import { FaCross } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
+import { useLogout } from "../../../hooks/auth/useLogout";
 
 export const Sidebar = ({ handleSidebarToggle, role }) => {
   const links = SidebarLinks[role] || [];
   const { modalData, openModal, closeModal } = useModal();
   const { decodedUser } = useJwtDecode();
-  // const { logout } = useAuth();
+  const { logout } = useLogout();
 
   // console.log(decodedUser);
 
@@ -34,7 +35,8 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
               />
               <div className="flex flex-col">
                 <span
-                  className={`text-lg font-semibold ${role === "doctor" && "text-white"} ${role === "user" && "text-gray-800" 
+                  className={`text-lg font-semibold ${role === "doctor" && "text-white"} ${
+                    role === "user" && "text-gray-800"
                   }  ${role === "admin" && "text-white"} `}
                 >
                   {decodedUser?.username}
@@ -127,21 +129,30 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
         {/* Bottom Section: Logout */}
         <div className="px-2">
           {role === "doctor" && (
-            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-white hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+            <button
+              onClick={() => logout()}
+              className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-white hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium"
+            >
               <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
               <span className="text-base">Logout</span>
             </button>
           )}
 
           {role === "user" && (
-            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+            <button
+              onClick={() => logout()}
+              className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium"
+            >
               <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
               <span className="text-base">Logout</span>
             </button>
           )}
 
           {role === "admin" && (
-            <button className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium">
+            <button
+              onClick={() => logout()}
+              className=" group flex items-center w-full gap-3 px-4 py-3.5 rounded-lg text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-200 ease-in-out font-medium"
+            >
               <RiLogoutCircleLine className="text-lg transition-transform group-hover:translate-x-1" />
               <span className="text-base">Logout</span>
             </button>

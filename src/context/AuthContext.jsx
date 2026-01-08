@@ -8,40 +8,57 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const initAuth = async () => {
+  // function that check token expired or not
+  const isTokenExpired = (token) => {
     try {
-      const response = await RefreshTokenService();
+      const decoded = jwtDecode(token);
+      return decoded.exp * 1000 < Date.now();
+    } catch (err) {
+      return true; // invalid token considered expired
+    }
+  };
 
-      console.log("refresh token response:", response.data);
-      const accessToken = response.data.accessToken;
-      if (!accessToken) throw new Error("No access token returned");
+  const initAuth = async () => {
+    let accessToken = localStorage.getItem("accessToken");
 
-      localStorage.setItem("accessToken", accessToken);
+    if (!accessToken || isTokenExpired(accessToken)) {
+      try {
+        const response = await RefreshTokenService();
+        accessToken = response.data.accessToken;
+        if (!accessToken) throw new Error("No access token returned");
+        localStorage.setItem("accessToken", accessToken);
+      } catch (err) {
+        console.log("Refresh token failed", err);
+        // toast.error("Session expired. Please login again.");
+        clearAuth();
+        setLoading(false);
+        return;
+      }
+    }
 
+    // decode and set user
+    try {
       const decodedJwtData = jwtDecode(accessToken);
-      console.log("decodedJwtData", decodedJwtData);
-
       setUser({
         userId: decodedJwtData.userId,
         username: decodedJwtData.username,
         role: decodedJwtData.role,
       });
     } catch (err) {
-      console.log("err", err);
-
-      // setUser(null);
+      console.log("Invalid access token", err);
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     initAuth();
   }, []);
 
-  const login = (accessToken) => {
+  const setAuth = (accessToken) => {
     localStorage.setItem("accessToken", accessToken);
     const decodedJwtData = jwtDecode(accessToken);
-
     setUser({
       userId: decodedJwtData.userId,
       username: decodedJwtData.username,
@@ -49,13 +66,15 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  const logout = async () => {
+  const clearAuth = async () => {
     localStorage.removeItem("accessToken");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, setAuth, clearAuth, loading }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

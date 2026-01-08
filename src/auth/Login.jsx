@@ -8,7 +8,7 @@ import { PreLoader } from "../components/UI/loaders/PreLoader";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setAuth } = useAuth();
 
   const { values, setValues, errors, setErrors, handleChange, resetForm, validateOnSubmit } =
     useForm(
@@ -37,8 +37,9 @@ export const Login = () => {
       resetForm();
       toast.success(response?.message);
 
-      // save access token in cookie
+      // save access token in localstorage
       // console.log(response.data.accessToken);
+      setAuth(response.data.accessToken);
 
       // navigate based on role
       const redirect = {

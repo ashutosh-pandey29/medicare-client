@@ -90,7 +90,7 @@ const publicRouter = [
         element: <VerifyEmailReminder />,
       },
       {
-        path: "verify",
+        path: "verify-email",
         element: <VerifyEmail />,
       },
       {
