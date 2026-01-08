@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // !-------------
 import { registerSchema } from "../utils/validationSchema";
 import { useRegister } from "../hooks/auth/useRegister";
 import { useForm } from "../hooks/custom/useForm";
+import { useAuth } from "../context/AuthContext";
 
 export const Register = () => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const { register, loading } = useRegister();
 
@@ -19,6 +22,18 @@ export const Register = () => {
       },
       registerSchema
     );
+
+  // if register / login restrict user to open orm
+
+  useEffect(() => {
+    if (!user) return;
+    const redirect = {
+      user: "/",
+      doctor: "/dashboard/doctor",
+      admin: "/dashboard/admin",
+    };
+    navigate(redirect[user.role] || "/unauthorized");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +48,7 @@ export const Register = () => {
     if (response.success) {
       resetForm();
       toast.success(response.message);
-      navigate(`../verify-email-reminder` , { state: { email: values.email } });
+      navigate(`../verify-email-reminder`, { state: { email: values.email } });
     }
   };
 

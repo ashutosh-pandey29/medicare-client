@@ -4,25 +4,83 @@ import { UserPageHeading } from "../../components/common/dashboard/heading/UserP
 import { Button } from "../../components/UI/Button";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { useMe } from "../../hooks/auth/useMe";
+import { Modal } from "../../components/modals/Modal";
+import { useModal } from "../../hooks/custom/useModal";
+import { DeleteConfirmationModel } from "../../components/modals/DeleteConfirmationModel";
+import { useForm } from "../../hooks/custom/useForm";
+import { accountUpdateSchema } from "../../utils/schema/auth.validation";
+import { useAccount } from "../../hooks/auth/useAccount";
+import { toast } from "react-toastify";
 
 export const Account = () => {
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [formData, setFormData] = useState("");
-  const { myAccountInfo, loading } = useMe();
+  const { modalData, openModal, closeModal } = useModal();
+  const { loading, myAccountInfo, updateAccount, updatePassword } = useAccount();
+
+  const initialValues = {
+    username: "",
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  };
+
+  const { values, setValues, errors, setErrors, handleChange, validateOnSubmit, resetForm } =
+    useForm(initialValues, accountUpdateSchema);
 
   const fetchAccount = async () => {
     const response = await myAccountInfo();
-
     console.log(response.data);
-
-    setFormData(response.data);
+    setValues(response.data);
   };
-
   useEffect(() => {
     fetchAccount();
   }, []);
+
+  // update account information
+
+  const handleAccountUpdate = async (e) => {
+    e.preventDefault();
+
+    const formErrors = validateOnSubmit(values);
+    if (Object.keys(formErrors).length > 0) return;
+
+    try {
+      const payload = {
+        username: values.username,
+        email: values.email,
+      };
+
+      const response = await updateAccount(payload);
+
+      toast.success(response.message);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // update account password
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    const formErrors = validateOnSubmit(values);
+    if (Object.keys(formErrors).length > 0) return;
+    try {
+      const payload = {
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      };
+
+      const response = await updatePassword(payload);
+      toast.success(response.message);
+
+      resetForm();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   return (
     <section className="bg-white rounded-sm shadow p-1  md:p-3  w-full h-auto">
@@ -42,93 +100,117 @@ export const Account = () => {
           </p>
 
           <div className="grid grid-cols-1  gap-6">
-            {/* Username */}
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-slate-700">Username</label>
-              <input
-                type="text"
-                className="h-11 px-3 rounded-md border border-zinc-300
+            <form onSubmit={handleAccountUpdate}>
+              {/* username */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-slate-700">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  className="h-11 px-3 rounded-md border border-zinc-300
         focus:outline-none focus:ring-2 focus:ring-green-500/40
         focus:border-green-500 transition"
-                placeholder="username "
-                value={formData.username}
-              />
-            </div>
+                  placeholder="username "
+                  value={values.username}
+                  onChange={handleChange}
+                />
+              </div>
 
-            {/* Email */}
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-slate-700">Email Address</label>
-              <input
-                type="email"
-                className="h-11 px-3 rounded-md border border-zinc-300
+              {/* Email */}
+              <div className="flex flex-col gap-1 mt-5">
+                <label className="text-sm font-medium text-slate-700">Email Address</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="h-11 px-3 rounded-md border border-zinc-300
         focus:outline-none focus:ring-2 focus:ring-green-500/40
         focus:border-green-500 transition"
-                placeholder="example@email.com"
-                value={formData.email}
-              />
-            </div>
-          </div>
+                  placeholder="example@email.com"
+                  value={values.email}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="mt-6 flex justify-end">
-            <Button label={"Save Change"} variant="submit" />
+              <div className="mt-6 flex justify-end">
+                <Button
+                  label={loading ? "Saving Change..." : "Save Change"}
+                  variant="submit"
+                  type="submit"
+                  disabled={loading}
+                />
+              </div>
+            </form>
           </div>
         </div>
 
         {/* security -  change password */}
-
         <div className="p-4 shadow-md rounded  mt-10">
           <h2 className="text-xl font-semibold text-slate-800">Security – Change Password</h2>
           <p className="text-sm text-gray-500 mb-6">
             Change your account password regularly to protect your account from unauthorized access.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Old Password */}
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm font-medium text-slate-700">Old Password</label>
+          <form onSubmit={handleUpdatePassword}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Old Password */}
+              <div className="flex flex-col gap-1 relative">
+                <label className="text-sm font-medium text-slate-700">Old Password</label>
 
-              <input
-                type={showOld ? "text" : "password"}
-                className="h-11 px-3 pr-10 rounded-md border border-zinc-300
+                <input
+                  type={showOld ? "text" : "password"}
+                  name="oldPassword"
+                  onChange={handleChange}
+                  value={values.oldPassword || ""}
+                  placeholder="********"
+                  className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
               focus:border-green-500 transition"
-              />
+                />
 
-              <button
-                type="button"
-                onClick={() => setShowOld(!showOld)}
-                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
-              >
-                {showOld ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => setShowOld(!showOld)}
+                  className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                >
+                  {showOld ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
 
-            {/* New Password */}
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm font-medium text-slate-700">New Password</label>
+              {/* New Password */}
+              <div className="flex flex-col gap-1 relative">
+                <label className="text-sm font-medium text-slate-700">New Password</label>
 
-              <input
-                type={showNew ? "text" : "password"}
-                className="h-11 px-3 pr-10 rounded-md border border-zinc-300
+                <input
+                  type={showNew ? "text" : "password"}
+                  name="newPassword"
+                  onChange={handleChange}
+                  value={values.newPassword || ""}
+                  placeholder="********"
+                  className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
               focus:border-green-500 transition"
-              />
+                />
 
-              <button
-                type="button"
-                onClick={() => setShowNew(!showNew)}
-                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
-              >
-                {showNew ? <FaEyeSlash /> : <FaEye />}
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setShowNew(!showNew)}
+                  className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                >
+                  {showNew ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
 
             {/* Confirm Password */}
-            <div className="flex flex-col gap-1 relative md:col-span-2">
+            <div className="flex flex-col gap-1 relative md:col-span-2 mt-5">
               <label className="text-sm font-medium text-slate-700">Confirm New Password</label>
 
               <input
                 type={showConfirm ? "text" : "password"}
+                name="confirmPassword"
+                onChange={handleChange}
+                value={values.confirmPassword || ""}
+                placeholder="********"
                 className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
               focus:border-green-500 transition"
@@ -142,19 +224,24 @@ export const Account = () => {
                 {showConfirm ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-          </div>
-          <div className="mt-6 rounded-md border-l-4 border-red-600 bg-red-50 p-4">
-            <h4 className="text-sm font-semibold text-red-700 mb-1">Important Security Notice</h4>
 
-            <p className="text-sm text-red-600 leading-relaxed">
-              After updating your password, you will be automatically logged out from your account.
-              Please log in again using your new password to continue.
-            </p>
-          </div>
+            <div className="mt-6 rounded-md border-l-4 border-red-600 bg-red-50 p-4">
+              <h4 className="text-sm font-semibold text-red-700 mb-1">Important Security Notice</h4>
 
-          <div className="mt-6 flex justify-end">
-            <Button label={"Update Password"} variant="submit" />
-          </div>
+              <p className="text-sm text-red-600 leading-relaxed">
+                After updating your password, you will be automatically logged out from your
+                account. Please log in again using your new password to continue.
+              </p>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <Button
+                label={loading ? "Updating..." : "Update Password"}
+                variant="submit"
+                type="submit"
+              />
+            </div>
+          </form>
         </div>
       </div>
 
@@ -174,9 +261,35 @@ export const Account = () => {
         </ul>
 
         <div className="flex justify-end">
-          <Button label="Delete Profile" variant="danger" />
+          <Button
+            label="Delete Profile"
+            variant="danger"
+            onClick={() =>
+              openModal(
+                <DeleteConfirmationModel
+                  title="delete your account"
+                  onClose={closeModal}
+                  content={
+                    <>
+                      <p className="text-red-700 p-2 border-l-4 mt-3 mb-4 bg-red-100 rounded-md">
+                        <ul className="list-disc list-inside space-y-1 text-sm">
+                          <li>Your account will be deactivated immediately</li>
+                          <li>You can recover it within 7 days by logging in again</li>
+                          <li>After 7 days, it will be permanently disabled</li>
+                          <li>Your data will be retained for analytics and audit</li>
+                        </ul>
+                      </p>
+                    </>
+                  }
+                />,
+                "Account Deletion"
+              )
+            }
+          />
         </div>
       </div>
+
+      <Modal data={modalData} onClose={closeModal} />
     </section>
   );
 };

@@ -12,63 +12,70 @@ export const AuthProvider = ({ children }) => {
   const isTokenExpired = (token) => {
     try {
       const decoded = jwtDecode(token);
+      console.log(decoded);
       return decoded.exp * 1000 < Date.now();
     } catch (err) {
       return true; // invalid token considered expired
     }
   };
 
-  const initAuth = async () => {
-    let accessToken = localStorage.getItem("accessToken");
+  useEffect(() => {
+    const initAuth = async () => {
+      let accessToken = localStorage.getItem("accessToken");
 
-    if (!accessToken || isTokenExpired(accessToken)) {
-      try {
-        const response = await RefreshTokenService();
-        accessToken = response.data.accessToken;
-        if (!accessToken) throw new Error("No access token returned");
-        localStorage.setItem("accessToken", accessToken);
-      } catch (err) {
-        console.log("Refresh token failed", err);
-        // toast.error("Session expired. Please login again.");
-        clearAuth();
+      if (isTokenExpired(accessToken)) {
+        try {
+          const response = await RefreshTokenService();
+          accessToken = response?.data?.accessToken;
+          if (!accessToken) throw new Error("No access token");
+          localStorage.setItem("accessToken", accessToken);
+        } catch {
+          // clearAuth();
+          return;
+        }
+      }
+
+      if (!accessToken) {
         setLoading(false);
         return;
       }
-    }
 
-    // decode and set user
-    try {
-      const decodedJwtData = jwtDecode(accessToken);
-      setUser({
-        userId: decodedJwtData.userId,
-        username: decodedJwtData.username,
-        role: decodedJwtData.role,
-      });
-    } catch (err) {
-      console.log("Invalid access token", err);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const decoded = jwtDecode(accessToken);
+        setUser({
+          userId: decoded.userId ?? null,
+          username: decoded.username ?? "",
+          role: decoded.role ?? "user",
+        });
+      } catch {
+        clearAuth();
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
     initAuth();
   }, []);
 
   const setAuth = (accessToken) => {
+    setLoading(true);
     localStorage.setItem("accessToken", accessToken);
-    const decodedJwtData = jwtDecode(accessToken);
+
+    const decoded = jwtDecode(accessToken);
     setUser({
-      userId: decodedJwtData.userId,
-      username: decodedJwtData.username,
-      role: decodedJwtData.role,
+      userId: decoded.userId ?? null,
+      username: decoded.username ?? "",
+      role: decoded.role ?? "user",
     });
+
+    setLoading(false);
   };
 
-  const clearAuth = async () => {
+  const clearAuth = () => {
+    setLoading(true);
     localStorage.removeItem("accessToken");
     setUser(null);
+    setLoading(false);
   };
 
   return (

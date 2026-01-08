@@ -42,20 +42,16 @@ export const Login = () => {
       setAuth(response.data.accessToken);
 
       // navigate based on role
-      const redirect = {
-        user: "/",
-        doctor: "/dashboard/doctor",
-        admin: "/dashboard/admin",
-      };
-      if (response.data.role === "user") {
-        navigate(`${redirect.user}`);
-      } else if (response.data.role === "doctor") {
-        navigate(`${redirect.doctor}`);
-      } else if (response.data.role === "admin") {
-        navigate(`${redirect.admin}`);
-      } else {
-        navigate("/unauthorized");
-      }
+
+      useEffect(() => {
+        if (!user) return;
+        const redirect = {
+          user: "/",
+          doctor: "/dashboard/doctor",
+          admin: "/dashboard/admin",
+        };
+        navigate(redirect[user.role] || "/unauthorized");
+      }, [user]);
     }
   };
 

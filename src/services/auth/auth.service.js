@@ -27,6 +27,14 @@ export const myAccount = () => {
   return api.get("/auth/me");
 };
 
+export const updateAccountService = (payload) => {
+  return api.put("auth/update-account", payload);
+};
+
+export const updatePasswordService = (payload) => {
+  return api.put("/auth/update-password", payload);
+}
+
 export const logoutService = () => {
   return api.post("/auth/logout");
 };

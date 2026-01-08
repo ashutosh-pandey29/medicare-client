@@ -47,7 +47,7 @@ api.interceptors.response.use(
         // refresh token cookie automatically send
         const res = await RefreshTokenService();
 
-        console.log("res" , res);
+        console.log("res", res);
 
         const newAccessToken = res.data.accessToken;
 
@@ -60,8 +60,8 @@ api.interceptors.response.use(
         // retry original request
         return api(originalRequest);
       } catch (refreshErr) {
-        console.log("refreshErr" ,refreshErr);
-        // any error in refresh token generation then logout
+        // console.log("refreshErr", refreshErr);
+        // // any error in refresh token generation then logout
         localStorage.removeItem("accessToken");
 
         window.location.href = "/auth/login";
