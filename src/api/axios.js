@@ -61,7 +61,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshErr) {
         // console.log("refreshErr", refreshErr);
-        // // any error in refresh token generation then logout
+        // any error in refresh token generation then logout
         localStorage.removeItem("accessToken");
 
         window.location.href = "/auth/login";

@@ -1,57 +1,76 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { UserPageHeading } from "../../components/common/dashboard/heading/UserPageHeading";
 import { Button } from "../../components/UI/Button";
 import { MdOutlineManageAccounts } from "react-icons/md";
-import { useMe } from "../../hooks/auth/useMe";
 import { Modal } from "../../components/modals/Modal";
 import { useModal } from "../../hooks/custom/useModal";
 import { DeleteConfirmationModel } from "../../components/modals/DeleteConfirmationModel";
 import { useForm } from "../../hooks/custom/useForm";
-import { accountUpdateSchema } from "../../utils/schema/auth.validation";
+import { accountUpdateSchema, passwordUpdateSchema } from "../../utils/schema/auth.validation";
 import { useAccount } from "../../hooks/auth/useAccount";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 export const Account = () => {
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [formData, setFormData] = useState("");
   const { modalData, openModal, closeModal } = useModal();
   const { loading, myAccountInfo, updateAccount, updatePassword } = useAccount();
+  const { clearAuth } = useAuth();
 
-  const initialValues = {
-    username: "",
+  const accountInitialValues = {
     email: "",
+    username: "",
+  };
+
+  const passwordInitialValue = {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   };
 
-  const { values, setValues, errors, setErrors, handleChange, validateOnSubmit, resetForm } =
-    useForm(initialValues, accountUpdateSchema);
+  const accountForm = useForm(accountInitialValues, accountUpdateSchema);
+  const passwordForm = useForm(passwordInitialValue, passwordUpdateSchema);
+
+  // destructing
+  const {
+    values: accountValues,
+    errors: accountErrors,
+    handleChange: handleAccountChange,
+    validateOnSubmit: validateAccount,
+    resetForm: resetAccountForm,
+    setValues: setAccountValues,
+  } = accountForm;
+
+  const {
+    values: passwordValues,
+    errors: passwordErrors,
+    handleChange: handlePasswordChange,
+    validateOnSubmit: validatePassword,
+    resetForm: resetPasswordForm,
+  } = passwordForm;
 
   const fetchAccount = async () => {
     const response = await myAccountInfo();
     console.log(response.data);
-    setValues(response.data);
+    setAccountValues(response.data);
   };
   useEffect(() => {
     fetchAccount();
   }, []);
 
-  // update account information
-
   const handleAccountUpdate = async (e) => {
     e.preventDefault();
 
-    const formErrors = validateOnSubmit(values);
+    const formErrors = validateAccount(accountValues);
     if (Object.keys(formErrors).length > 0) return;
 
     try {
       const payload = {
-        username: values.username,
-        email: values.email,
+        username: accountValues.username,
+        email: accountValues.email,
       };
 
       const response = await updateAccount(payload);
@@ -65,18 +84,23 @@ export const Account = () => {
   // update account password
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
-    const formErrors = validateOnSubmit(values);
+    const formErrors = validatePassword(passwordValues);
+    console.log(formErrors);
+
     if (Object.keys(formErrors).length > 0) return;
+
     try {
       const payload = {
-        oldPassword: values.oldPassword,
-        newPassword: values.newPassword,
+        oldPassword: passwordValues.oldPassword,
+        newPassword: passwordValues.newPassword,
       };
 
       const response = await updatePassword(payload);
       toast.success(response.message);
+      resetPasswordForm();
 
-      resetForm();
+      // clear access token ;
+      clearAuth();
     } catch (err) {
       toast.error(err.message);
     }
@@ -111,8 +135,8 @@ export const Account = () => {
         focus:outline-none focus:ring-2 focus:ring-green-500/40
         focus:border-green-500 transition"
                   placeholder="username "
-                  value={values.username}
-                  onChange={handleChange}
+                  value={accountValues.username}
+                  onChange={handleAccountChange}
                 />
               </div>
 
@@ -126,8 +150,8 @@ export const Account = () => {
         focus:outline-none focus:ring-2 focus:ring-green-500/40
         focus:border-green-500 transition"
                   placeholder="example@email.com"
-                  value={values.email}
-                  onChange={handleChange}
+                  value={accountValues.email}
+                  onChange={handleAccountChange}
                 />
               </div>
 
@@ -151,7 +175,7 @@ export const Account = () => {
           </p>
 
           <form onSubmit={handleUpdatePassword}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1  gap-6">
               {/* Old Password */}
               <div className="flex flex-col gap-1 relative">
                 <label className="text-sm font-medium text-slate-700">Old Password</label>
@@ -159,8 +183,8 @@ export const Account = () => {
                 <input
                   type={showOld ? "text" : "password"}
                   name="oldPassword"
-                  onChange={handleChange}
-                  value={values.oldPassword || ""}
+                  onChange={handlePasswordChange}
+                  value={passwordValues.oldPassword || ""}
                   placeholder="********"
                   className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
@@ -174,6 +198,9 @@ export const Account = () => {
                 >
                   {showOld ? <FaEyeSlash /> : <FaEye />}
                 </button>
+                {passwordErrors.oldPassword && (
+                  <p className="text-sm text-red-600 mt-1">{passwordErrors.oldPassword}</p>
+                )}
               </div>
 
               {/* New Password */}
@@ -183,8 +210,8 @@ export const Account = () => {
                 <input
                   type={showNew ? "text" : "password"}
                   name="newPassword"
-                  onChange={handleChange}
-                  value={values.newPassword || ""}
+                  onChange={handlePasswordChange}
+                  value={passwordValues.newPassword || ""}
                   placeholder="********"
                   className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
@@ -198,6 +225,9 @@ export const Account = () => {
                 >
                   {showNew ? <FaEyeSlash /> : <FaEye />}
                 </button>
+                {passwordErrors.newPassword && (
+                  <p className="text-sm text-red-600 mt-1">{passwordErrors.newPassword}</p>
+                )}
               </div>
             </div>
 
@@ -208,8 +238,8 @@ export const Account = () => {
               <input
                 type={showConfirm ? "text" : "password"}
                 name="confirmPassword"
-                onChange={handleChange}
-                value={values.confirmPassword || ""}
+                onChange={handlePasswordChange}
+                value={passwordValues.confirmPassword || ""}
                 placeholder="********"
                 className="h-11 px-3 pr-10 rounded-md border border-zinc-300
               focus:outline-none focus:ring-2 focus:ring-green-500/40
@@ -223,6 +253,9 @@ export const Account = () => {
               >
                 {showConfirm ? <FaEyeSlash /> : <FaEye />}
               </button>
+              {passwordErrors.confirmPassword && (
+                <p className="text-sm text-red-600 mt-1">{passwordErrors.confirmPassword}</p>
+              )}
             </div>
 
             <div className="mt-6 rounded-md border-l-4 border-red-600 bg-red-50 p-4">

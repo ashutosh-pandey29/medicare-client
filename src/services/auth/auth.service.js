@@ -38,3 +38,4 @@ export const updatePasswordService = (payload) => {
 export const logoutService = () => {
   return api.post("/auth/logout");
 };
+

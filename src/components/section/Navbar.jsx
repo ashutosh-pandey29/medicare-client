@@ -3,12 +3,12 @@ import { GrMenu } from "react-icons/gr";
 import { RxCross1 } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo/logo.png";
-import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
+import { useAuth } from "../../context/AuthContext";
 
 export const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
-  const { decodedUser } = useJwtDecode();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     const onScroll = () => {
@@ -64,13 +64,16 @@ export const Navbar = () => {
           </ul>
 
           {/* DESKTOP BUTTON */}
+
           <div className="hidden md:block">
-            {decodedUser ? (
+            {loading ? (
+              <div className="px-4 py-2 text-gray-400">Checking login...</div>
+            ) : user ? (
               <NavLink
-                to={`/dashboard/${decodedUser?.role}`}
+                to={`/dashboard/${user.role}`}
                 className="bg-zinc-100 text-gray-700 px-4 py-2 rounded hover:bg-zinc-200"
               >
-                {decodedUser?.username}
+                {user.username}
               </NavLink>
             ) : (
               <NavLink
@@ -125,22 +128,21 @@ export const Navbar = () => {
             Book Appointment
           </NavLink>
 
-         
-          {decodedUser ? (
-              <NavLink
-                to={`/dashboard/${decodedUser?.role}`}
-                className="bg-zinc-100 text-gray-700 px-4 py-2 rounded hover:bg-zinc-200"
-              >
-                {decodedUser?.username}
-              </NavLink>
-            ) : (
-              <NavLink
-                to="/auth/login"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              >
-                Login
-              </NavLink>
-            )}
+          {user ? (
+            <NavLink
+              to={`/dashboard/${user?.role}`}
+              className="bg-zinc-100 text-gray-700 px-4 py-2 rounded hover:bg-zinc-200"
+            >
+              {user?.username}
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/auth/login"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
     </>

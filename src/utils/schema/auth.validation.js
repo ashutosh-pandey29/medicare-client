@@ -29,24 +29,22 @@ export const resetPasswordSchema = z
  * =======================
  */
 
+export const accountUpdateSchema = z.object({
+  username: z
+    .string({ required_error: "Username is required" })
+    .trim()
+    .min(5, "Username must be at least 5 characters")
+    .max(20, "Username must not exceed 20 characters")
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/, "Username must contain letters and numbers only"),
 
-export const accountUpdateSchema = z
+  email: z
+    .string({ required_error: "Email is required" })
+    .trim()
+    .email("Please provide a valid email address"),
+});
+
+export const passwordUpdateSchema = z
   .object({
-    username: z
-      .string({ required_error: "Username is required" })
-      .trim()
-      .min(5, "Username must be at least 5 characters")
-      .max(20, "Username must not exceed 20 characters")
-      .regex(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
-        "Username must contain letters and numbers only"
-      ),
-
-    email: z
-      .string({ required_error: "Email is required" })
-      .trim()
-      .email("Please provide a valid email address"),
-
     oldPassword: z
       .string()
       .min(8, "Old password must be at least 8 characters")
@@ -61,25 +59,11 @@ export const accountUpdateSchema = z
       .regex(
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
         "New password must contain letters and numbers only"
-      )
-,
-    confirmPassword: z.string().optional(),
+      ),
+
+    confirmPassword: z.string().min(8, "Confirm password is required"),
   })
-  .refine(
-    (data) => {
-      // agar koi bhi password field filled ho to sab required ho
-      if (data.oldPassword || data.newPassword || data.confirmPassword) {
-        return (
-          data.oldPassword &&
-          data.newPassword &&
-          data.confirmPassword &&
-          data.newPassword === data.confirmPassword
-        );
-      }
-      return true;
-    },
-    {
-      message: "Passwords must be filled and new password must match confirmation",
-      path: ["confirmPassword"],
-    }
-  );
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "New password and confirm password must match",
+    path: ["confirmPassword"],
+  });

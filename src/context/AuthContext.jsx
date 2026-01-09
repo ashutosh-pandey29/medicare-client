@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const isTokenExpired = (token) => {
     try {
       const decoded = jwtDecode(token);
-      console.log(decoded);
+      // console.log(decoded);
       return decoded.exp * 1000 < Date.now();
     } catch (err) {
       return true; // invalid token considered expired
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       let accessToken = localStorage.getItem("accessToken");
 
-      if (isTokenExpired(accessToken)) {
+      if (!accessToken || isTokenExpired(accessToken)) {
         try {
           const response = await RefreshTokenService();
           accessToken = response?.data?.accessToken;
@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem("accessToken", accessToken);
         } catch {
           // clearAuth();
+          setLoading(false);
           return;
         }
       }
@@ -73,6 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   const clearAuth = () => {
     setLoading(true);
+    setUser(null);
     localStorage.removeItem("accessToken");
     setUser(null);
     setLoading(false);
