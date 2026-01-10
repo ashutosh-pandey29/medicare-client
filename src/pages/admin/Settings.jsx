@@ -1,10 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminPageHeading } from "../../components/common/dashboard/heading/AdminPageHeading";
 import { FaCogs } from "react-icons/fa";
+import { useWebPush } from "../../hooks/notification/useWebPush";
+import { toast } from "react-toastify";
+import { BiLoader } from "react-icons/bi";
 
 const Toggle = () => <input type="checkbox" className="w-5 h-5 cursor-pointer accent-blue-600" />;
 
 export const Settings = () => {
+  const [notificationEnabled, setNotificationEnabled] = useState(false);
+
+  const { enableNotification, disableNotification, loading } = useWebPush();
+
+  // Update state if browser permission changes
+
+  useEffect(() => {
+    const permissionGranted = Notification.permission === "granted";
+    const isSubscribed = Boolean(localStorage.getItem("pushEndpoint"));
+
+    setNotificationEnabled(permissionGranted && isSubscribed);
+  }, []);
+
+  const handleEnableNotifications = async (e) => {
+    const checked = e.target.checked;
+
+    if (!checked) {
+      await disableNotification();
+      setNotificationEnabled(false);
+      return;
+    }
+
+    await enableNotification();
+    setNotificationEnabled(true);
+  };
+
   return (
     <>
       <AdminPageHeading
@@ -258,6 +287,45 @@ export const Settings = () => {
               </div>
 
               <input type="checkbox" className="w-5 h-5 accent-blue-600 cursor-pointer" />
+            </div>
+          </div>
+
+          <div className="bg-gray-800 rounded-lg shadow p-6 space-y-5">
+            <h2 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
+              Notification Control
+            </h2>
+
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-300 font-medium">Enable Notifications</p>
+                <p className="text-sm text-gray-400">
+                  Receive appointment updates, alerts, and reminders.
+                </p>
+              </div>
+
+              <label className="relative inline-flex items-center cursor-pointer">
+                {loading ? (
+                  <>
+                    <BiLoader className="animate-spin text-xl text-white" />
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={notificationEnabled}
+                      onChange={handleEnableNotifications}
+                    />
+                    <div
+                      className="peer bg-gray-700 w-14 h-6 rounded-full relative
+                        after:content-[''] after:absolute after:top-1 after:left-1
+                        after:w-4 after:h-4 after:bg-blue-500 after:rounded-full
+                        after:transition-transform peer-checked:after:translate-x-8
+                        peer-checked:bg-green-500"
+                    ></div>
+                  </>
+                )}
+              </label>
             </div>
           </div>
 

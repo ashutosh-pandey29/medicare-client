@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { registerService } from "../../services/auth/auth.service";
+import { toast } from "react-toastify";
 
 export const useRegister = () => {
   const [loading, setLoading] = useState(false);

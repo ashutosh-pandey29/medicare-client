@@ -3,6 +3,7 @@ export const Button = ({
   disabled,
   label,
   variant = "primary",
+  size = "md",
   onClick,
   customCss,
 }) => {
@@ -17,15 +18,23 @@ export const Button = ({
     danger: "bg-red-600 hover:bg-red-700 text-white",
   };
 
+  const sizeStyles = {
+    xs: "px-3 py-1 text-sm",
+    sm: "px-5 py-2 text-base",
+    md: "px-6 py-3 text-base",
+    lg: "px-8 py-4 text-lg",
+  };
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
       className={`
-    px-6 py-3 rounded font-semibold
+    rounded font-semibold
     transition-all duration-300 ease-out
     focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+    ${sizeStyles[size]} 
     ${
       disabled
         ? "cursor-not-allowed opacity-60"

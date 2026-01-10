@@ -24,7 +24,7 @@ const AdminRoutes = [
     path: "/dashboard/admin",
     element: (
       <AuthProvider>
-        <SocketProvider>
+        <SocketProvider role={"admin"}>
           <ProtectedRoutes allowedRoles={["admin"]} />
         </SocketProvider>
       </AuthProvider>

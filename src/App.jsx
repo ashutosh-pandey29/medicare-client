@@ -8,6 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { NotFound } from "./pages/NotFound";
 import { UnauthorizedError } from "./pages/errors/UnauthorizedError";
 import { UnexpectedError } from "./pages/errors/UnexpectedError";
+import { registerServiceWorker } from "./utils/notifications/registerService.worker";
+import { useEffect } from "react";
+import { requestNotificationPermission } from "./utils/notifications/notificationPermission";
 const router = createBrowserRouter([
   ...PublicRoutes,
   ...UserRoutes,
@@ -29,8 +32,31 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  // // web push -> registerService worker start on app start
+  // useEffect(() => {
+  //   registerServiceWorker();
+  // }, []);
+
   return (
     <>
+      
+      {/* <button className="mt-50 border "
+  onClick={async () => {
+    const allowed = await requestNotificationPermission();
+
+    if (!allowed) {
+      alert("Notifications not allow");
+      return;
+    }
+
+    await registerServiceWorker();
+    await subscribeUser();
+  }}
+>
+  Enable Notifications
+</button> */}
+
+      
       <RouterProvider router={router} />
       <ToastContainer
         position="bottom-right"

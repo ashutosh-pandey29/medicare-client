@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { BsBell } from "react-icons/bs";
 import { FaBell } from "react-icons/fa";
+import { FiBell } from "react-icons/fi";
 import { LuCheckCheck } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
@@ -29,21 +30,16 @@ export const NotificationBell = ({ notifications = [], theme = "light" }) => {
       <div
         onClick={() => setOpen(!open)}
         className={`
-          w-11 h-11 flex items-center justify-center rounded-full cursor-pointer
-          text-white shrink-0 ring-1
-          ${
-            isDark
-              ? "bg-slate-800 ring-white/10 hover:bg-slate-700"
-              : "bg-linear-to-br from-blue-500 to-cyan-500 ring-white/40"
-          }
-        `}
+    w-11 h-11 flex items-center justify-center
+    rounded-full shrink-0 cursor-pointer
+    ${theme === "dark" ? " text-white hover:bg-slate-800" : " text-blue-800 hover:bg-gray-200"}
+   
+  `}
       >
-        <FaBell className="text-lg" />
+        <FiBell className="text-xl" />
 
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full flex items-center justify-center animate-pulse">
-            {unreadCount}
-          </span>
+          <span className="animate-ping absolute top-2.5 right-2.5 block h-1 w-1 rounded-full ring-2 ring-green-400 bg-green-600"></span>
         )}
       </div>
 

@@ -51,7 +51,7 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
             </div>
 
             <button
-              className="md:hidden bg-zinc-200 text-2xl rounded-lg p-2"
+              className="md:hidden text-white bg-gray-800 text-xl rounded-lg p-2"
               onClick={() => handleSidebarToggle()}
             >
               <RxCross1 />
@@ -59,7 +59,7 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
           </div>
 
           {/* Links */}
-          <ul className="mt-2 space-y-1 h-[76vh] border-b border-b-zinc-100 overflow-y-auto pr-2 ">
+          <ul className="mt-2 space-y-1 h-[76vh] overflow-y-auto pr-2 ">
             {links.map((item) => (
               <li key={item.title}>
                 {role === "user" && (
@@ -127,7 +127,7 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
         </div>
 
         {/* Bottom Section: Logout */}
-        <div className="px-2">
+        <div className="px-2  py-3 w-full">
           {role === "doctor" && (
             <button
               onClick={() => logout()}
