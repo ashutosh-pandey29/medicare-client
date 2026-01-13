@@ -18,6 +18,7 @@ import { Analysis } from "../../pages/admin/Analysis";
 import { Account } from "../../pages/admin/Account";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { AuthProvider } from "../../context/AuthContext";
+import Register from "../../components/forms/Register";
 
 const AdminRoutes = [
   {
@@ -71,7 +72,7 @@ const AdminRoutes = [
               },
               {
                 path: "new",
-                element: <DoctorRegisterForm />,
+                element: <Register />,
               },
               {
                 path: "new/profile/:doctorId",
