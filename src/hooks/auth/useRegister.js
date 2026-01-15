@@ -20,7 +20,6 @@ export const useRegister = () => {
         const formattedErrors = {};
 
         err.errors.forEach((e) => {
-          // agar multiple errors per field → join with comma
           if (formattedErrors[e.field]) {
             formattedErrors[e.field] += `, ${e.message}`;
           } else {

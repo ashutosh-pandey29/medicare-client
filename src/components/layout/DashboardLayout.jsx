@@ -25,7 +25,7 @@ export const DashboardLayout = ({ role }) => {
   }, [theme]);
 
   return (
-    <div className="min-h-screen flex overflow-x-hidden">
+    <div className="">
       {/* Sidebar */}
 
       <aside

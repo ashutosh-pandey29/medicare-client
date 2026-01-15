@@ -9,8 +9,8 @@ import { DoctorList } from "../../pages/admin/DoctorList";
 import { ViewDoctor } from "../../pages/admin/ViewDoctor";
 import { DepartmentForm } from "../../components/forms/admin/DepartmentForm";
 import { DepartmentList } from "../../pages/admin/DepartmentList";
-import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
-import { DoctorRegisterForm } from "../../components/forms/DoctorRegisterForm";
+// import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
+// import { DoctorRegisterForm } from "../../components/forms/DoctorRegisterForm";
 import { Settings } from "../../pages/admin/Settings";
 import { Notification } from "../../pages/admin/Notification";
 import { SocketProvider } from "../../context/SocketContext";
@@ -46,15 +46,19 @@ const AdminRoutes = [
           },
           {
             path: "departments",
+            element: <Department />,
             children: [
-              { index: true, element: <DepartmentList /> },
+             {
+                index: true,
+                element: <DepartmentList />,
+              },
               {
                 path: "new",
                 element: <DepartmentForm />,
               },
               {
                 path: "edit/:departmentId",
-                element: <DepartmentForm />,
+                element: <DepartmentForm  isEdit={true}/>,
               },
             ],
           },
@@ -74,14 +78,14 @@ const AdminRoutes = [
                 path: "new",
                 element: <Register />,
               },
-              {
-                path: "new/profile/:doctorId",
-                element: <DoctorProfileForm />,
-              },
-              {
-                path: "profile/edit/:id",
-                element: <DoctorProfileForm />,
-              },
+              // {
+              //   path: "new/profile/:doctorId",
+              //   element: <DoctorProfileForm />,
+              // },
+              // {
+              //   path: "profile/edit/:id",
+              //   element: <DoctorProfileForm />,
+              // },
             ],
           },
 

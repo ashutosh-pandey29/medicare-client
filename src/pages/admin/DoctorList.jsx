@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AdminPageHeading } from "../../components/common/dashboard/heading/AdminPageHeading";
 import {
-  MdLocalHospital,
   MdLockReset,
   MdOutlineNoAccounts,
   MdOutlinePublishedWithChanges,

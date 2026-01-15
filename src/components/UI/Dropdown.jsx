@@ -51,7 +51,7 @@ export const Dropdown = ({ label, actions = [], theme = "light" }) => {
       {/* Dropdown */}
       {open && (
         <div
-          className={`absolute right-0 top-full mt-2 w-60 rounded-md shadow-xl z-20 border
+          className={`absolute right-0 lg:right-30 top-8 mt-2 w-40 rounded-md shadow-xl z-20 border
             ${isDark ? "bg-slate-900 border-slate-700" : "bg-white border-gray-200"}`}
         >
           {actions.map((action, idx) => {

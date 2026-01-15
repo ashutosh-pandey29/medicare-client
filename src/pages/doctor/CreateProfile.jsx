@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
+// import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
 
 export const CreateProfile = () => {
   return (

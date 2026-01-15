@@ -34,6 +34,8 @@ const Register = () => {
     if (response.success) {
       resetForm();
       toast.success("Doctor Registered successfully.");
+        resetForm();
+      navigate(-1);
     }
   };
 

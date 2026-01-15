@@ -7,7 +7,7 @@ export const Modal = ({ data, onClose }) => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 md:p-4 p-1 overflow-y-auto
+        className={`fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/90 md:p-4 p-1 overflow-y-auto
               `}
         role="dialog"
         aria-modal="true"

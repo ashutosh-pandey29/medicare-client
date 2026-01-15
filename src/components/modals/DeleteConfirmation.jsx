@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FiAlertTriangle, FiTrash2 } from "react-icons/fi";
 import { RiCloseLargeLine } from "react-icons/ri";
 
-export const DeleteConfirmationModel = ({
+export const DeleteConfirmation= ({
   onClose,
   onConfirm,
   title = "Confirm Delete",
@@ -14,11 +14,11 @@ export const DeleteConfirmationModel = ({
   const isConfirmed = confirmText === "DELETE";
 
   return (
-    <div
-      className={`w-full max-w-sm rounded-xl shadow-2xl p-4
-        ${isDark ? "bg-slate-900 text-slate-200" : "bg-white text-gray-800"}
-      `}
-    >
+     <div className="w-full max-w-sm md:max-w-lg p-1 md:p-6">
+      <div
+        className="bg-gray-800 text-gray-200 rounded-xl p-5 md:p-6 space-y-6"
+        style={{ boxShadow: "rgba(0, 0, 0, 0.2) 0px 18px 50px 10px" }}
+      >
       {/* Header */}
       <div
         className={`flex items-center justify-between pb-3 mb-3 border-b
@@ -41,12 +41,13 @@ export const DeleteConfirmationModel = ({
       </div>
 
       {/* Content */}
-      <div className={`text-sm mb-4 ${isDark ? "text-slate-400" : "text-gray-600"}`}>
+      <div className={`text-sm mb-4 ${isDark ? "text-slate-200" : "text-gray-600"}`}>
         {content}
       </div>
 
       {/* Confirm Input */}
-      <div className="mb-5">
+        <div className="mb-5">
+          
         <label className="block text-xs font-medium mb-1">
           Type <span className="font-mono text-red-500">DELETE</span> to confirm
         </label>
@@ -89,6 +90,7 @@ export const DeleteConfirmationModel = ({
           Delete
         </button>
       </div>
+    </div>
     </div>
   );
 };
