@@ -50,9 +50,22 @@ export const AdminWelcomeCard = () => {
             </div>
 
             <div>
-              <h2 className="text-base md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+              {/* <h2 className="text-base md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                 Hospital Administration
-              </h2>
+              </h2> */}
+              <h1 className="text-md sm:text-xl md:text-3xl font-extrabold flex  gap-2">
+                <span className="text-[#FF6B6B] dark:text-[#FF8787] drop-shadow-[0_0_6px_rgba(255,107,107,0.6)] dark:drop-shadow-none">
+                  MediCare
+                </span>
+
+                <span className="text-[#38B000] dark:text-[#6FCF97] drop-shadow-[0_0_6px_rgba(56,176,0,0.6)] dark:drop-shadow-none hidden md:block">
+                  Hospital
+                </span>
+                <span className="text-[#FFD93D] dark:text-[#FFE066] drop-shadow-[0_0_6px_rgba(255,217,61,0.6)] dark:drop-shadow-none">
+                  Administration
+                </span>
+              </h1>
+
               <p className="text-xs md:text-lg text-slate-300 mt-1 opacity-80">
                 System overview & operational control
               </p>

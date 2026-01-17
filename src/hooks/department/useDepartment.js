@@ -4,6 +4,7 @@ import {
   deleteDepartmentService,
   fetchAllDepartmentService,
   fetchDepartmentByIdService,
+  fetchPublicDepartmentService,
   forceDeleteDepartmentService,
   updateDepartmentService,
 } from "../../services/department/department.service.js";
@@ -11,6 +12,30 @@ import { toast } from "react-toastify";
 
 export const useDepartment = () => {
   const [loading, setLoading] = useState();
+
+  /**=====================FETCH PUBLIC DEPARTMENT -  FRO DROPDOWN========== */
+
+  const fetchPublicDepartment = async (setErrors) => {
+    try {
+      setLoading(true);
+      const response = await fetchPublicDepartmentService();
+
+      // console.log(response);
+
+      if (!response?.success) {
+        console.error(response);
+        setErrors(response?.message || "Unable to fetch departments");
+        return;
+      }
+
+      return response;
+    } catch (err) {
+      console.error(err);
+      setErrors(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /**===================FETCH DEPARTMENT============================== */
 
@@ -121,7 +146,7 @@ export const useDepartment = () => {
 
   /**=================== FORCE DELETE==================================== */
   const forceDeleteDepartment = async (departmentId) => {
-     try {
+    try {
       setLoading(true);
       const response = await forceDeleteDepartmentService(departmentId);
       if (!response.success) {
@@ -164,5 +189,6 @@ export const useDepartment = () => {
     updateDepartment,
     deleteDepartment,
     forceDeleteDepartment,
+    fetchPublicDepartment,
   };
 };

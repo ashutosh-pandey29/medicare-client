@@ -74,7 +74,7 @@ export const NotificationBell = ({ notifications = [], theme = "light" }) => {
                 {notifications.map((n) => (
                   <div
                     key={`${n.appointmentId}-${n.createdAt}`}
-                    onClick={() => navigate("approve-appointment")}
+                    onClick={() => navigate("notifications")}
                     className={`
                       p-4 cursor-pointer transition
                       ${
@@ -91,17 +91,35 @@ export const NotificationBell = ({ notifications = [], theme = "light" }) => {
                     <div className="flex gap-3">
                       <div
                         className={`
-                          w-10 h-10 rounded-full flex items-center justify-center shrink-0
+                          w-8 h-8 rounded-full flex items-center justify-center shrink-0
                           ${
                             isDark ? "bg-indigo-600" : "bg-linear-to-br from-blue-500 to-indigo-600"
                           }
                         `}
                       >
-                        <BsBell className="text-white w-5 h-5" />
+                        <BsBell className="text-white w-4 h-4" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium leading-relaxed">{n.message}</p>
+                        {/* Title */}
+                        <p
+                          className={`text-sm font-semibold truncate ${
+                            isDark ? "text-gray-100" : "text-gray-900"
+                          }`}
+                        >
+                          {n.title}
+                        </p>
+
+                        {/* Message */}
+                        <p
+                          className={`text-sm mt-0.5 truncate ${
+                            isDark ? "text-gray-300" : "text-gray-700"
+                          }`}
+                        >
+                          {n.message}
+                        </p>
+
+                        {/* Timestamp */}
                         <p className="text-xs opacity-60 mt-1">
                           {n.createdAt
                             ? new Date(n.createdAt).toLocaleString("en-IN", {
@@ -126,7 +144,10 @@ export const NotificationBell = ({ notifications = [], theme = "light" }) => {
                 isDark ? "border-white/10 bg-slate-800" : "border-gray-200 bg-gray-50"
               }`}
             >
-              <button className="w-full py-2 text-sm font-medium text-blue-500 hover:bg-blue-500/10 rounded-lg">
+              <button
+                onClick={() => navigate("notifications")}
+                className="w-full py-2 text-sm font-medium text-blue-500 hover:bg-blue-500/10 rounded-lg"
+              >
                 View all notifications
               </button>
             </div>

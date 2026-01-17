@@ -4,6 +4,12 @@ export const fetchAllDepartmentService = async () => {
   return await api.get("/department/all");
 };
 
+
+export const fetchPublicDepartmentService = async () => {
+  return api.get("/department/public");
+}
+
+
 export const fetchDepartmentByIdService = async (id) => {
   return await api.get(`/department/${id}`);
 };

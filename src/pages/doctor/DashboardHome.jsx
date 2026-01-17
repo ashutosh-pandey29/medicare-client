@@ -81,14 +81,11 @@ export const DashboardHome = () => {
             subText="13"
           />
 
-
-           <MiniCard
+          <MiniCard
             title="Today Appointment"
             icon={<FaUserCheck className="text-emerald-600" size={22} />}
             subText="13"
           />
-
-
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 mt-5">
           {/* 5 patient appointment table */}
@@ -165,8 +162,6 @@ export const DashboardHome = () => {
                       </tbody>
                     </table>
                   </div>
-
-                
                 </div>
               </div>
             </div>
@@ -198,9 +193,7 @@ export const DashboardHome = () => {
               </div>
             </div>
           </div>
-
         </div>
-      
       </section>
     </>
   );

@@ -10,7 +10,8 @@ import { Profile } from "../../pages/doctor/Profile";
 import { Account } from "../../pages/doctor/Account";
 import { PatientConsultation } from "../../pages/doctor/PatientConsultation";
 import { Settings } from "../../pages/doctor/Settings";
-import { CreateProfile } from "../../pages/doctor/CreateProfile";
+import { DoctorProfileForm } from "../../components/forms/doctor/DoctorProfileForm";
+import { DoctorProfilePage } from "../../components/forms/doctor/DoctorProfilePage";
 
 const DoctorRoutes = [
   {
@@ -18,7 +19,7 @@ const DoctorRoutes = [
     element: (
       <AuthProvider>
         <SocketProvider role="doctor">
-          <ProtectedRoutes allowedRoles={["doctor" ]}/>
+          <ProtectedRoutes allowedRoles={["doctor"]} />
         </SocketProvider>
       </AuthProvider>
     ),
@@ -49,10 +50,21 @@ const DoctorRoutes = [
           {
             path: "profile",
             element: <Profile />,
-          },
-          {
-            path: "profile/:mode/:id?",
-            element: <CreateProfile />,
+            children: [
+              {
+                index: true,
+                element: <DoctorProfilePage />,
+              },
+              {
+                path: "create",
+                element: <DoctorProfileForm />,
+              },
+
+              {
+                path: "update",
+                element: <DoctorProfileForm isEdit="true" />,
+              },
+            ],
           },
 
           {
