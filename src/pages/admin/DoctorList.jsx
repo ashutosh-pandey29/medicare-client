@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MdLockReset,
   MdOutlineNoAccounts,
   MdOutlinePublishedWithChanges,
+  MdOutlineVerifiedUser,
 } from "react-icons/md";
 import { Dropdown } from "../../components/UI/Dropdown";
 import { FilterDropdown } from "../../components/UI/Dashboard/FilterDropdown";
@@ -15,165 +16,218 @@ import {
   FaFilePdf,
   FaHistory,
   FaPrint,
+  FaSortAmountDown,
 } from "react-icons/fa";
+import { useDoctor } from "../../hooks/admin/useDoctor";
+import { NotFound } from "../../components/basic/NotFound";
+import { TableSkeletonLoader } from "../../components/UI/loaders/skeleton/TableSkeletonLoader";
+import { usePagination } from "../../hooks/common/usePagination";
+import { Pagination } from "../../components/UI/pagination/Pagination";
+import { useModal } from "../../hooks/custom/useModal";
 
 export const DoctorList = () => {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
 
+  const [search, setSearch] = useState("");
+
+  const [sortOrder, setSortOrder] = useState(null);
+
+  const { modalData, closeModal, openModal } = useModal();
+
+  const { fetchDoctor, loading } = useDoctor();
+
+  const loadDoctorList = async () => {
+    const response = await fetchDoctor();
+
+    console.log(response);
+    if (response?.success) {
+      setDoctors(response.data);
+    }
+  };
   useEffect(() => {
-    const getDoctor = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/get`);
-      const jsonResponse = await response.json();
-      setDoctors(jsonResponse.data);
-    };
-    getDoctor();
+    loadDoctorList();
   }, []);
 
-  const actions = [
+  /**================SEARCH DATA========================  */
+
+  const searchedData = useMemo(() => {
+    if (!search.trim()) return doctors;
+
+    const query = search.toLowerCase();
+
+    return doctors.filter((d) => {
+      const profileId = d.profileId?.toLowerCase() || "";
+      const doctorName = d.doctorName?.toLowerCase() || "";
+      const departmentName = d.departmentName?.toLowerCase() || "";
+      const isVerified = d.isVerified ? "verified" : "not verified";
+
+      return (
+        profileId.includes(query) ||
+        doctorName.includes(query) ||
+        departmentName.includes(query) ||
+        isVerified.includes(query)
+      );
+    });
+  }, [doctors, search]);
+
+  /**================ HANDLE DATA SORTING(A->Z / Z->A) */
+
+  const sortedData = useMemo(() => {
+    if (!sortOrder) return searchedData; // no sorting
+
+    return [...searchedData].sort((a, b) =>
+      sortOrder === "asc"
+        ? a.departmentName.localeCompare(b.departmentName)
+        : b.departmentName.localeCompare(a.departmentName)
+    );
+  }, [searchedData, sortOrder]);
+
+  /**================HANDLE PAGINATION=================== */
+  const limit = 5;
+  const { page, setPage, totalPage, currentData } = usePagination(sortedData, limit);
+
+  const getAction = (content) => [
     {
-      label: "view Profile",
+      label: "view or Verify Profile",
       icon: FaEye,
+      onClick: () => navigate(`profile/${content.profileId}`),
     },
+
     {
       label: "Change role",
       icon: MdOutlinePublishedWithChanges,
     },
-    {
-      label: "Activity History",
-      icon: FaHistory,
-    },
+
     {
       label: "Deactivate Account",
       icon: MdOutlineNoAccounts,
     },
-    {
-      label: "Reset Password",
-      icon: MdLockReset,
-    },
   ];
 
-  const tableDropdownAction = [
-    {
-      label: "Print Table",
-      icon: FaPrint,
-    },
-    {
-      label: "Download CSV",
-      icon: FaDownload,
-    },
-    {
-      label: "Download Excel",
-      icon: FaFileExcel,
-    },
-
-    {
-      label: "Download PDF",
-      icon: FaFilePdf,
-    },
-  ];
-
-  const filters = [
-    {
-      label: "All",
-      value: "all",
-    },
-    {
-      label: "Active Doctors",
-      value: "active",
-    },
-    {
-      label: "Inactive Doctors",
-      value: "inactive",
-    },
-    {
-      label: "Verified Doctors",
-      value: "verified",
-    },
-    {
-      label: "Pending Verification",
-      value: "pending_verified",
-    },
-    {
-      label: "Blocked Doctors",
-      value: "blocked",
-    },
-    {
-      label: "By Department",
-      value: "department",
-    },
-  ];
+  if (loading) return <TableSkeletonLoader />;
 
   return (
-    <div className="sm:max-w-sm md:min-w-full mx-auto p-1 h-auto">
+    <div className="sm:max-w-sm md:min-w-full mx-auto p-1 ">
       {/* Heading */}
 
-      {/* Table Container */}
-      <div className="bg-gray-900 rounded-md border border-gray-800 shadow-lg mt-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 gap-2 sm:gap-0">
-          <h2 className="text-xl font-bold text-white">Doctors List</h2>
-          <div className="flex gap-1.5">
-            <Dropdown label="Download" theme="dark" actions={tableDropdownAction} />
-            <FilterDropdown theme="dark" filters={filters} />
+      <div className=" bg-gray-900 rounded-md shadow-lg">
+        <div className="px-1 md:px-4 py-3 border-b border-gray-800">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* Title */}
+            <h2 className="text-lg sm:text-xl font-semibold text-white">Doctor Table </h2>
+
+            {/* Actions */}
+            <div className="flex sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
+              {/* Search */}
+              <input
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search department..."
+                className="
+                w-full sm:w-64
+                border rounded-md px-4 py-2
+                border-gray-700 bg-gray-900 text-gray-200
+                outline-none focus:border-blue-500
+              "
+              />
+
+              {/* Buttons */}
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  onClick={() => openModal(<ExportOptionsModal onClose={closeModal} />)}
+                  className="
+                  h-10 w-10 flex items-center justify-center rounded-full
+                  bg-gray-800 hover:bg-gray-700 transition
+                "
+                  title="Export Data"
+                >
+                  <FaDownload className="text-white text-sm" />
+                </button>
+
+                <button
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="
+                  h-10 w-10 flex items-center justify-center rounded-full
+                  bg-gray-800 hover:bg-gray-700 transition
+                "
+                  title="Sort"
+                >
+                  <FaSortAmountDown className="text-white text-sm" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="">
-          <table className="min-w-[600px] w-full border-collapse text-left">
-            <thead className="bg-gray-800 border-b border-gray-700">
-              <tr>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
-                  Avatar
-                </th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[150px]">
-                  Name
-                </th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[150px]">
-                  Department
-                </th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
-                  Status
-                </th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[120px]">
-                  Phone
-                </th>
-                <th className="px-2 py-2 sm:px-4 sm:py-3 text-sm md:text-base text-gray-300 min-w-[100px]">
-                  Actions
-                </th>
-              </tr>
-            </thead>
+        {currentData.length === 0 ? (
+          <NotFound
+            message="No Doctors Found"
+            description="There are currently no doctor profiles available in the system."
+            theme="dark"
+          />
+        ) : (
+          <>
+            {/* Table Wrapper */}
 
-            <tbody className="text-white text-sm md:text-base">
-              {doctors?.map((d, i) => (
-                <tr key={i} className="hover:bg-gray-800 transition-colors duration-200">
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
-                    <img
-                      src={d.avatar || "https://img.icons8.com/?size=96&id=kDoeg22e5jUY&format=png"}
-                      alt="avatar"
-                      className="h-12 w-12 rounded-full object-cover border border-slate-500"
-                    />
-                  </td>
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.name}</td>
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.department}</td>
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
-                    <div class="mt-1 flex items-center gap-x-1.5">
-                      <div class="flex-none rounded-full bg-green-500/20 p-1">
-                        <div class="size-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                      </div>
-                      <p class="text-xs/5 text-gray-500">Online</p>
-                    </div>
-                  </td>
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">{d.phone}</td>
-                  <td className="py-3 px-2 sm:px-4 border-b border-gray-700">
-                    <Dropdown actions={actions} theme="dark" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            <div class="relative  overflow-x-auto h-screen ">
+              <table className="min-w-full border-collapse text-center">
+                <thead className="bg-gray-800 text-gray-200">
+                  <tr className="border-b border-gray-700">
+                    <th className="px-4 py-3 text-sm">Profile ID</th>
+                    <th className="px-4 py-3 text-sm">Doctor Name</th>
+                    <th className="px-4 py-3 text-sm">Doctor Department</th>
+                    <th className="px-4 py-3 text-sm">Status</th>
+                    <th className="px-4 py-3 text-sm"></th>
+                  </tr>
+                </thead>
+
+                <tbody className="text-sm">
+                  {currentData.map((d) => (
+                    <tr
+                      key={d.departmentId}
+                      className="border-b border-gray-700 hover:bg-gray-800 transition"
+                    >
+                      <td className="px-4 py-2 text-gray-300 whitespace-nowrap">{d.profileId}</td>
+
+                      <td className="px-4 py-2 text-gray-300">{d.doctorName}</td>
+                      <td className="px-4 py-2 text-gray-300">{d.departmentName}</td>
+
+                      <td className="px-4 py-2 text-gray-300">
+                        <span className="inline-flex items-center gap-1">
+                          {d.isVerified ? (
+                            <>
+                              <span className="text-sm text-green-600">verified</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-sm text-red-600">not verified</span>
+                            </>
+                          )}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-2">
+                        <Dropdown actions={getAction(d)} theme="dark" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="px-4 py-3 border-t border-gray-800">
+                <Pagination
+                  page={page}
+                  totalPages={totalPage}
+                  onPageChange={setPage}
+                  theme="dark"
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

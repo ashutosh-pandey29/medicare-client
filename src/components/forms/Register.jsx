@@ -34,7 +34,7 @@ const Register = () => {
     if (response.success) {
       resetForm();
       toast.success("Doctor Registered successfully.");
-        resetForm();
+      resetForm();
       navigate(-1);
     }
   };
@@ -57,11 +57,15 @@ const Register = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ================= FORM ================= */}
-        <form className="bg-gray-800 rounded-md shadow p-1 md:p-4 lg:p-6 space-y-5" onSubmit={handleSubmit}>
+        <form
+          className="bg-gray-800 rounded-md shadow p-1 md:p-4 lg:p-6 space-y-5"
+          onSubmit={handleSubmit}
+        >
           {/* Username */}
           <div>
             <label className="block text-sm text-slate-400 mb-1">Username</label>
             <input
+              type="text"
               name="username"
               id="username"
               placeholder="example123"
@@ -79,6 +83,7 @@ const Register = () => {
             <input
               name="email"
               id="email"
+              type="email"
               placeholder="example123@gmail.com"
               value={values.email}
               onChange={handleChange}
@@ -93,6 +98,7 @@ const Register = () => {
             <label className="block text-sm text-slate-400 mb-1">Password</label>
             <div className="flex gap-2 items-center">
               <input
+                type="password"
                 name="password"
                 placeholder="*********"
                 value={values.password}
@@ -162,51 +168,43 @@ const Register = () => {
             <li>After approval, doctor becomes active and receives an official ID.</li>
           </ol>
 
-        <div className="bg-red-950/40 border-l-4 border-red-600 rounded-md p-1 
-text-xs text-red-200 leading-relaxed">
-  <strong className="block mb-1 text-red-400">
-    Important Password & Access Notice
-  </strong>
+          <div
+            className="bg-red-950/40 border-l-4 border-red-600 rounded-md p-1 
+text-xs text-red-200 leading-relaxed"
+          >
+            <strong className="block mb-1 text-red-400">Important Password & Access Notice</strong>
 
-  <ul className="list-disc pl-4 space-y-1">
-    <li>
-      The password entered during registration is used{" "}
-      <strong className="text-red-300">
-        only to create the doctor’s account
-      </strong>.
-    </li>
+            <ul className="list-disc pl-4 space-y-1">
+              <li>
+                The password entered during registration is used{" "}
+                <strong className="text-red-300">only to create the doctor’s account</strong>.
+              </li>
 
-    <li>
-      After email verification, the doctor will receive a{" "}
-      <strong className="text-red-300">
-        temporary login password
-      </strong>{" "}
-      via email.
-    </li>
+              <li>
+                After email verification, the doctor will receive a{" "}
+                <strong className="text-red-300">temporary login password</strong> via email.
+              </li>
 
-    <li>
-      The doctor may{" "}
-      <strong className="text-red-300">
-        reset or change the password
-      </strong>{" "}
-      after logging in. If not changed, the temporary password remains active.
-    </li>
+              <li>
+                The doctor may{" "}
+                <strong className="text-red-300">reset or change the password</strong> after logging
+                in. If not changed, the temporary password remains active.
+              </li>
 
-    <li>
-      For security reasons, the{" "}
-      <strong className="text-red-300">
-        admin-created password will never be reused
-      </strong>{" "}
-      after verification.
-    </li>
+              <li>
+                For security reasons, the{" "}
+                <strong className="text-red-300">
+                  admin-created password will never be reused
+                </strong>{" "}
+                after verification.
+              </li>
 
-    <li>
-      <strong className="text-red-300">Admin Access:</strong> Admin can reset the
-      doctor’s password and access the dashboard for verification or support.
-    </li>
-  </ul>
-</div>
-
+              <li>
+                <strong className="text-red-300">Admin Access:</strong> Admin can reset the doctor’s
+                password and access the dashboard for verification or support.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

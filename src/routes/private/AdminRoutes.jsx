@@ -6,7 +6,7 @@ import { Billings } from "../../pages/admin/Billings";
 import { Department } from "../../pages/admin/Department";
 import { AddDoctor } from "../../pages/admin/AddDoctor";
 import { DoctorList } from "../../pages/admin/DoctorList";
-import { ViewDoctor } from "../../pages/admin/ViewDoctor";
+import { ViewDoctorProfile } from "../../pages/admin/ViewDoctorProfile";
 import { DepartmentForm } from "../../components/forms/admin/DepartmentForm";
 import { DepartmentList } from "../../pages/admin/DepartmentList";
 // import { DoctorProfileForm } from "../../components/forms/DoctorProfileForm";
@@ -48,7 +48,7 @@ const AdminRoutes = [
             path: "departments",
             element: <Department />,
             children: [
-             {
+              {
                 index: true,
                 element: <DepartmentList />,
               },
@@ -58,7 +58,7 @@ const AdminRoutes = [
               },
               {
                 path: "edit/:departmentId",
-                element: <DepartmentForm  isEdit={true}/>,
+                element: <DepartmentForm isEdit={true} />,
               },
             ],
           },
@@ -71,8 +71,8 @@ const AdminRoutes = [
                 element: <DoctorList />,
               },
               {
-                path: "profile/:id",
-                element: <ViewDoctor />,
+                path: "profile/:profileId",
+                element: <ViewDoctorProfile />,
               },
               {
                 path: "new",

@@ -49,7 +49,7 @@ export const passwordUpdateSchema = z
       .string()
       .min(8, "Old password must be at least 8 characters")
       .regex(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
         "Old password must contain letters and numbers only"
       ),
 
@@ -57,7 +57,7 @@ export const passwordUpdateSchema = z
       .string()
       .min(8, "New password must be at least 8 characters")
       .regex(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
         "New password must contain letters and numbers only"
       ),
 
