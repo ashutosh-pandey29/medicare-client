@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   createDoctorProfileService,
   fetchDoctorProfileService,
+  updateDoctorProfileService,
 } from "../../services/doctor/profile.service";
 import { toast } from "react-toastify";
 
@@ -51,6 +52,30 @@ export const useProfile = () => {
     }
   };
 
+
+  /**================ UPDATE PROFILE=============== */
+
+  const updateProfile = async (payload, setErrors) => {
+      try {
+      setLoading(true);
+      const response = await updateDoctorProfileService(payload);
+      if (!response?.success) {
+        toast.error(response?.message || "Profile updating failed");
+        return null;
+      }
+
+      toast.success(response?.message || "Profile updating successfully");
+      return response;
+    } catch (err) {
+      errorHandler(err, setErrors);
+    } finally {
+      setLoading(false);
+    }
+
+
+  }
+
+
   /**================HANDLE ERROR================== */
 
   const errorHandler = (err, setErrors) => {
@@ -70,5 +95,5 @@ export const useProfile = () => {
     toast.error(err.message);
   };
 
-  return { loading, fetchProfile, createProfile };
+  return { loading, fetchProfile, createProfile  , updateProfile};
 };

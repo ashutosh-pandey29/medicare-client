@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../UI/Button";
 import { useForm } from "../../../hooks/custom/useForm";
 import { FiFileText } from "react-icons/fi";
@@ -11,10 +11,12 @@ import { useProfile } from "../../../hooks/doctor/useProfile";
 import { doctorProfileValidation } from "../../../utils/schema/doctor.validation";
 import { useDepartment } from "../../../hooks/department/useDepartment";
 
-export const DoctorProfileForm = () => {
+export const DoctorProfileForm = ({ isEdit = false }) => {
   const navigate = useNavigate();
   const { fetchPublicDepartment } = useDepartment();
   const [departments, setDepartments] = useState([]);
+  const [profile, setProfile] = useState([]);
+  const { loading, fetchProfile, createProfile, updateProfile } = useProfile();
 
   /* ================= Initial State ================= */
 
@@ -34,7 +36,23 @@ export const DoctorProfileForm = () => {
     initialValue,
     doctorProfileValidation
   );
-  const { loading, createProfile } = useProfile();
+
+  const { state } = useLocation();
+
+  const profileId = state?.profileId;
+
+  console.log(profileId);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const response = await fetchProfile();
+
+      if (response.success) {
+        setValues(response.data);
+      }
+    };
+    loadProfile();
+  }, []);
 
   /* ================= Education ================= */
 
@@ -101,7 +119,9 @@ export const DoctorProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await createProfile(values, setErrors);
+    const response = isEdit
+      ? await updateProfile(values, setErrors)
+      : await createProfile(values, setErrors);
 
     console.log(response);
     console.log("FINAL DATA 👉", values);
@@ -452,7 +472,11 @@ export const DoctorProfileForm = () => {
 
           {/* Submit Button */}
           <div className="flex justify-end gap-4">
-            <Button onClick={handleSubmit} label="Submit for Verification" variant="primary" />
+            <Button
+              onClick={handleSubmit}
+              label={isEdit ? "Update Profile" : "Submit Profile"}
+              variant="primary"
+            />
           </div>
         </div>
       </form>

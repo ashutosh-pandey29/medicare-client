@@ -1,11 +1,13 @@
 import { FaClock, FaHospital, FaCamera } from "react-icons/fa";
-import { NotFound } from "../../basic/NotFound";
+import { NotFound } from "../../components/basic/NotFound";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useProfile } from "../../../hooks/doctor/useProfile";
+import { useProfile } from "../../hooks/doctor/useProfile";
 import { BsAward, BsKeyFill, BsPhone } from "react-icons/bs";
-import { DoctorProfileSkeletonLoader } from "../../UI/loaders/skeleton/DoctorProfileSkeltonLoader";
+import { DoctorProfileSkeletonLoader } from "../../components/UI/loaders/skeleton/DoctorProfileSkeltonLoader";
 import { MdVerifiedUser } from "react-icons/md";
+import { GoShield } from "react-icons/go";
+import { IoShieldCheckmarkSharp } from "react-icons/io5";
 
 export function DoctorProfilePage() {
   const navigate = useNavigate();
@@ -31,8 +33,6 @@ export function DoctorProfilePage() {
     return `${formattedHour}:${minute} ${suffix}`;
   };
 
-  console.log(profile);
-  console.log(loading);
   return (
     <>
       <div className="min-h-screen">
@@ -40,15 +40,15 @@ export function DoctorProfilePage() {
           <DoctorProfileSkeletonLoader />
         ) : profile.length === 0 ? (
           <>
-              <NotFound
-                message="Profile Not Created"
-                description="You haven’t created your profile yet. To start using all features, please create your profile now."
-                actionText="Create Profile"
-                theme="light" // or "dark"
-                onClick={() => {
-                  navigate("create");
-                }}
-              />
+            <NotFound
+              message="Profile Not Created"
+              description="You haven’t created your profile yet. To start using all features, please create your profile now."
+              actionText="Create Profile"
+              theme="light" // or "dark"
+              onClick={() => {
+                navigate("create");
+              }}
+            />
           </>
         ) : (
           <>
@@ -83,18 +83,28 @@ export function DoctorProfilePage() {
                           {/* Name + Verified */}
                           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                             Dr. {profile?.doctorName}
-                            <MdVerifiedUser className="text-blue-600" title="Verified Doctor" />
+                            {profile.isVerified ? (
+                              <IoShieldCheckmarkSharp
+                                className="text-green-700 text-xl"
+                                title="Verified Doctor"
+                              />
+                            ) : (
+                              <GoShield
+                                className="text-red-500 text-xl"
+                                title="Not Verified Doctor"
+                              />
+                            )}
                           </h1>
 
                           {/* Edit profile */}
-                          <NavLink
-                            to="update"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium
-             text-blue-600 border border-blue-200 rounded-md
-             hover:bg-blue-50 hover:border-blue-300 transition w-fit"
+                          <button
+                            onClick={()=>navigate("update", {
+                              state: { profileId: profile.profileId },
+                            })}
+                            className="text-blue-600"
                           >
                             Edit Profile
-                          </NavLink>
+                          </button>
                         </div>
                       </div>
 

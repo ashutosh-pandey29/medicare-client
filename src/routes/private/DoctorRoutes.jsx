@@ -11,7 +11,7 @@ import { Account } from "../../pages/doctor/Account";
 import { PatientConsultation } from "../../pages/doctor/PatientConsultation";
 import { Settings } from "../../pages/doctor/Settings";
 import { DoctorProfileForm } from "../../components/forms/doctor/DoctorProfileForm";
-import { DoctorProfilePage } from "../../components/forms/doctor/DoctorProfilePage";
+import { DoctorProfilePage } from "../../pages/doctor/DoctorProfilePage";
 
 const DoctorRoutes = [
   {
