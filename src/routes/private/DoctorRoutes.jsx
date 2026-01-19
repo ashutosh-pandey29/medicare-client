@@ -2,14 +2,12 @@ import { DashboardLayout } from "../../components/layout/DashboardLayout";
 import { ApproveAppointment } from "../../pages/doctor/ApproveAppointment";
 import { DashboardHome } from "../../pages/doctor/DashboardHome";
 import { PatientTable } from "../../pages/doctor/PatientTable";
-import { ReportEntry } from "../../pages/doctor/ReportEntry";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { AuthProvider } from "../../context/AuthContext";
 import { SocketProvider } from "../../context/SocketContext";
 import { Profile } from "../../pages/doctor/Profile";
 import { Account } from "../../pages/doctor/Account";
 import { PatientConsultation } from "../../pages/doctor/PatientConsultation";
-import { Settings } from "../../pages/doctor/Settings";
 import { DoctorProfileForm } from "../../components/forms/doctor/DoctorProfileForm";
 import { DoctorProfilePage } from "../../pages/doctor/DoctorProfilePage";
 
@@ -43,10 +41,7 @@ const DoctorRoutes = [
             path: "patient-table",
             element: <PatientTable />,
           },
-          {
-            path: "report-entry",
-            element: <ReportEntry />,
-          },
+          
           {
             path: "profile",
             element: <Profile />,
@@ -71,10 +66,7 @@ const DoctorRoutes = [
             path: "account",
             element: <Account />,
           },
-          {
-            path: "settings",
-            element: <Settings />,
-          },
+         
         ],
       },
     ],
