@@ -1,7 +1,7 @@
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaUser } from "react-icons/fa";
 import { Dropdown } from "../../../UI/Dropdown";
 
-export const CardRow = ({ data, actions = [] }) => {
+export const CardRow = ({ status, title, message, actions = [] }) => {
   const statusStyles = {
     confirmed: {
       border: "border-blue-500",
@@ -19,10 +19,9 @@ export const CardRow = ({ data, actions = [] }) => {
       border: "border-yellow-500",
       badge: "bg-yellow-100 text-yellow-700",
     },
-    
   };
 
-  const styles = statusStyles[data] || {
+  const styles = statusStyles[status] || {
     border: "border-gray-300",
     badge: "bg-gray-100 text-gray-700",
   };
@@ -30,14 +29,12 @@ export const CardRow = ({ data, actions = [] }) => {
   // console.log(actions);
 
   return (
-    <div
-      className={`bg-white  rounded border-l-4  ${styles.border} transition hover:bg-zinc-50`}
-    >
+    <div className={`bg-white  rounded border-l-4  ${styles.border} transition hover:bg-zinc-50`}>
       {/* Header */}
       <div className=" p-3 border-zinc-100 rounded">
         <div className="flex justify-between items-start ">
           <span className={`px-3 py-1 rounded text-xs font-semibold capitalize ${styles.badge}`}>
-            status
+            {status}
           </span>
 
           {/* dropdown */}
@@ -47,13 +44,11 @@ export const CardRow = ({ data, actions = [] }) => {
 
         <div className="flex flex-col   items-start ">
           <div>
-            <h3 className="text-base font-bold text-gray-800">Lorem ipsum dolor sit amet.</h3>
-            <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, et! </p>
+            <h3 className="text-base font-bold text-gray-800">{title}</h3>
+            <p className="text-sm text-gray-500">{message}</p>
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 };

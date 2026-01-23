@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   createDoctorProfileService,
+  fetchDoctorByDepartmentIdService,
   fetchDoctorProfileService,
   updateDoctorProfileService,
 } from "../../services/doctor/profile.service";
@@ -30,13 +31,34 @@ export const useProfile = () => {
     }
   };
 
+  /**===============FETCH DOCTOR BY DEPARTMENT ID  */
+
+  const fetchDoctorByDepartmentId = async (departmentId ,  setErrors) => {
+    setLoading(true);
+    try {
+      const response = await fetchDoctorByDepartmentIdService(departmentId);
+
+      if (!response?.success) {
+        console.error(response);
+        setErrors(response?.message || "Unable to fetch departments");
+        return;
+      }
+
+      return response;
+    } catch (err) {
+      console.error(err);
+      setErrors(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   /**===================CREATE PROFILE ================ */
 
   const createProfile = async (payload, setErrors) => {
     try {
       setLoading(true);
       const response = await createDoctorProfileService(payload);
-
 
       if (!response?.success) {
         toast.error(response?.message || "Profile creation failed");
@@ -52,11 +74,10 @@ export const useProfile = () => {
     }
   };
 
-
   /**================ UPDATE PROFILE=============== */
 
   const updateProfile = async (payload, setErrors) => {
-      try {
+    try {
       setLoading(true);
       const response = await updateDoctorProfileService(payload);
       if (!response?.success) {
@@ -71,10 +92,7 @@ export const useProfile = () => {
     } finally {
       setLoading(false);
     }
-
-
-  }
-
+  };
 
   /**================HANDLE ERROR================== */
 
@@ -95,5 +113,5 @@ export const useProfile = () => {
     toast.error(err.message);
   };
 
-  return { loading, fetchProfile, createProfile  , updateProfile};
+  return { loading, fetchProfile, fetchDoctorByDepartmentId, createProfile, updateProfile };
 };

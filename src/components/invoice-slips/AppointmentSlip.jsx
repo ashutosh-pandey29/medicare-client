@@ -9,8 +9,7 @@ import {
   FaIdCard,
 } from "react-icons/fa";
 
-export const AppointmentSlip = ({ appointmentData, paymentInfo }) => {
-  console.log(appointmentData);
+export const AppointmentSlip = ({ appointmentData }) => {
   return (
     <div className="bg-white p-1 hidden  print:block">
       {/* Appointment Slip */}
@@ -46,8 +45,8 @@ export const AppointmentSlip = ({ appointmentData, paymentInfo }) => {
                   {appointmentData?.appointmentId}
                 </p>
                 <p className="text-lg text-gray-600 font-medium">
-                  <span className=" text-blue-600 font-semibold">Token No. : </span>
-                  {10}
+                  <span className=" text-blue-600 font-semibold">Token No. : </span>0
+                  {appointmentData?.token}
                 </p>
               </div>
             </div>
@@ -57,7 +56,7 @@ export const AppointmentSlip = ({ appointmentData, paymentInfo }) => {
         {/* Title */}
         <div className="bg-blue-50 px-6 py-2 md:px-8">
           <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800">
-            APPOINTMENT CONFIRMATION SLIP
+            APPOINTMENT SLIP
           </h2>
         </div>
 
@@ -96,33 +95,57 @@ export const AppointmentSlip = ({ appointmentData, paymentInfo }) => {
             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
               <div>
                 <p className=" text-base font-semibold text-gray-800">Doctor Name</p>
-                <p className="text-base text-gray-600">{appointmentData?.doctorId?.doctorName}</p>
+                <p className="text-base text-gray-600">{appointmentData?.doctorName}</p>
               </div>
               <div>
                 <p className="  text-base font-semibold text-gray-800">Department</p>
-                <p className="text-sm text-gray-600">
-                  {appointmentData?.departmentId?.departmentName}
-                </p>
+                <p className="text-sm text-gray-600">{appointmentData?.departmentName}</p>
               </div>
               <div>
                 <p className=" text-base font-semibold text-gray-800">Appointment Date</p>
-                <p className="text-sm text-gray-600">
-                  {appointmentData?.appointmentDate
-                    ? new Date(appointmentData.appointmentDate).toLocaleDateString("en-IN", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })
-                    : "—"}
-                </p>
+                <p className="text-sm text-gray-600">{appointmentData?.appointmentDate}</p>
               </div>
             </div>
           </div>
 
           {/* Important Note Box */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-3">
-            <p className="text-sm font-semibold text-gray-800 mb-2">Important Note</p>
-            <p className="text-base text-gray-700">{paymentInfo}</p>
+          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-3 rounded-md">
+            <p className="text-sm font-semibold text-gray-800 mb-3">Payment Status</p>
+
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-base font-medium text-gray-700">
+                Amount:{" "}
+                <span className="font-semibold text-gray-900">
+                  ₹{appointmentData.paymentAmount}
+                </span>
+              </p>
+
+              <span
+                className={`px-3 py-1 text-xs font-semibold rounded-full
+        ${
+          appointmentData.paymentStatus === "paid"
+            ? "bg-green-100 text-green-700"
+            : appointmentData.paymentStatus === "pending"
+              ? "bg-orange-100 text-orange-700"
+              : appointmentData.paymentStatus === "failed"
+                ? "bg-red-100 text-red-700"
+                : "bg-gray-100 text-gray-700"
+        }`}
+              >
+                {appointmentData.paymentStatus?.toUpperCase()}
+              </span>
+            </div>
+
+            <p className="text-sm text-gray-600">
+              {appointmentData.paymentStatus === "paid" &&
+                "Payment completed successfully. Please carry your appointment slip."}
+
+              {appointmentData.paymentStatus === "pending" &&
+                "Payment is pending. Kindly complete the payment before your appointment."}
+
+              {appointmentData.paymentStatus === "failed" &&
+                "Payment failed. Please retry to confirm your appointment."}
+            </p>
           </div>
         </div>
 

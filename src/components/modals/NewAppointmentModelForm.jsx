@@ -3,116 +3,107 @@ import { useForm } from "../../hooks/custom/useForm";
 import { appointmentSchema } from "../../utils/validationSchema";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useToken } from "../../hooks/custom/useToken";
 import { Button } from "../UI/Button";
+import { RiCloseLargeLine } from "react-icons/ri";
+import { useDepartment } from "../../hooks/department/useDepartment";
+import { useProfile } from "../../hooks/doctor/useProfile";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
 
-export const NewAppointmentModelForm = () => {
+export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   const [departments, setDepartments] = useState([]);
-  const [departmentId, setDepartmentId] = useState([]);
   const [doctor, setDoctor] = useState([]);
-  const [touchedField, setTouchedField] = useState({}); //  tracking user interaction
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const token = useToken();
-  const handleBlur = (e) => {
-    setTouchedField({ ...touchedField, [e.target.name]: true });
-  };
-  const initialValue = {
-    doctorId: "",
-    departmentId: "",
-    appointmentDate: "",
-    name: "",
-    phone: "",
-    problem: "",
-  };
+  const { fetchPublicDepartment } = useDepartment();
+  const { fetchDoctorByDepartmentId } = useProfile();
+  const { loading, newAppointment } = useAppointment();
 
-  const onSubmit = async (value) => {
-    setLoading(true);
-
-    // console.log("appointment value :", value);
-    try {
-      // const token = localStorage.getItem("accessToken");
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/appointment/book-appointment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-        body: JSON.stringify(value),
-      });
-
-      const jsonResponse = await response.json();
-
-      console.log(jsonResponse);
-
-      if (response.ok) {
-        if (jsonResponse.status) {
-          toast.success(jsonResponse.message);
-          navigate(`/appointment/confirmation?appointmentId=${jsonResponse.data.appointmentId}`);
-        } else {
-          toast.error(jsonResponse.message);
-        }
-      } else {
-        throw new Error();
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const { value, errors, handleChange, handleSubmit } = useForm(
-    initialValue,
-    appointmentSchema,
-    onSubmit
+  const { values, setValues, errors, setErrors, handleChange, resetForm } = useForm(
+    {
+      departmentId: data?.departmentId || "",
+      doctorId: data?.doctorId || "",
+      appointmentDate: data?.appointmentDate ? data.appointmentDate.split("T")[0] : "",
+      name: data?.name || "",
+      phone: data?.phone || "",
+      problem: data?.problem || "",
+    },
+    appointmentSchema
   );
 
-  // fetch department
+  useEffect(() => {
+    if (mode === "update" && data) {
+      setValues({
+        departmentId: data.departmentId || "",
+        doctorId: data.doctorId || "",
+        appointmentDate: data.appointmentDate ? data.appointmentDate.split("T")[0] : "",
+        name: data.name || "",
+        phone: data.phone || "",
+        problem: data.problem || "",
+      });
+    }
+  }, [data, mode]);
+
+  // fetch department for dropdown
+
   useEffect(() => {
     const fetchDepartment = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/department/get`, {
-        method: "GET",
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
-      const d = await response.json();
-      setDepartments(d.data);
+      const response = await fetchPublicDepartment(setErrors);
+      console.log(response);
+      if (response.success) {
+        setDepartments(response.data);
+      }
     };
     fetchDepartment();
   }, []);
 
-  // fetch doctor
-  useEffect(() => {
-    console.log("dd", departmentId);
-    const fetchDoctor = async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/doctor/get/department/${departmentId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        }
-      );
-      const doc = await response.json();
-      console.log(doc);
-      setDoctor(doc.data ? doc.data : []);
-    };
-    fetchDoctor();
-  }, [departmentId]);
+  // fetch doctor for dropdown
 
+  const fetchDoctor = async (departmentId) => {
+    const response = await fetchDoctorByDepartmentId(departmentId);
+    console.log(response);
+    if (response.success) {
+      setDoctor(response.data);
+    }
+  };
+
+  // handle department change
   const handleDepartmentChange = (e) => {
-    console.log(e.target.value);
     handleChange(e);
-    setDepartmentId(e.target.value);
+    setDoctor([]); // reset old doctor
+    fetchDoctor(e.target.value);
+  };
+
+  // fetch doctor when department already exists (update case)
+  useEffect(() => {
+    if (values.departmentId) {
+      fetchDoctor(values.departmentId);
+    }
+  }, [values.departmentId]);
+
+  // handle submit appointment
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await newAppointment(values);
+
+    if (response.success) {
+      toast.success(response.message || "Appointment crated");
+      // move to payment page
+    }
   };
 
   return (
     <>
-      <div className="p-1">
-        <form onSubmit={handleSubmit} className="space-y-1">
+      <div className="w-full max-w-sm md:max-w-lg p-1 md:p-6 bg-white rounded-xl">
+        {/* header */}
+
+        <div className="mb-5 p-1 border-b border-b-zinc-100 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold ">Book Your Appointment</h1>
+          <button className={`w-8 h-8 flex items-center justify-center rounded`} onClick={onClose}>
+            <RiCloseLargeLine />
+          </button>
+        </div>
+
+        <form className="space-y-1 p-3" onSubmit={handleSubmit}>
           {/* Department & Service */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
             {/* Department Select */}
@@ -121,20 +112,16 @@ export const NewAppointmentModelForm = () => {
                 className="h-[6vh] border border-zinc-300 rounded-md px-4 outline-none focus:ring-2 focus:ring-green-300"
                 name="departmentId"
                 id="departmentId"
-                value={value.departmentId}
+                value={values.departmentId}
                 onChange={handleDepartmentChange}
-                onBlur={handleBlur}
               >
                 <option value="">Select Department</option>
                 {departments.map((dept) => (
                   <option key={dept._id} value={dept._id}>
-                    {dept.departmentName} — ₹{dept.fees}
+                    {dept.departmentName}
                   </option>
                 ))}
               </select>
-              {touchedField.departmentId && errors.departmentId && (
-                <span className="text-red-500 text-sm mt-1">{errors.departmentId}</span>
-              )}
             </div>
 
             {/* Doctor Select */}
@@ -143,11 +130,12 @@ export const NewAppointmentModelForm = () => {
                 className="h-[6vh] border border-zinc-300 rounded-md px-4 outline-none focus:ring-2 focus:ring-green-300"
                 name="doctorId"
                 id="doctorId"
-                value={value.doctorId}
+                value={values.doctorId}
                 onChange={handleChange}
-                onBlur={handleBlur}
               >
-                <option value="">Select Doctor</option>
+                <option value="">
+                  {!values.departmentId ? "Select department first" : "Select Doctor"}
+                </option>{" "}
                 {doctor.length > 0 ? (
                   doctor.map((doc) => (
                     <option key={doc._id} value={doc._id}>
@@ -158,9 +146,6 @@ export const NewAppointmentModelForm = () => {
                   <option disabled>Doctor not found</option>
                 )}
               </select>
-              {touchedField.doctorId && errors.doctorId && (
-                <span className="text-red-500 text-sm mt-1">{errors.doctorId}</span>
-              )}
             </div>
 
             {/* Appointment Date */}
@@ -170,13 +155,9 @@ export const NewAppointmentModelForm = () => {
                 name="appointmentDate"
                 id="appointmentDate"
                 className="h-[6vh] border border-zinc-300 rounded-md px-4 outline-none focus:ring-2 focus:ring-green-300"
-                value={value.appointmentDate}
                 onChange={handleChange}
-                onBlur={handleBlur}
+                value={values.appointmentDate}
               />
-              {touchedField.appointmentDate && errors.appointmentDate && (
-                <span className="text-red-500 text-sm mt-1">{errors.appointmentDate}</span>
-              )}
             </div>
           </div>
 
@@ -189,13 +170,9 @@ export const NewAppointmentModelForm = () => {
                 name="name"
                 id="name"
                 className="h-[6vh] border border-zinc-300 rounded-md px-4 outline-none focus:ring-2 focus:ring-green-300"
-                value={value.name}
+                value={values.name}
                 onChange={handleChange}
-                onBlur={handleBlur}
               />
-              {touchedField.name && errors.name && (
-                <span className="text-red-500 text-sm mt-1">{errors.name}</span>
-              )}
             </div>
 
             <div className="flex flex-col">
@@ -205,13 +182,9 @@ export const NewAppointmentModelForm = () => {
                 name="phone"
                 id="phone"
                 className="h-[6vh] border border-zinc-300 rounded-md px-4 outline-none focus:ring-2 focus:ring-green-300"
-                value={value.phone}
+                value={values.phone}
                 onChange={handleChange}
-                onBlur={handleBlur}
               />
-              {touchedField.phone && errors.phone && (
-                <span className="text-red-500 text-sm mt-1">{errors.phone}</span>
-              )}
             </div>
           </div>
 
@@ -222,25 +195,25 @@ export const NewAppointmentModelForm = () => {
               name="problem"
               id="problem"
               className="w-full h-[25vh] border border-zinc-300 rounded-md px-4 py-2 outline-none focus:ring-2 focus:ring-green-300 resize-none"
-              value={value.problem}
+              value={values.problem}
               onChange={handleChange}
-              onBlur={handleBlur}
             ></textarea>
-            {touchedField.problem && errors.problem && (
-              <span className="text-red-500 text-sm mt-1">{errors.problem}</span>
-            )}
           </div>
 
           {/* Submit Button */}
 
-          <div className="flex items-center justify-end mt-2">
-            <Button
-              type="submit"
-              variant="submit"
-              disabled={loading}
-              label={`${loading ? "Booking..." : "Book Appointment"}`}
-              customCss={`${loading ? "bg-green-100 cursor-not-allowed" : ""}`}
-            />
+          <div className="flex items-center justify-end mt-5  gap-5">
+            {/* btn */}
+            <button
+              onClick={onClose}
+              className="bg-zinc-100 hover:bg-zinc-200 px-3 py-2.5 text-gray-700 rounded cursor-pointer"
+            >
+              Cancel
+            </button>
+
+            <button className="bg-blue-600 hover:bg-blue-700 px-3 py-2.5 text-white rounded cursor-pointer">
+              {mode && mode === "update" ? "Update Appointment" : "Book Appointment"}
+            </button>
           </div>
         </form>
       </div>
