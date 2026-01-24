@@ -9,7 +9,7 @@ import {
   FaIdCard,
 } from "react-icons/fa";
 
-export const AppointmentSlip = ({ appointmentData }) => {
+export const AppointmentSlip = ({ appointmentData, paymentInfo = null }) => {
   return (
     <div className="bg-white p-1 hidden  print:block">
       {/* Appointment Slip */}
@@ -112,16 +112,19 @@ export const AppointmentSlip = ({ appointmentData }) => {
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-3 rounded-md">
             <p className="text-sm font-semibold text-gray-800 mb-3">Payment Status</p>
 
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-base font-medium text-gray-700">
-                Amount:{" "}
-                <span className="font-semibold text-gray-900">
-                  ₹{appointmentData.paymentAmount}
-                </span>
-              </p>
+            {paymentInfo !== null ? (
+              paymentInfo
+            ) : (
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-base font-medium text-gray-700">
+                  Amount:{" "}
+                  <span className="font-semibold text-gray-900">
+                    ₹{appointmentData.paymentAmount}
+                  </span>
+                </p>
 
-              <span
-                className={`px-3 py-1 text-xs font-semibold rounded-full
+                <span
+                  className={`px-3 py-1 text-xs font-semibold rounded-full
         ${
           appointmentData.paymentStatus === "paid"
             ? "bg-green-100 text-green-700"
@@ -131,10 +134,11 @@ export const AppointmentSlip = ({ appointmentData }) => {
                 ? "bg-red-100 text-red-700"
                 : "bg-gray-100 text-gray-700"
         }`}
-              >
-                {appointmentData.paymentStatus?.toUpperCase()}
-              </span>
-            </div>
+                >
+                  {appointmentData.paymentStatus?.toUpperCase()}
+                </span>
+              </div>
+            )}
 
             <p className="text-sm text-gray-600">
               {appointmentData.paymentStatus === "paid" &&

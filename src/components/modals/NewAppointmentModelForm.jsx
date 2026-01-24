@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "../../hooks/custom/useForm";
 import { appointmentSchema } from "../../utils/validationSchema";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "../UI/Button";
 import { RiCloseLargeLine } from "react-icons/ri";
 import { useDepartment } from "../../hooks/department/useDepartment";
@@ -10,23 +10,25 @@ import { useProfile } from "../../hooks/doctor/useProfile";
 import { useAppointment } from "../../hooks/appointment/useAppointment";
 
 export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
+  const navigate = useNavigate();
   const [departments, setDepartments] = useState([]);
   const [doctor, setDoctor] = useState([]);
   const { fetchPublicDepartment } = useDepartment();
   const { fetchDoctorByDepartmentId } = useProfile();
   const { loading, newAppointment } = useAppointment();
 
-  const { values, setValues, errors, setErrors, handleChange, resetForm } = useForm(
-    {
-      departmentId: data?.departmentId || "",
-      doctorId: data?.doctorId || "",
-      appointmentDate: data?.appointmentDate ? data.appointmentDate.split("T")[0] : "",
-      name: data?.name || "",
-      phone: data?.phone || "",
-      problem: data?.problem || "",
-    },
-    appointmentSchema
-  );
+  const { values, setValues, errors, setErrors, handleChange, resetForm, validateOnSubmit } =
+    useForm(
+      {
+        departmentId: data?.departmentId || "",
+        doctorId: data?.doctorId || "",
+        appointmentDate: data?.appointmentDate ? data.appointmentDate.split("T")[0] : "",
+        name: data?.name || "",
+        phone: data?.phone || "",
+        problem: data?.problem || "",
+      },
+      appointmentSchema
+    );
 
   useEffect(() => {
     if (mode === "update" && data) {
@@ -67,6 +69,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   // handle department change
   const handleDepartmentChange = (e) => {
     handleChange(e);
+    
     setDoctor([]); // reset old doctor
     fetchDoctor(e.target.value);
   };
@@ -83,11 +86,15 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await newAppointment(values);
+    const formErrors = validateOnSubmit(values);
+    if (Object.keys(formErrors).length > 0) return;
+
+    const response = await newAppointment(values, setErrors);
 
     if (response.success) {
-      toast.success(response.message || "Appointment crated");
+      toast.success(response.message || "Appointment scheduled.");
       // move to payment page
+      navigate(`/appointment/confirmation?appointmentId=${response.data?.appointmentId}`);
     }
   };
 
@@ -122,6 +129,9 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
                   </option>
                 ))}
               </select>
+              {errors.departmentId && (
+                <span className="text-sm text-red-700">{errors.departmentId}</span>
+              )}
             </div>
 
             {/* Doctor Select */}
@@ -146,6 +156,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
                   <option disabled>Doctor not found</option>
                 )}
               </select>
+              {errors.doctorId && <span className="text-sm text-red-700">{errors.doctorId}</span>}
             </div>
 
             {/* Appointment Date */}
@@ -158,6 +169,9 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
                 onChange={handleChange}
                 value={values.appointmentDate}
               />
+              {errors.appointmentDate && (
+                <span className="text-sm text-red-700">{errors.appointmentDate}</span>
+              )}
             </div>
           </div>
 
@@ -173,6 +187,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
                 value={values.name}
                 onChange={handleChange}
               />
+              {errors.name && <span className="text-sm text-red-700">{errors.name}</span>}
             </div>
 
             <div className="flex flex-col">
@@ -185,6 +200,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
                 value={values.phone}
                 onChange={handleChange}
               />
+              {errors.phone && <span className="text-sm text-red-700">{errors.phone}</span>}
             </div>
           </div>
 
@@ -198,6 +214,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
               value={values.problem}
               onChange={handleChange}
             ></textarea>
+            {errors.problem && <span className="text-sm text-red-700">{errors.problem}</span>}
           </div>
 
           {/* Submit Button */}
@@ -211,8 +228,12 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
               Cancel
             </button>
 
-            <button className="bg-blue-600 hover:bg-blue-700 px-3 py-2.5 text-white rounded cursor-pointer">
-              {mode && mode === "update" ? "Update Appointment" : "Book Appointment"}
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 px-3 py-2.5 text-white rounded cursor-pointer"
+            >
+              {loading ? "Booking..." : mode === "update" ? "Update Appointment" : "Book Appointment"}
+
             </button>
           </div>
         </form>

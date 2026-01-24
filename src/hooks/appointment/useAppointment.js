@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { fetchAllAppointmentService, fetchAppointmentByIdService, newAppointmentService } from "../../services/appointment/appointment.service";
+import {
+  fetchAllAppointmentService,
+  fetchAppointmentByIdService,
+  newAppointmentService,
+} from "../../services/appointment/appointment.service";
 
 export const useAppointment = () => {
   const [loading, setLoading] = useState(false);
@@ -67,7 +71,7 @@ export const useAppointment = () => {
 
   //! NEW APPOINTMENT (BOOK NEW APPOINTMENT)
 
-  const newAppointment = async (payload) => {
+  const newAppointment = async (payload, setErrors) => {
     setLoading(true);
     try {
       const response = await newAppointmentService(payload);
@@ -96,7 +100,7 @@ export const useAppointment = () => {
   const cancelAppointment = async () => {
     setLoading(true);
     try {
-         const response = await newAppointmentService(payload);
+      const response = await newAppointmentService(payload);
       if (!response.success) {
         throw new Error(response.message || "appointment Not booked");
       }
@@ -105,6 +109,23 @@ export const useAppointment = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const errorHandler = (err, setErrors) => {
+    if (err.errors && setErrors) {
+      const formattedErrors = {};
+
+      err.errors.forEach((e) => {
+        if (formattedErrors[e.field]) {
+          formattedErrors[e.field] += `, ${e.message}`;
+        } else {
+          formattedErrors[e.field] = e.message;
+        }
+      });
+      setErrors(formattedErrors);
+    }
+
+    toast.error(err.message);
   };
 
   return { loading, newAppointment, fetchAllAppointment, fetchAppointmentById };

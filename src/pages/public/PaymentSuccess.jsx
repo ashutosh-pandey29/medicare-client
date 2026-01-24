@@ -15,6 +15,7 @@ import { IoMdAlert } from "react-icons/io";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { PreLoader } from "../../components/UI/loaders/PreLoader";
 import { AppointmentSlip } from "../../components/invoice-slips/AppointmentSlip";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
 
 export const PaymentSuccess = () => {
   const navigate = useNavigate();
@@ -22,38 +23,26 @@ export const PaymentSuccess = () => {
   const VALID_PAYMENT_MODE = ["online", "hospital"];
   const appointmentId = params.get("appointmentId");
   const receivedMode = params.get("mode");
+  const { loading, fetchAppointmentById } = useAppointment();
   const paymentMode = VALID_PAYMENT_MODE.includes(receivedMode)
     ? receivedMode
     : navigate("/unexpected-error");
 
   // fetch all detail using appointment id
   const [appointmentData, setAppointmentData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const fetchAppointmentData = async () => {
-      // console.log(appointmentId);
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/appointment/get/${appointmentId}`,
-          {
-            method: "GET",
-            // "Authorization": token ? `${token}` : null,
-          }
-        );
 
-        const jsonResponse = await response.json();
-        // console.log(jsonResponse.data);
-        setAppointmentData(jsonResponse.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
+  console.log(appointmentId);
+  useEffect(() => {
+    const fetchAppointmentData = async () => {
+      const response = await fetchAppointmentById(appointmentId);
+
+      console.log(response);
+      if (response.success) {
+        setAppointmentData(response.data);
       }
     };
-
     fetchAppointmentData();
-  }, [appointmentId]);
+  }, []);
 
   // handling slip print
 
@@ -99,8 +88,13 @@ export const PaymentSuccess = () => {
       <div className="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-amber-50 flex items-center justify-center md:p-4 ">
         <div className="max-w-2xl w-full bg-white rounded  overflow-hidden page-container">
           {/* Header */}
-          <div className="flex justify-center flex-row items-center bg-linear-to-r from-green-500 to-amber-500 text-white p-8 text-center">
-            <h1 className="text-2xl md:text-2xl lg:text-3xl font-bold mb-2">Appointment Booked!</h1>
+          <div className="bg-linear-to-r from-blue-600 via-blue-500 to-teal-500 text-white px-6 py-6 md:py-8 rounded-t-xl text-center">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+            Appointment Booked Successfully🎉
+            </h1>
+            <p className="text-sm md:text-base text-white/90 mt-1">
+              Thank you for choosing our healthcare services
+            </p>
           </div>
 
           {/* Main Content */}
@@ -124,17 +118,38 @@ export const PaymentSuccess = () => {
               <p className="text-amber-800 text-sm leading-relaxed">{paymentInfo}</p>
             </div>
 
-            {/* Booking ID */}
-            <div className="bg-gray-100 rounded-lg p-4 mb-6 text-center">
-              <p className="text-gray-600 text-sm mb-1">Appointment ID</p>
-              <p className="text-gray-900 font-bold text-2xl tracking-wider">
-                {appointmentData?.appointmentId}
-              </p>
-              <p className="text-gray-500 text-xs mt-2">
-                {paymentMode === "hospital"
-                  ? "Please present this ID at the reception counter and complete the payment"
-                  : "Please keep this ID for future reference"}
-              </p>
+            {/* Booking ID & Token */}
+            <div className="bg-gray-100 rounded-xl p-4 md:p-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
+                {/* Appointment ID */}
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                    Appointment ID
+                  </p>
+                  <p className="text-gray-900 font-bold text-2xl md:text-3xl tracking-wider">
+                    {appointmentData?.appointmentId || "-"}
+                  </p>
+                  <p className="text-gray-500 text-xs mt-2 max-w-xs mx-auto">
+                    {paymentMode === "hospital"
+                      ? "Show this ID at the reception counter to complete payment."
+                      : "Keep this ID safe for future reference."}
+                  </p>
+                </div>
+
+                {/* Divider (desktop only) */}
+                <div className="hidden md:flex justify-center">
+                  <div className="w-px h-20 bg-gray-300" />
+                </div>
+
+                {/* Token Number */}
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">Token Number</p>
+                  <p className="text-gray-900 font-bold text-2xl md:text-3xl tracking-wider">
+                    {appointmentData?.token ? `0${appointmentData.token}` : "-"}
+                  </p>
+                  <p className="text-gray-500 text-xs mt-2">Token number may change at hospital</p>
+                </div>
+              </div>
             </div>
 
             {/* Appointment Details */}
@@ -169,12 +184,8 @@ export const PaymentSuccess = () => {
                   <FaUserMd className="text-teal-600 mt-1 mr-3 text-xl shrink-0" />
                   <div className="flex-1">
                     <p className="text-gray-600 text-sm">Doctor</p>
-                    <p className="text-gray-900 font-semibold">
-                      {appointmentData?.doctorId?.doctorName}
-                    </p>
-                    <p className="text-gray-600 text-xs">
-                      {appointmentData?.departmentId?.departmentName}
-                    </p>
+                    <p className="text-gray-900 font-semibold">{appointmentData?.doctorName}</p>
+                    <p className="text-gray-600 text-xs">{appointmentData?.departmentName}</p>
                   </div>
                 </div>
 
@@ -183,24 +194,10 @@ export const PaymentSuccess = () => {
                   <div className="flex-1">
                     <p className="text-gray-600 text-sm">Appointment Date</p>
                     <p className="text-gray-900 font-semibold">
-                      {appointmentData?.appointmentDate
-                        ? new Date(appointmentData.appointmentDate).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "—"}
+                      {appointmentData?.appointmentDate}
                     </p>
                   </div>
                 </div>
-
-                {/* <div className="flex items-start">
-                  <FaClock className="text-orange-600 mt-1 mr-3 text-xl shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-gray-600 text-sm">Appointment Time</p>
-                    <p className="text-gray-900 font-semibold">10:30 AM</p>
-                  </div>
-                </div> */}
               </div>
             </div>
 
@@ -261,7 +258,10 @@ export const PaymentSuccess = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col-reverse sm:flex-row gap-3 no-print">
-              <button onClick={()=>navigate("/dashboard/user/")} className="flex-1 bg-blue-100 hover:bg-blue-200 text-black font-bold py-3 px-6 rounded-lg transition duration-300 cursor-pointer">
+              <button
+                onClick={() => navigate("/dashboard/user/")}
+                className="flex-1 bg-blue-100 hover:bg-blue-200 text-black font-bold py-3 px-6 rounded-lg transition duration-300 cursor-pointer"
+              >
                 back to Home
               </button>
 
