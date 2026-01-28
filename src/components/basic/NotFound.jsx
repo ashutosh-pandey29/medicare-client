@@ -68,9 +68,7 @@ export const NotFound = ({
             </button>
           )}
 
-          <p className={`text-xs ${theme === "dark" ? "text-gray-600" : "text-gray-500"}`}>
-            Get started by creating your first entry
-          </p>
+          
         </div>
       </div>
     </div>

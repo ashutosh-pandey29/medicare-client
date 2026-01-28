@@ -1,10 +1,10 @@
 import React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { MdDeleteOutline, MdWarningAmber } from "react-icons/md";
+import { MdCancel, MdDeleteOutline, MdWarningAmber } from "react-icons/md";
 import { FiAlertCircle } from "react-icons/fi";
 
-export const ConfirmActionModal = ({ message, variant = "info", onClose }) => {
+export const ConfirmActionModal = ({ message, variant = "info", onClose ,  onConfirm}) => {
   const CARD_VARIANT = {
     info: {
       icon: <IoMdInformationCircleOutline className="text-blue-600  text-5xl animate-pulse" />,
@@ -42,50 +42,63 @@ export const ConfirmActionModal = ({ message, variant = "info", onClose }) => {
       iconColor: "text-red-600",
       button: "Delete Forever",
     },
+
+    cancel: {
+      icon: <MdCancel className="text-yellow-500 text-5xl animate-pulse" />,
+      title: "Cancel Confirmation ",
+      bg: "bg-yellow-50",
+      border: "border-yellow-200",
+      iconBg: "bg-yellow-100",
+      iconColor: "text-yellow-500",
+      button: "Ok",
+    },
   };
 
   return (
     <>
-      <div className="text-center mb-6">
-        <div
-          className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto  ${CARD_VARIANT[variant]?.bg}`}
-        >
-          {CARD_VARIANT[variant]?.icon}
+      <div className="w-full max-w-sm md:max-w-lg p-1 md:p-6 bg-white rounded-2xl">
+        <div className="text-center mb-6 ">
+          <div
+            className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto  ${CARD_VARIANT[variant]?.bg}`}
+          >
+            {CARD_VARIANT[variant]?.icon}
+          </div>
+          <h3 className="text-2xl font-bold  mb-2">{CARD_VARIANT[variant]?.title}</h3>
+          <p className="text-gray-600">{message}</p>
         </div>
-        <h3 className="text-2xl font-bold  mb-2">{CARD_VARIANT[variant]?.title}</h3>
-        <p className="text-gray-600">{message}</p>
-      </div>
 
-      {CARD_VARIANT[variant] === "delete" && (
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Type "DELETE" to confirm
-          </label>
-          <input
-            type="text"
-            placeholder="DELETE"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
-          />
-        </div>
-      )}
-      <div className="flex gap-3  md:flex-row flex-col-reverse">
-        <button
-          className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
-          onClick={onClose}
-        >
-          Cancel
-        </button>
+        {CARD_VARIANT[variant] === "delete" && (
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Type "DELETE" to confirm
+            </label>
+            <input
+              type="text"
+              placeholder="DELETE"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+            />
+          </div>
+        )}
+        <div className="flex gap-3  md:flex-row flex-col-reverse">
+          <button
+            className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
 
-        <button
-          className={`flex-1 px-6 py-3 rounded-lg text-white font-semibold
+          <button
+          onClick={onConfirm}
+            className={`flex-1 px-6 py-3 rounded-lg text-white font-semibold
             ${
               CARD_VARIANT[variant] === "delete"
                 ? "bg-red-600 hover:bg-red-700"
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
-        >
-          {CARD_VARIANT[variant]?.button}
-        </button>
+          >
+            {CARD_VARIANT[variant]?.button}
+          </button>
+        </div>
       </div>
     </>
   );

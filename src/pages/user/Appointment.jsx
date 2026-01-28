@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { LuCalendarSync } from "react-icons/lu";
-import { FaEye, FaPrint } from "react-icons/fa6";
+import { FaCross, FaEye, FaPrint } from "react-icons/fa6";
 import { Modal } from "../../components/modals/Modal";
 import { NewAppointmentModelForm } from "../../components/modals/NewAppointmentModelForm";
 import { useModal } from "../../hooks/custom/useModal";
@@ -21,13 +21,21 @@ import { useReactToPrint } from "react-to-print";
 import { useAppointment } from "../../hooks/appointment/useAppointment";
 import { APPOINTMENT_MESSAGE_MAP } from "../../utils/message/appointmentMessage";
 import { DeleteConfirmation } from "../../components/modals/DeleteConfirmation";
+import { MdCancel } from "react-icons/md";
+import { toast } from "react-toastify";
 
 export const Appointment = () => {
   const { modalData, openModal, closeModal } = useModal();
   const [appointmentData, setAppointmentData] = useState([]);
   const [appointmentSlipData, setAppointmentSlipData] = useState([]);
   const [updateAppointmentData, setUpdateAppointmentData] = useState([]);
-  const { loading, fetchAllAppointment, fetchAppointmentById } = useAppointment();
+  const {
+    loading,
+    fetchAllAppointment,
+    fetchAppointmentById,
+    cancelAppointment,
+    deleteAppointment,
+  } = useAppointment();
 
   // for printing
   const printRef = useRef(null);
@@ -56,6 +64,19 @@ export const Appointment = () => {
     }, 0);
   };
 
+  // fetch all appointment
+
+  const loadAppointmentData = async () => {
+    const response = await fetchAllAppointment();
+    console.log("apt", response);
+    if (response.success) {
+      setAppointmentData(response.data);
+    }
+  };
+  useEffect(() => {
+    loadAppointmentData();
+  }, []);
+
   const viewAppointment = async (appointmentId) => {
     const response = await fetchAppointmentById(appointmentId);
 
@@ -81,18 +102,42 @@ export const Appointment = () => {
   // handle cancel appointment
 
   const handleCancelAppointment = (appointmentId) => {
-     openModal(
-          <DeleteConfirmationModel
-            title="Delete Appointment"
-            content="This action cannot be undone. Type DELETE to confirm."
-            theme="light"
-         onClose={closeModal}
-         onConfirm={async () => {
-           
-         }}
-          />,
-          "Cancel Appointment"
-        )
+    openModal(
+      <ConfirmActionModal
+        message={"Are you sure you want to cancel this appointment? This action cannot be undone."}
+        variant="cancel"
+        onClose={closeModal}
+        onConfirm={async () => {
+          const response = await cancelAppointment(appointmentId);
+
+          if (response.success) {
+            toast.success(response.message || "Appointment cancelled");
+            loadAppointmentData();
+            closeModal();
+          }
+        }}
+      />
+    );
+  };
+
+  // handle delete appointment
+
+  const handleDeleteAppointment = (appointmentId) => {
+    openModal(
+      <DeleteConfirmationModel
+        content={"Are you sure you want to Delete this appointment? This action cannot be undone."}
+        title="Delete Appointment"
+        onClose={closeModal}
+        onConfirm={async () => {
+          const response = await deleteAppointment(appointmentId);
+          if (response.success) {
+            toast.success(response.message || "Appointment cancelled");
+            loadAppointmentData();
+            closeModal();
+          }
+        }}
+      />
+    );
   };
 
   const getAppointmentAction = (data) => [
@@ -116,25 +161,17 @@ export const Appointment = () => {
 
     {
       label: "Cancel Appointment",
-      icon: FaTrash,
-      danger: true,
+      icon: MdCancel,
       onClick: () => handleCancelAppointment(data.appointmentId),
     },
+
+    {
+      label: "Delete Appointment",
+      icon: FaTrash,
+      danger: true,
+      onClick: () => handleDeleteAppointment(data.appointmentId),
+    },
   ];
-
-  // fetch all appointment
-
-  useEffect(() => {
-    const loadAppointmentData = async () => {
-      const response = await fetchAllAppointment();
-      console.log("apt", response);
-      if (response.success) {
-        setAppointmentData(response.data);
-      }
-    };
-
-    loadAppointmentData();
-  }, []);
 
   if (loading) return <PreLoader />;
   return (

@@ -29,15 +29,19 @@ export const Header = ({ handleSidebarToggle, role }) => {
     };
 
     // join personal room
-    socket.emit("join", decodedUser.userId);
     console.log("Joining room:", decodedUser.userId);
-
+    socket.emit("join", decodedUser.userId);
     socket.on("notification", handleNotification);
 
     return () => {
       socket.off("notification", handleNotification);
     };
   }, [socket, decodedUser]);
+
+useEffect(() => {
+  console.log("decodedUser changed:", decodedUser);
+}, [decodedUser]);
+
 
   return (
     <header className="h-16 w-full flex items-center justify-between px-2 z-50">

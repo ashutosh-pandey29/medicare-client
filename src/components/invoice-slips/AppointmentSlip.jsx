@@ -119,7 +119,7 @@ export const AppointmentSlip = ({ appointmentData, paymentInfo = null }) => {
                 <p className="text-base font-medium text-gray-700">
                   Amount:{" "}
                   <span className="font-semibold text-gray-900">
-                    ₹{appointmentData.paymentAmount}
+                    ₹{appointmentData?.paymentAmount}
                   </span>
                 </p>
 
@@ -135,19 +135,19 @@ export const AppointmentSlip = ({ appointmentData, paymentInfo = null }) => {
                 : "bg-gray-100 text-gray-700"
         }`}
                 >
-                  {appointmentData.paymentStatus?.toUpperCase()}
+                  {appointmentData?.paymentStatus?.toUpperCase()}
                 </span>
               </div>
             )}
 
             <p className="text-sm text-gray-600">
-              {appointmentData.paymentStatus === "paid" &&
+              {appointmentData?.paymentStatus === "paid" &&
                 "Payment completed successfully. Please carry your appointment slip."}
 
-              {appointmentData.paymentStatus === "pending" &&
+              {appointmentData?.paymentStatus === "pending" &&
                 "Payment is pending. Kindly complete the payment before your appointment."}
 
-              {appointmentData.paymentStatus === "failed" &&
+              {appointmentData?.paymentStatus === "failed" &&
                 "Payment failed. Please retry to confirm your appointment."}
             </p>
           </div>

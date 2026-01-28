@@ -1,4 +1,11 @@
-import { FaAnglesRight, FaAnglesLeft, FaUser, FaCalendar, FaPhone } from "react-icons/fa6";
+import {
+  FaAnglesRight,
+  FaAnglesLeft,
+  FaUser,
+  FaCalendar,
+  FaPhone,
+  FaUserInjured,
+} from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useToken } from "../../hooks/custom/useToken";
@@ -6,116 +13,100 @@ import { FiActivity, FiFileText } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { NoDataFound } from "../../components/basic/DataNotFound";
 import { Button } from "../../components/UI/Button";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
+import { NotFound } from "../../components/basic/NotFound";
 
 export const PatientConsultation = () => {
   const navigate = useNavigate();
   const token = useToken();
   const [patients, setPatients] = useState([]);
 
-  const markActive = (p) => {
-    const activeIdx = p.find((p) => p.status === "approved");
-
-    return p.map((p, i) => ({
-      ...p,
-      active: i === activeIdx,
-    }));
-  };
+  const { fetchPatientForConsultation, updateAppointment } = useAppointment();
 
   // Fetch patient queue on mount
   useEffect(() => {
     const fetchPatientQueue = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/get/patient-queue`, {
-          method: "GET",
-        });
-
-        const jsonResponse = await response.json();
-
-        // const activePatient = markActive(jsonResponse.data);
-        setPatients(jsonResponse.data);
-      } catch (error) {
-        console.error("Error fetching patient queue:", error);
+      const response = await fetchPatientForConsultation();
+      if (response.success && response.data.length > 0) {
+        setPatients(
+          response.data.map((p, i) => ({
+            ...p,
+            active: i === 0,
+          }))
+        );
       }
     };
-
     fetchPatientQueue();
   }, []);
 
-  // Move active patient to given index
-  const handleActivePatient = (index) => {
-    setPatients((prev) =>
-      prev.map((p, i) => ({
-        ...p,
-        active: i === index,
-      }))
-    );
-  };
-
-  // // Move to previous patient
-  // const handlePrev = () => {
-  //   const currentIndex = patients.findIndex((p) => p.active);
-  //   if (currentIndex > 0) {
-  //     handleActivePatient(currentIndex - 1);
-  //   }
-  // };
-
   // Move to next patient
 
-  // const handleNext = async () => {
-  //   const currentIndex = patients.findIndex((p) => p.active);
-  //   if (currentIndex === -1) return;
+  const handleNext = async () => {
+    const currentIndex = patients.findIndex((p) => p.active);
+    if (currentIndex === -1) return;
 
-  //   const currentPatient = patients[currentIndex];
+    const currentPatient = patients[currentIndex];
 
-  //   // console.log("cp", currentPatient);
+    // console.log("cp", currentPatient);
 
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API_URL}/appointment/update-status/${currentPatient.appointmentId}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: token ? `Bearer ${token}` : null,
-  //         },
-  //         body: JSON.stringify({ status: "completed" }),
-  //       }
-  //     );
+    const payload = {
+      appointmentId: activePatient.appointmentId,
+      status: "completed",
+    };
+    const response = await updateAppointment(payload);
 
-  //     const jsonResponse = await response.json();
+    if (response.success) {
+      toast.success(response.message || "Appointment marked as completed");
 
-  //     if (!response.ok) {
-  //       throw new Error();
-  //     }
+      setPatients((prev) => {
+        const filtered = prev.filter((item) => item.appointmentId !== currentPatient.appointmentId);
 
-  //     if (jsonResponse.status) {
-  //       toast.success(jsonResponse.message || "Appointment marked as completed");
+        const nextIndex = Math.min(currentIndex, filtered.length + 1);
 
-  //       setPatients((prev) => {
-  //         const filtered = prev.filter(
-  //           (item) => item.appointmentId !== currentPatient.appointmentId
-  //         );
+        return filtered.map((p, i) => ({
+          ...p,
+          active: i === nextIndex,
+        }));
+      });
 
-  //         const nextIndex = Math.min(currentIndex, filtered.length + 1);
+      // handleActivePatient(currentIndex + 1);
+    }
+  };
 
-  //         return filtered.map((p, i) => ({
-  //           ...p,
-  //           active: i === nextIndex,
-  //         }));
-  //       });
+  const handleSkip = async () => {
+    const currentIndex = patients.findIndex((p) => p.active);
+    if (currentIndex === -1) return;
 
-  //       // handleActivePatient(currentIndex + 1);
-  //     } else {
-  //       toast.success(jsonResponse.message || "Appointment not  marked as completed");
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast.error("Server error. Please try again in a moment.");
-  //   }
-  // };
+    const currentPatient = patients[currentIndex];
+
+    // console.log("cp", currentPatient);
+
+    const payload = {
+      appointmentId: activePatient.appointmentId,
+      status: "missed",
+    };
+    const response = await updateAppointment(payload);
+
+    if (response.success) {
+      toast.success(response.message || "Appointment marked as missed");
+
+      setPatients((prev) => {
+        const filtered = prev.filter((item) => item.appointmentId !== currentPatient.appointmentId);
+
+        const nextIndex = Math.min(currentIndex, filtered.length + 1);
+
+        return filtered.map((p, i) => ({
+          ...p,
+          active: i === nextIndex,
+        }));
+      });
+
+      // handleActivePatient(currentIndex + 1);
+    }
+  };
 
   // Get currently active patient for details section
-  // const activePatient = patients.find((p) => p.active);
+  const activePatient = patients.find((p) => p.active);
 
   return (
     <section className="max-w-7xl mx-auto overflow-x-hidden">
@@ -177,114 +168,106 @@ export const PatientConsultation = () => {
 
       {/* Patient Details */}
 
-     <div className="flex flex-col lg:flex-row gap-6 mt-5 w-full">
-      <div className="flex-1">
-        <div className="bg-white rounded shadow overflow-hidden">
-
-          {/* Header */}
-          <div className="bg-linear-to-r from-[#059669] to-[#3ad28b] px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="bg-white rounded-full p-3">
-                  <FaUser className="text-green-600" size={32} />
+      {patients.length > 0 ? (
+        <>
+          <div className="flex flex-col lg:flex-row gap-6 mt-5 w-full">
+            <div className="flex-1">
+              <div className="bg-white rounded shadow overflow-hidden">
+                {/* Header */}
+                <div className="bg-linear-to-r from-[#059669] to-[#3ad28b] px-8 py-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-white rounded-full p-3">
+                        <FaUserInjured className="text-green-600" size={32} />
+                      </div>
+                      <div>
+                        <h1 className="text-2xl font-bold text-white">{activePatient?.name}</h1>
+                        <p className="text-emerald-100 text-sm">
+                          Patient Token : #{activePatient?.token}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    John Doe
-                  </h1>
-                  <p className="text-emerald-100 text-sm">
-                    Patient #1
-                  </p>
+
+                {/* Queue */}
+                <div className="bg-opacity-20 backdrop-blur-sm">
+                  <div className="mx-auto w-full max-w-7xl flex items-center gap-2 border-b border-emerald-100/30 px-2 py-2">
+                    <button className="shrink-0 px-4 py-3 rounded bg-zinc-100">
+                      <FaAnglesLeft />
+                    </button>
+
+                    <div className="flex gap-2 overflow-x-auto flex-1 px-2">
+                      {patients.map((p) => (
+                        <button
+                          key={p.appointmentId}
+                          className={`min-w-10 h-9 rounded font-semibold ${
+                            p.active ? "bg-green-500 text-white" : "bg-zinc-100"
+                          }`}
+                        >
+                          {p.token}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button className="shrink-0 px-4 py-3 rounded bg-zinc-100">
+                      <FaAnglesRight />
+                    </button>
+                  </div>
                 </div>
-              </div>
-                
-                <Button label={"Add Report"} variant="light" onClick={()=>navigate("../report-entry")}/>
-            </div>
-          </div>
 
-          {/* Queue */}
-          <div className="bg-opacity-20 backdrop-blur-sm">
-            <div className="mx-auto w-full max-w-7xl flex items-center gap-2 border-b border-emerald-100/30 px-2 py-2">
-              <button className="shrink-0 px-4 py-3 rounded bg-zinc-100">
-                <FaAnglesLeft />
-              </button>
+                {/* Content */}
+                <div className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Left */}
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <FiFileText className="text-blue-600 mt-1" size={20} />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Appointment ID</p>
+                          <p className="text-gray-800 font-semibold font-mono">
+                            {activePatient?.appointmentId}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="flex gap-2 overflow-x-auto flex-1 px-2">
-                <button className="min-w-10 h-9 rounded bg-yellow-500 text-white font-semibold">
-                  1
-                </button>
-                <button className="min-w-10 h-9 rounded bg-zinc-100 font-semibold">
-                  2
-                </button>
-                <button className="min-w-10 h-9 rounded bg-green-500 text-white font-semibold">
-                  3
-                </button>
-              </div>
+                    {/* Right */}
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <FaCalendar className="text-blue-600 mt-1" size={20} />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Appointment Date</p>
+                          <p className="text-gray-800 font-semibold">
+                            {activePatient
+                              ? new Date(activePatient?.appointmentDate).toDateString()
+                              : "-"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              <button className="shrink-0 px-4 py-3 rounded bg-zinc-100">
-                <FaAnglesRight />
-              </button>
-            </div>
-          </div>
+                  {/* Problem */}
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <p className="text-xs text-gray-600 font-medium mb-2">Patient Problem</p>
+                    <p className="text-gray-800 font-medium">{activePatient?.problem}</p>
+                  </div>
 
-          {/* Content */}
-          <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Actions */}
+                  <div className="mt-6 flex gap-3 justify-center">
+                    <Button label={"Skip"} variant="danger" onClick={() => handleSkip()} />
 
-              {/* Left */}
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <FiFileText className="text-blue-600 mt-1" size={20} />
-                  <div>
-                    <p className="text-xs text-gray-500 font-medium">
-                      Appointment ID
-                    </p>
-                    <p className="text-gray-800 font-semibold font-mono">
-                      APPT-0012
-                    </p>
+                    <Button label={"Next"} variant="primary" onClick={() => handleNext()} />
                   </div>
                 </div>
               </div>
-
-              {/* Right */}
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <FaCalendar className="text-blue-600 mt-1" size={20} />
-                  <div>
-                    <p className="text-xs text-gray-500 font-medium">
-                      Appointment Date
-                    </p>
-                    <p className="text-gray-800 font-semibold">
-                      12 Dec 2024
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Problem */}
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-              <p className="text-xs text-gray-600 font-medium mb-2">
-                Patient Problem
-              </p>
-              <p className="text-gray-800 font-medium">
-                Fever, headache, and general weakness.
-              </p>
-            </div>
-
-            {/* Actions */}
-            <div className="mt-6 flex gap-3 justify-center">
-           
-                <Button label={"Skip"} variant="danger"/>
-
-                <Button label={"Next"} variant="primary"/>
-                
             </div>
           </div>
-
-        </div>
-      </div>
-    </div>
+        </>
+      ) : (
+        <NotFound message=" All Appointments Completed 🎉" />
+      )}
     </section>
   );
 };

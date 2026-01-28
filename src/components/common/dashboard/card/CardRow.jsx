@@ -32,13 +32,17 @@ export const CardRow = ({ status, title, message, actions = [] }) => {
     <div className={`bg-white  rounded border-l-4  ${styles.border} transition hover:bg-zinc-50`}>
       {/* Header */}
       <div className=" p-3 border-zinc-100 rounded">
-        <div className="flex justify-between items-start ">
-          <span className={`px-3 py-1 rounded text-xs font-semibold capitalize ${styles.badge}`}>
-            {status}
-          </span>
+        <div className="flex justify-between items-start">
+          {/* Left side: status or placeholder */}
+          {status ? (
+            <span className={`px-3 py-1 rounded text-xs font-semibold capitalize ${styles.badge}`}>
+              {status}
+            </span>
+          ) : (
+            <div />
+          )}
 
-          {/* dropdown */}
-
+          {/* Right side: dropdown always */}
           <Dropdown actions={actions} />
         </div>
 

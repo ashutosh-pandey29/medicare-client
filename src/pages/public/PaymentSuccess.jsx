@@ -31,8 +31,8 @@ export const PaymentSuccess = () => {
   // fetch all detail using appointment id
   const [appointmentData, setAppointmentData] = useState(null);
 
-  console.log(appointmentId);
   useEffect(() => {
+    alert();
     const fetchAppointmentData = async () => {
       const response = await fetchAppointmentById(appointmentId);
 
@@ -41,13 +41,14 @@ export const PaymentSuccess = () => {
         setAppointmentData(response.data);
       }
     };
-    fetchAppointmentData();
+    if (appointmentId) {
+      fetchAppointmentData();
+    }
   }, []);
 
   // handling slip print
 
   const printRef = useRef(null);
-
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     documentTitle: `Appointment_${appointmentData?.appointmentId}`,
@@ -56,7 +57,7 @@ export const PaymentSuccess = () => {
     },
   });
 
-  // console.log("current :", printRef.current);
+  console.log(appointmentData);
 
   if (loading && !appointmentData) {
     return <PreLoader />;
@@ -90,7 +91,7 @@ export const PaymentSuccess = () => {
           {/* Header */}
           <div className="bg-linear-to-r from-blue-600 via-blue-500 to-teal-500 text-white px-6 py-6 md:py-8 rounded-t-xl text-center">
             <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
-            Appointment Booked Successfully🎉
+              Appointment Booked Successfully🎉
             </h1>
             <p className="text-sm md:text-base text-white/90 mt-1">
               Thank you for choosing our healthcare services
@@ -145,7 +146,7 @@ export const PaymentSuccess = () => {
                 <div>
                   <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">Token Number</p>
                   <p className="text-gray-900 font-bold text-2xl md:text-3xl tracking-wider">
-                    {appointmentData?.token ? `0${appointmentData.token}` : "-"}
+                    {appointmentData?.token ? `0${appointmentData?.token}` : "-"}
                   </p>
                   <p className="text-gray-500 text-xs mt-2">Token number may change at hospital</p>
                 </div>

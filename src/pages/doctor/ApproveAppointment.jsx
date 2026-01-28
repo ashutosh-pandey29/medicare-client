@@ -1,85 +1,53 @@
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { useFetch } from "../../hooks/custom/useFetch";
-import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
-import { useToken } from "../../hooks/custom/useToken";
-import { toast } from "react-toastify";
 import { NoDataFound } from "../../components/basic/DataNotFound";
 import { CardRow } from "../../components/common/dashboard/card/CardRow";
 import { Button } from "../../components/UI/Button";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
+import { NotFound } from "../../components/basic/NotFound";
+import { toast } from "react-toastify";
 
 export const ApproveAppointment = () => {
-  const [isOn, setIsOn] = useState(false);
   const [appointment, setAppointment] = useState([]);
   const [AutoApproval, setAutoApproval] = useState(false);
-  const token = useToken();
-  const { decodedUser } = useJwtDecode();
-  const userId = decodedUser?.userId;
-  const { data, error, loading } = useFetch(
-    userId ? `${import.meta.env.VITE_API_URL}/appointment/get/appointments/doctor/${userId}` : null
-  );
+
+  const { loading, fetchAppointmentForDoctor, updateAppointment } = useAppointment();
 
   useEffect(() => {
-    setAppointment(data.data);
-  }, [data]);
-
-  const handleApprove = async (appointmentId) => {
-    try {
-      if (!appointmentId) {
-        throw new Error("Appointment ID missing");
+    const getAppointment = async () => {
+      const response = await fetchAppointmentForDoctor();
+      console.log(response);
+      if (response.success) {
+        setAppointment(response.data);
       }
+    };
+    getAppointment();
+  }, []);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/appointment/update-status/${appointmentId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : null,
-          },
-          body: JSON.stringify({ status: "approved" }),
-        }
-      );
+  const handleAppointmentAction = async (aptId, status) => {
+    const payload = {
+      appointmentId: aptId,
+      status: status,
+    };
+    const response = await updateAppointment(payload);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData?.message || "Failed to approve appointment");
-      }
-
-      const jsonResponse = await response.json();
-      if (jsonResponse?.status) {
-        toast.success(jsonResponse.message || "Appointment approved successfully");
-        setAppointment((prev) => prev.filter((item) => item.appointmentId !== appointmentId));
-      } else {
-        throw new Error(jsonResponse?.message || "Approval failed");
-      }
-    } catch (error) {
-      // console.error("Approve appointment error:", error);
-      toast.error(error.message || "Something went wrong");
+    if (response.success) {
+      toast.success(response.message || "appointment confirmed");
+      setAppointment((prev) => prev.filter((apt) => apt.appointmentId !== aptId));
     }
   };
-
-
-  // handle auto approval
-
-  const handleToggleAutoApproval = () => {
-    alert("implementing later");
-  }
-  
-
-  // action
 
   const getAppointmentAction = (aptId) => [
     {
       label: "Approve ",
       icon: FaCheckCircle,
-      onClick: () => handleApprove(aptId),
+      onClick: () => handleAppointmentAction(aptId, "confirmed"),
     },
 
     {
       label: "Reject ",
       icon: FaTimesCircle,
-      onClick: () => alert("aa"),
+      onClick: () => handleAppointmentAction(aptId, "rejected"),
     },
   ];
 
@@ -114,27 +82,6 @@ export const ApproveAppointment = () => {
         </svg>
 
         {/* Main Content */}
-        {/* <div className="relative z-10 p-4">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center">
-              <div className="ml-1">
-                <div className="flex items-center justify-between   gap-2 mb-1">
-                  <h2 className="text-xl md:text-4xl font-bold text-white">Appointment Requests</h2>
-                </div>
-
-                <p className="text-gray-100 text-base  font-semibold">
-                  Manage all patient appointments that are waiting for approval
-
-                </p>
-
-                <p className="text-zinc-100 text-sm mt-2 animate-pulse">
-                  * Enable Auto Approval to automatically confirm appointment requests and reduce manual effort.
-                </p>
-
-              </div>
-            </div>
-          </div>
-        </div> */}
 
         <div className="relative z-10 p-4">
           <div className="flex items-start justify-between mb-6">
@@ -167,24 +114,32 @@ export const ApproveAppointment = () => {
         </svg>
       </div>
 
-      <div className="max-w-full   mt-5  ">
+      <div className="max-w-full   mt-5 h-screen  ">
         {/* Content */}
 
-        <div className=" space-y-1.5 divide-gray-100 ">
+        <div className=" space-y-2.5 divide-gray-100 ">
           {appointment?.length === 0 ? (
             <>
-              <NoDataFound message="No pending appointment requests at this time." />
-              <div className=" text-center">
-                <Button
-                  label={AutoApproval ? "Disable Auto Approval" : " Enable Auto Approval"}
-                  variant="outline"
-                  onClick={()=>handleToggleAutoApproval()}
-                />
-              </div>
+              <NotFound
+                message="Nothing Here Yet"
+                description="New appointment requests will appear here when patients book."
+              />
             </>
           ) : (
             appointment?.map((appointment, index) => (
-              <CardRow key={index} actions={getAppointmentAction(appointment.appointmentId)} />
+              <CardRow
+                key={index}
+                title={"New Appointment"}
+                status={"waiting for approval"}
+                message={
+                  <>
+                    Patient <strong>{appointment.name}</strong> has requested an appointment for{" "}
+                    <strong> {appointment.appointmentDate}</strong>. The request is awaiting your
+                    approval.
+                  </>
+                }
+                actions={getAppointmentAction(appointment.appointmentId)}
+              />
             ))
           )}
         </div>
