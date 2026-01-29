@@ -19,6 +19,10 @@ export const CardRow = ({ status, title, message, actions = [] }) => {
       border: "border-yellow-500",
       badge: "bg-yellow-100 text-yellow-700",
     },
+    upcoming: {
+      border: "border-red-500",
+      badge: "bg-red-600 text-white",
+    },
   };
 
   const styles = statusStyles[status] || {
@@ -43,7 +47,8 @@ export const CardRow = ({ status, title, message, actions = [] }) => {
           )}
 
           {/* Right side: dropdown always */}
-          <Dropdown actions={actions} />
+
+          {actions.length > 0 && <Dropdown actions={actions} />}
         </div>
 
         <div className="flex flex-col   items-start ">

@@ -14,13 +14,26 @@ import { NewAppointmentModelForm } from "../../components/modals/NewAppointmentM
 import { Modal } from "../../components/modals/Modal";
 import { useModal } from "../../hooks/custom/useModal";
 import { CardRow } from "../../components/common/dashboard/card/CardRow";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NoDataFound } from "../../components/basic/DataNotFound";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
 
 export const DashboardHome = ({ appointment }) => {
   const { decodedUser } = useJwtDecode();
   const { modalData, openModal, closeModal } = useModal();
   const [upcomingAppointment, setUpComingAppointment] = useState([]);
+
+  const { fetchUpcomingAppointment } = useAppointment();
+
+  useEffect(() => {
+    const getUpcomingAppointment = async () => {
+      const response = await fetchUpcomingAppointment();
+      if (response.success) {
+        setUpComingAppointment(response.data);
+      }
+    };
+    getUpcomingAppointment();
+  }, []);
 
   return (
     <section className=" w-full h-auto bg-white">
@@ -86,25 +99,21 @@ export const DashboardHome = ({ appointment }) => {
                 {upcomingAppointment.length === 0 ? (
                   <NoDataFound message="No upcoming appointments scheduled." />
                 ) : (
-                  <div className="bg-white w-full rounded-md border-l-4 border-yellow-400 transition hover:bg-zinc-50">
-                    <div className="p-3 md:p-4 space-y-2">
-                      {/* Status */}
-                      <span className="inline-block px-3 py-1 text-xs font-semibold capitalize rounded bg-yellow-200 text-yellow-800">
-                        status
-                      </span>
-
-                      {/* Content */}
-                      <div>
-                        <h3 className="text-base font-semibold text-gray-800">
-                          Lorem ipsum dolor sit amet.
-                        </h3>
-
-                        <p className="text-sm text-gray-500 mt-1">
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, et!
-                        </p>
-                      </div>
+                  upcomingAppointment.map((apt) => (
+                    <div className="w-full mt-1.5 ">
+                      <CardRow
+                        status={"upcoming"}
+                        title="Upcoming Appointment "
+                        message={`Your Appointment is scheduled for ${new Date(
+                          apt.appointmentDate
+                        ).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}`}
+                      />
                     </div>
-                  </div>
+                  ))
                 )}
               </div>
             </div>

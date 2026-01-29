@@ -8,6 +8,7 @@ import {
   newAppointmentService,
   updateAppointmentService,
   fetchPatientForConsultationService,
+  upcomingAppointmentService,
 } from "../../services/appointment/appointment.service";
 import { toast } from "react-toastify";
 
@@ -66,10 +67,23 @@ export const useAppointment = () => {
   //! FETCH APPOINTMENT OF USER
 
   //! FETCH UPCOMING APPOINTMENT
-  const upcomingAppointment = () => {
+  const fetchUpcomingAppointment = async () => {
     setLoading(true);
     try {
+      const response = await upcomingAppointmentService();
+
+      // console.log(response);
+
+      if (!response?.success) {
+        console.error(response);
+        toast.error(response?.message || "Unable to fetch appointment");
+        return;
+      }
+
+      return response;
     } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -164,9 +178,8 @@ export const useAppointment = () => {
     }
   };
 
-
-  const fetchPatientForConsultation = async ()=>{
-     setLoading(true);
+  const fetchPatientForConsultation = async () => {
+    setLoading(true);
     try {
       const response = await fetchPatientForConsultationService();
 
@@ -179,7 +192,7 @@ export const useAppointment = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const errorHandler = (err, setErrors) => {
     if (err.errors && setErrors) {
@@ -208,5 +221,6 @@ export const useAppointment = () => {
     fetchAppointmentForDoctor,
     updateAppointment,
     fetchPatientForConsultation,
+    fetchUpcomingAppointment,
   };
 };
