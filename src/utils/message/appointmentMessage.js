@@ -11,6 +11,12 @@ export const APPOINTMENT_MESSAGE_MAP = {
       `Your appointment with Dr. ${doctorName} is confirmed for ${appointmentDate}. Please arrive 10 minutes early.`,
   },
 
+  missed: {
+    title: "Appointment Missed",
+    getMessage: ({ doctorName, appointmentDate }) =>
+      `You missed your appointment with Dr. ${doctorName} scheduled for ${appointmentDate}. Please rebook if needed.`,
+  },
+
   cancelled: {
     title: "Appointment Cancelled.",
     getMessage: ({ doctorName, appointmentDate }) =>
@@ -33,5 +39,11 @@ export const APPOINTMENT_MESSAGE_MAP = {
     title: "Appointment Request Rejected.",
     getMessage: ({ doctorName, appointmentDate }) =>
       `Your appointment request with Dr. ${doctorName} for ${appointmentDate} was rejected. Please try booking another slot.`,
+  },
+
+  booked: {
+    title: "Appointment Booked",
+    getMessage: ({ doctorName, appointmentDate }) =>
+      `Your appointment with Dr. ${doctorName} has been successfully booked for ${appointmentDate}.`,
   },
 };
