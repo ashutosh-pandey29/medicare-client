@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaClock, FaDownload } from "react-icons/fa";
 import { FiFileText } from "react-icons/fi";
 
-export const DownloadTimerModal = ({ duration = 10 , onClose}) => {
+export const DownloadTimerModal = ({ duration = 5, onClose }) => {
   const [seconds, setSeconds] = useState(duration);
 
   useEffect(() => {
@@ -23,14 +23,14 @@ export const DownloadTimerModal = ({ duration = 10 , onClose}) => {
 
   // Auto close when timer hits 0
   useEffect(() => {
-    if (seconds === 0 ) {
+    if (seconds === 0) {
       onClose();
     }
   }, [seconds]);
 
   return (
     <>
-      <div className=" w-full p-8 bg-white ">
+      <div className=" w-full p-8 bg-white rounded-xl">
         <div className="flex flex-col items-center text-center">
           {/* Timer Circle */}
           <div className="relative mb-6">

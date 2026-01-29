@@ -1,8 +1,29 @@
 import { useState } from "react";
-import { createPaymentService, verifyPaymentService } from "../../services/payment/payment.service";
+import {
+  createPaymentService,
+  downloadInvoiceService,
+  getAllPaymentService,
+  verifyPaymentService,
+} from "../../services/payment/payment.service";
 
 export const usePayment = () => {
   const [loading, setLoading] = useState(false);
+
+  const getAllPayment = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllPaymentService();
+      if (!response.success) {
+        throw new Error(response.message || "Payment not fetched ");
+      }
+
+      return response;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const createPayment = async (appointmentId) => {
     setLoading(true);
@@ -39,5 +60,18 @@ export const usePayment = () => {
     }
   };
 
-  return { loading, createPayment, verifyPayment };
+  const downloadInvoice = async (paymentId) => {
+    setLoading(true);
+    try {
+      const response = await downloadInvoiceService(paymentId);
+     
+      return response;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, createPayment, verifyPayment, getAllPayment, downloadInvoice };
 };

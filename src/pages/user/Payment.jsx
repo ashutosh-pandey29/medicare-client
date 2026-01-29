@@ -10,22 +10,50 @@ import { useModal } from "../../hooks/custom/useModal";
 import { Modal } from "../../components/modals/Modal";
 import { DownloadTimerModal } from "../../components/modals/DownloadTimerModal";
 import { ViewInvoiceModal } from "../../components/modals/ViewInvoiceModal";
+import { useEffect } from "react";
+import { usePayment } from "../../hooks/payment/usePayment";
 export const Payment = () => {
   const { modalData, openModal, closeModal } = useModal();
-  const getPaymentAction = () => [
-    {
-      label: "Invoice Details",
-      icon: FaReceipt,
-      onClick: () =>openModal(<ViewInvoiceModal/> , "Payment Details")
-    },
+  const [payments, setPayments] = useState([]);
+
+  const { loading, getAllPayment, downloadInvoice } = usePayment();
+
+  useEffect(() => {
+    const fetchAllPayment = async () => {
+      const response = await getAllPayment();
+      if (response.success) {
+        setPayments(response.data);
+      }
+    };
+    fetchAllPayment();
+  }, []);
+
+  const handleDownloadInvoice = async (paymentId) => {
+    try {
+      const response = await downloadInvoice(paymentId);
+
+      // console.log(response instanceof Blob);
+
+      const url = window.URL.createObjectURL(response);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `invoice-${paymentId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Invoice download failed", err);
+    }
+  };
+
+  const getPaymentAction = (payment) => [
     {
       label: "Download Receipt",
       icon: FaDownload,
-      onClick: () =>
-        openModal(
-          <DownloadTimerModal duration={10} onClose={closeModal} />,
-          "Preparing Invoice download"
-        ),
+      onClick: () => handleDownloadInvoice(payment.paymentId),
     },
     {
       label: "Share Receipt",
@@ -42,7 +70,7 @@ export const Payment = () => {
   ];
 
   return (
-    <section className="bg-white rounded-sm shadow   w-full h-auto">
+    <section className="bg-white rounded-sm shadow   w-full h-screen">
       <div className=" p-3 flex flex-col  md:justify-between md:items-center gap-4 border-b border-b-zinc-100">
         {/* heading  */}
         <UserPageHeading
@@ -59,9 +87,17 @@ export const Payment = () => {
 
       {/* items */}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mt-5 p-3">
-        {paymentJSON.map((p, index) => {
-          return <CardRow key={index} data={p} actions={getPaymentAction()} />;
-        })}
+        {payments.map((p, index) => (
+          <CardRow
+            key={index}
+            title={`Payment ID: ${p.transactionId}`}
+            status={p.paymentStatus === "success" ? "paid" : "failed"}
+            message={` You paid ₹${p.paymentAmount} via ${p.paymentMethod.toUpperCase()} For 
+                  ${p.appointment?.departmentName} consultation with 
+                  ${p.appointment?.doctorName}`}
+            actions={getPaymentAction(p)}
+          />
+        ))}
       </div>
 
       <Modal data={modalData} onClose={closeModal} />
