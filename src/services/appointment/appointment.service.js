@@ -35,3 +35,7 @@ export const fetchAppointmentForDoctorService = () => {
 export const fetchPatientForConsultationService = () => {
   return api.get("/appointment/consultant");
 };
+
+export const fetchAppointmentStatsService = () => {
+  return api.get("appointment/stats");
+};

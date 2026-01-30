@@ -12,6 +12,8 @@ import { useAccount } from "../../hooks/auth/useAccount";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { BiLoader } from "react-icons/bi";
+import { useWebPush } from "../../hooks/notification/useWebPush";
 export const Account = () => {
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -19,6 +21,8 @@ export const Account = () => {
   const { modalData, openModal, closeModal } = useModal();
   const { loading, myAccountInfo, updateAccount, updatePassword } = useAccount();
   const { clearAuth } = useAuth();
+  const [notificationEnabled, setNotificationEnabled] = useState(false);
+  const { enableNotification, disableNotification } = useWebPush();
 
   const accountInitialValues = {
     email: "",
@@ -105,6 +109,25 @@ export const Account = () => {
       toast.error(err.message);
     }
   };
+
+
+
+
+  // handle notification 
+
+   const handleEnableNotifications = async (e) => {
+    const checked = e.target.checked;
+
+    if (!checked) {
+      await disableNotification();
+      setNotificationEnabled(false);
+      return;
+    }
+
+    await enableNotification();
+    setNotificationEnabled(true);
+  };
+
 
   return (
     <section className="bg-white rounded-sm shadow p-1  md:p-3  w-full h-auto">
@@ -278,8 +301,48 @@ export const Account = () => {
         </div>
       </div>
 
-      {/* delete profile  */}
+      {/* notification  */}
 
+      <div className="bg-white rounded-md shadow p-6 space-y-5 mt-5">
+        <h2 className="text-lg font-semibold text-black border-b border-gray-700 pb-2">
+          Notification Control
+        </h2>
+
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-gray-800 font-medium">Enable Notifications</p>
+            <p className="text-sm text-gray-700">
+              Receive appointment updates, alerts, and reminders.
+            </p>
+          </div>
+
+          <label className="relative inline-flex items-center cursor-pointer">
+            {loading ? (
+              <>
+                <BiLoader className="animate-spin text-xl text-white" />
+              </>
+            ) : (
+              <>
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={notificationEnabled}
+                  onChange={handleEnableNotifications}
+                />
+                <div
+                  className="peer bg-gray-200 w-14 h-6 rounded-full relative
+                        after:content-[''] after:absolute after:top-1 after:left-1
+                        after:w-4 after:h-4 after:bg-blue-500 after:rounded-full
+                        after:transition-transform peer-checked:after:translate-x-8
+                        peer-checked:bg-green-400"
+                ></div>
+              </>
+            )}
+          </label>
+        </div>
+      </div>
+
+      {/* delete profile  */}
       <div className="p-6 mt-10 border border-red-200 bg-red-50 rounded-lg">
         <h2 className="text-xl font-semibold text-red-700 mb-3">Delete Profile</h2>
 

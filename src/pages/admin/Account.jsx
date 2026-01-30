@@ -63,8 +63,8 @@ export const Account = () => {
             </div>
 
             <div className="text-right pt-2">
-                <button
-                  className="
+              <button
+                className="
     inline-flex h-12 items-center justify-center rounded-md border border-blue-700
     bg-[linear-gradient(110deg,#003366,45%,#0055aa,55%,#003366)] bg-size[200%_100%]
     px-6 font-medium text-blue-100 transition-all duration-300
@@ -73,9 +73,9 @@ export const Account = () => {
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-50
     cursor-pointer animate-shimmer
   "
-                >
-                  Save Change
-                </button>
+              >
+                Save Change
+              </button>
             </div>
           </div>
 

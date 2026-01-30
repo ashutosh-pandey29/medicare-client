@@ -9,6 +9,7 @@ import {
   updateAppointmentService,
   fetchPatientForConsultationService,
   upcomingAppointmentService,
+  fetchAppointmentStatsService,
 } from "../../services/appointment/appointment.service";
 import { toast } from "react-toastify";
 
@@ -194,6 +195,28 @@ export const useAppointment = () => {
     }
   };
 
+
+
+  /**=============STATS=========== */
+
+  const fetchAppointmentStats =  async ()=>{
+    setLoading(true);
+    try{
+      const response  =  await fetchAppointmentStatsService();
+
+      if(!response.success){
+        throw new Error(response.message || "Stats not available");
+      }
+
+      return response;
+
+    }catch(err){
+      console.log(err);
+    }finally{
+      setLoading(false);
+    }
+  }
+
   const errorHandler = (err, setErrors) => {
     if (err.errors && setErrors) {
       const formattedErrors = {};
@@ -222,5 +245,6 @@ export const useAppointment = () => {
     updateAppointment,
     fetchPatientForConsultation,
     fetchUpcomingAppointment,
+    fetchAppointmentStats,
   };
 };

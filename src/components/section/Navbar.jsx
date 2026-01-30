@@ -10,6 +10,7 @@ export const Navbar = () => {
   const [isScroll, setIsScroll] = useState(false);
   const { user, loading } = useAuth();
 
+
   useEffect(() => {
     const onScroll = () => {
       setIsScroll(window.scrollY > 10);

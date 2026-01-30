@@ -38,10 +38,9 @@ export const Header = ({ handleSidebarToggle, role }) => {
     };
   }, [socket, decodedUser]);
 
-useEffect(() => {
-  console.log("decodedUser changed:", decodedUser);
-}, [decodedUser]);
-
+  useEffect(() => {
+    console.log("decodedUser changed:", decodedUser);
+  }, [decodedUser]);
 
   return (
     <header className="h-16 w-full flex items-center justify-between px-2 z-50">
@@ -78,7 +77,7 @@ useEffect(() => {
           label="Logout"
           customCss="bg-red-500 hover:bg-red-600 md:block hidden"
           size="sm"
-          onClick={() => useLogout()}
+          onClick={() => logout()}
         />
       </div>
     </header>

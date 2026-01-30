@@ -12,6 +12,7 @@ import { Account } from "../../pages/admin/Account";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { AuthProvider } from "../../context/AuthContext";
 import Register from "../../components/forms/Register";
+import { Settings } from "../../pages/admin/Settings";
 
 const AdminRoutes = [
   {
@@ -79,6 +80,11 @@ const AdminRoutes = [
           {
             path: "accounts",
             element: <Account />,
+          },
+
+          {
+            path: "settings",
+            element: <Settings />,
           },
         ],
       },

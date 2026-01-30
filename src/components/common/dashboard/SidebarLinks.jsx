@@ -7,7 +7,7 @@ import {
 } from "react-icons/md";
 import { IoIosTime } from "react-icons/io";
 import { FaUsersCog } from "react-icons/fa";
-import { FaCheckToSlot, FaCircleUser, FaGear } from "react-icons/fa6";
+import { FaCheckToSlot, FaCircleUser, FaGear, FaGears } from "react-icons/fa6";
 
 export const SidebarLinks = {
   user: [
@@ -80,9 +80,14 @@ export const SidebarLinks = {
     },
 
     {
-      title: "Accounts & Settings",
+      title: "Accounts",
       icon: <FaUsersCog className="text-lg" />,
       path: "accounts",
     },
+    {
+         title: "Settings",
+      icon: <FaGears className="text-lg" />,
+      path: "settings",
+    }
   ],
 };
