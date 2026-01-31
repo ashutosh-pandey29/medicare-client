@@ -19,7 +19,7 @@ export const Account = () => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { modalData, openModal, closeModal } = useModal();
-  const { loading, myAccountInfo, updateAccount, updatePassword } = useAccount();
+  const { loading, myAccountInfo, updateAccount, updatePassword, deleteAccount } = useAccount();
   const { clearAuth } = useAuth();
   const [notificationEnabled, setNotificationEnabled] = useState(false);
   const { enableNotification, disableNotification } = useWebPush();
@@ -110,12 +110,9 @@ export const Account = () => {
     }
   };
 
+  // handle notification
 
-
-
-  // handle notification 
-
-   const handleEnableNotifications = async (e) => {
+  const handleEnableNotifications = async (e) => {
     const checked = e.target.checked;
 
     if (!checked) {
@@ -127,7 +124,6 @@ export const Account = () => {
     await enableNotification();
     setNotificationEnabled(true);
   };
-
 
   return (
     <section className="bg-white rounded-sm shadow p-1  md:p-3  w-full h-auto">
@@ -365,6 +361,19 @@ export const Account = () => {
                 <DeleteConfirmationModel
                   title="delete your account"
                   onClose={closeModal}
+                  onConfirm={async () => {
+                    try {
+                      const response = await deleteAccount();
+                      if (response?.success) {
+                        toast.success(response.message || "Account deactivated");
+                        closeModal();
+                        clearAuth();
+                        // navigate("/login");
+                      }
+                    } catch (err) {
+                      toast.error(err.message || "Failed to delete account");
+                    }
+                  }}
                   content={
                     <>
                       <p className="text-red-700 p-2 border-l-4 mt-3 mb-4 bg-red-100 rounded-md">

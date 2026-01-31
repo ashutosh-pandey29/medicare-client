@@ -12,7 +12,7 @@ const UserRoutes = [
     path: "/dashboard/user",
     element: (
       <AuthProvider>
-        <SocketProvider>
+        <SocketProvider role={"user"}>
           <ProtectedRoutes allowedRoles={["user"]} />
         </SocketProvider>
       </AuthProvider>

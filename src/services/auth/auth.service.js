@@ -39,3 +39,6 @@ export const logoutService = () => {
   return api.post("/auth/logout");
 };
 
+export const deleteAccountService = ()=>{
+  return api.put("/auth/delete");
+}

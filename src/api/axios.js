@@ -63,7 +63,6 @@ api.interceptors.response.use(
         // console.log("refreshErr", refreshErr);
         // any error in refresh token generation then logout
         localStorage.removeItem("accessToken");
-
         window.location.href = "/auth/login";
         return Promise.reject(refreshErr);
       }

@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { myAccount, updateAccountService, updatePasswordService } from "../../services/auth/auth.service";
+import {
+  deleteAccountService,
+  myAccount,
+  updateAccountService,
+  updatePasswordService,
+} from "../../services/auth/auth.service";
+import { toast } from "react-toastify";
 
 export const useAccount = () => {
   const [loading, setLoading] = useState(false);
@@ -71,5 +77,23 @@ export const useAccount = () => {
     }
   };
 
-  return { loading, myAccountInfo, updateAccount, updatePassword };
+  // delete account
+  const deleteAccount = async () => {
+    setLoading(true);
+    try {
+      const response = await deleteAccountService();
+      if (!response.success) {
+        console.log(response);
+        throw new Error(response.message || "Something went wrong");
+      }
+      return response;
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message || "Account deletion failed ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, myAccountInfo, updateAccount, updatePassword, deleteAccount };
 };
