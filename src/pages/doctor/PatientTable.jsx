@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CiExport, CiFilter } from "react-icons/ci";
 import { FaDownload, FaEye } from "react-icons/fa6";
 import { useToken } from "../../hooks/custom/useToken";
@@ -6,42 +6,45 @@ import { useJwtDecode } from "../../hooks/custom/useJwtDecode";
 import { NoDataFound } from "../../components/basic/DataNotFound";
 import { Dropdown } from "../../components/UI/Dropdown";
 import { MdHealing } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaSortAmountDown } from "react-icons/fa";
 import { Button } from "../../components/UI/Button";
+import { useAppointment } from "../../hooks/appointment/useAppointment";
+import { TableSkeletonLoader } from "../../components/UI/loaders/skeleton/TableSkeletonLoader";
+import { usePagination } from "../../hooks/common/usePagination";
+import { Pagination } from "../../components/UI/pagination/Pagination";
+import { NotFound } from "../../components/basic/NotFound";
+import { Modal } from "../../components/modals/Modal";
+import { useModal } from "../../hooks/custom/useModal";
 
 export const PatientTable = () => {
   const [isOn, setIsOn] = useState(false);
   const token = useToken();
   const { decodedUser } = useJwtDecode();
   const [patients, setPatients] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState(null);
+  const { modalData, closeModal, openModal } = useModal();
+
+  const { loading, getMyPatient } = useAppointment();
 
   //fetch all patient
 
   console.log(decodedUser);
-  // useEffect(() => {
-  //   const fetchPatient = async () => {
-  //     try {
-  //       const response = await fetch(`${import.meta.env.VITE_API_URL}/doctor/patient`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Authorization": token ? `${token}` : null,
-  //         },
-  //       });
-  //       const jsonResponse = await response.json();
+  useEffect(() => {
+    const getAllPatient = async () => {
+      const response = await getMyPatient();
 
-  //       // console.log(jsonResponse);
-  //       setPatients(jsonResponse.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
+      if (response.success) {
+        setPatients(response.data);
+      }
+    };
 
-  //   fetchPatient();
-  // }, []);
+    getAllPatient();
+  }, []);
 
-  // console.log(patients);
+  console.log(patients);
 
-  const actions = [
+  const getAction = () => [
     {
       label: "View Summary",
       icon: FaEye,
@@ -71,6 +74,30 @@ export const PatientTable = () => {
       icon: FaEdit,
     },
   ];
+
+  /**================SEARCH DATA========================  */
+
+  const searchedPatient = useMemo(() => {
+    if (!search.trim()) return patients;
+
+    return patients.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+  }, [patients, search]);
+
+  /**================ HANDLE DATA SORTING(A->Z / Z->A) */
+
+  const sortedPatients = useMemo(() => {
+    if (!sortOrder) return searchedPatient; // no sorting
+
+    return [...searchedPatient].sort((a, b) =>
+      sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+    );
+  }, [searchedPatient, sortOrder]);
+
+  /**================HANDLE PAGINATION=================== */
+  const limit = 5;
+  const { page, setPage, totalPage, currentData } = usePagination(sortedPatients, limit);
+
+  if (loading) return <TableSkeletonLoader />;
 
   return (
     <div className="max-w-7xl mx-auto ">
@@ -129,259 +156,142 @@ export const PatientTable = () => {
       </div>
 
       {/* table */}
-      <div className="w-full overflow-x-auto">
-        <div className="max-w-screen overflow-auto  md:p-0">
-          <div className="min-h-screen mt-5 p-1 md:p-0">
-            <div className="max-w-7xl mx-auto ">
-              <div className="bg-white rounded  overflow-hidden">
-                {/* Header */}
-                <div className="bg-linear-to-r from-[#059669] to-[#3ad28b] md:px-6  md:py-2 px-2">
-                  <div className="flex flex-col md:flex-row md:items-center  md:justify-between ">
-                    <input
-                      type="text"
-                      className="w-full mt-1 md:mt-0 md:w-1/2 rounded-lg px-2 py-3 text-sm bg-white/20 text-white placeholder-white/70 border border-white/30 backdrop-blur-md outline-none focus:border-white focus:bg-white/30 transition"
-                      placeholder="Quick Search...."
-                    />
 
-                    <div className="h-auto p-2 flex  gap-1.5 justify-end">
-                      <Dropdown label={"Action"} actions={tableDropdownAction} />
-                    </div>
-                  </div>
-                </div>
+      <div className="w-full mt-4 ">
+        <div className="bg-white rounded-md shadow-lg">
+          {/* Header */}
+          <div className="px-1 md:px-4 py-3 border-b border-zinc-100">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              {/* Title */}
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Patient Table</h2>
 
-                {/* Table */}
-                <div className="overflow-x-auto">
-                  {/* {patients.length === 0 ? (
-                    <NoDataFound message="No Patient Found" />
-                  ) : ( */}
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gray-200 border-b border-gray-200">
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          <div className="flex items-center gap-2">Sr.No.</div>
-                        </th>
-                        <th className="px-6 py-4  text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          <div className="flex items-center gap-2  ">Patient Name</div>
-                        </th>
+              {/* Actions */}
+              <div className="flex sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
+                {/* Search */}
+                <input
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(1);
+                  }}
+                  placeholder="Search patient by name..."
+                  className="
+               w-full sm:w-64
+               border rounded-md px-4 py-2
+               border-zinc-100 bg-white text-gray-900
+               outline-none focus:border-blue-500
+             "
+                />
 
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          <div className="flex items-center gap-2">
-                            Treatment Status
-                          </div>
-                        </th>
+                {/* Buttons */}
+                <div className="flex items-center gap-2 justify-end">
+                  <button
+                    onClick={() => openModal(<ExportOptionsModal onClose={closeModal} />)}
+                    className="
+                 h-10 w-10 flex items-center justify-center rounded-full
+                 bg-zinc-100 hover:bg-zinc-300 transition
+               "
+                    title="Export Data"
+                  >
+                    <FaDownload className="text-black text-sm" />
+                  </button>
 
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          <div className="flex items-center gap-2">Visit Date</div>
-                        </th>
-
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {/* Row 1 */}
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                            01
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">Rahul Sharma</p>
-                            <p className="text-xs text-gray-500">Apt ID: APT-001</p>
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
-                            Completed
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          12 Dec 2024
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-end">
-                          <Dropdown actions={actions} />
-                        </td>
-                      </tr>
-
-                      {/* Row 2 */}
-                      <tr className="hover:bg-blue-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                            02
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">Anita Verma</p>
-                            <p className="text-xs text-gray-500">Apt ID: APT-002</p>
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
-                            Completed
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          13 Dec 2024
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Dropdown />
-                        </td>
-                      </tr>
-
-                      {/* Row 3 */}
-                      <tr className="hover:bg-blue-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                            03
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">Mohit Kumar</p>
-                            <p className="text-xs text-gray-500">Apt ID: APT-003</p>
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
-                            Completed
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          14 Dec 2024
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Dropdown />
-                        </td>
-                      </tr>
-
-                      {/* Row 4 */}
-                      <tr className="hover:bg-blue-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                            04
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">Priya Singh</p>
-                            <p className="text-xs text-gray-500">Apt ID: APT-004</p>
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
-                            Completed
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          15 Dec 2024
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Dropdown />
-                        </td>
-                      </tr>
-
-                      {/* Row 5 */}
-                      <tr className="hover:bg-blue-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-cyan-700">
-                            05
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">Amit Patel</p>
-                            <p className="text-xs text-gray-500">Apt ID: APT-005</p>
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="rounded-full px-3 py-1 text-sm bg-green-100 text-green-700 font-medium">
-                            Completed
-                          </span>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          16 Dec 2024
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Dropdown />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  {/* )} */}
-                </div>
-
-                {/* Footer */}
-                <div className=" px-6 py-4 border-t border-gray-200">
-                  <div class="flex items-center gap-8  justify-center">
-                    <button
-                      disabled
-                      class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      type="button"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="w-4 h-4"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </button>
-
-                    <p class="text-slate-600">
-                      Page <strong class="text-slate-800">1</strong> of&nbsp;
-                      <strong class="text-slate-800">10</strong>
-                    </p>
-
-                    <button
-                      class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      type="button"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="w-4 h-4"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                    className="
+                 h-10 w-10 flex items-center justify-center rounded-full
+                 bg-zinc-100 hover:bg-zinc-300 transition
+               "
+                    title="Sort"
+                  >
+                    <FaSortAmountDown className="text-black text-sm" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+
+          {currentData.length === 0 ? (
+            <NotFound
+              message="No patient found"
+              description="There are no patient to display at the moment"
+            />
+          ) : (
+            <>
+              {/* Table Wrapper */}
+
+              <div className="relative  overflow-x-auto ">
+                <table className="min-w-full border-collapse text-center">
+                  <thead className="bg-zinc-50 text-gray-900">
+                    <tr className="border-b border-amber-50">
+                      <th className="px-4 py-3 text-sm">Sr.No.</th>
+                      <th className="px-4 py-3 text-sm">Patient Name</th>
+                      <th className="px-4 py-3 text-sm">Status</th>
+                      <th className="px-4 py-3 text-sm">Total Visit</th>
+                      <th className="px-4 py-3 text-sm">Last Visit</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="text-sm">
+                    {currentData.map((d, i) => (
+                      <tr
+                        key={d.departmentId}
+                        className="border-b border-amber-100 hover:bg-zinc-100 transition"
+                      >
+                        <td className="px-4 py-2 text-gray-900 whitespace-nowrap">
+                          0{(page - 1) * limit + i + 1}
+                        </td>
+
+                        <td className="px-4 py-2 text-gray-900">{d.name}</td>
+
+                        <td className="px-4 py-2 text-gray-900">
+                          <span
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold
+                                ${
+                                  d.status === "completed"
+                                    ? "bg-green-100 text-green-700"
+                                    : d.status === "confirmed"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : d.status === "missed"
+                                        ? "bg-red-100 text-red-700"
+                                        : d.status === "pending"
+                                          ? "bg-yellow-100 text-yellow-700"
+                                          : "bg-gray-100 text-gray-700"
+                                }
+                              `}
+                          >
+                            {d.status}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-2">
+                          <span className="inline-flex items-center gap-1">0{d.visitCount}</span>
+                        </td>
+
+                        <td className="px-4 py-2">
+                          <span className="inline-flex items-center gap-1">
+                            {new Date(d.lastVisit).toLocaleDateString()}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div className="px-4 py-3 border-t border-amber-50">
+                  <Pagination
+                    page={page}
+                    totalPages={totalPage}
+                    onPageChange={setPage}
+                    theme="light"
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
+
+        {/* Modal */}
+        <Modal data={modalData} onClose={closeModal} />
       </div>
     </div>
   );

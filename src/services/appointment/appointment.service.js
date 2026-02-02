@@ -39,3 +39,7 @@ export const fetchPatientForConsultationService = () => {
 export const fetchAppointmentStatsService = () => {
   return api.get("appointment/stats");
 };
+
+export const getMyPatientService = ()=>{
+  return api.get("appointment/doctor/patient");
+}
