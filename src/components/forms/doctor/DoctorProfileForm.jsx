@@ -96,13 +96,20 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
 
   /* ================= Slots ================= */
 
-  const addSlot = (dayIndex) => {
-    setValues((prev) => {
-      const updated = [...prev.workingTime];
-      updated[dayIndex].slots.push({ from: "", to: "" });
-      return { ...prev, workingTime: updated };
-    });
-  };
+const addSlot = (dayIndex) => {
+  setValues((prev) => ({
+    ...prev,
+    workingTime: prev.workingTime.map((day, index) =>
+      index === dayIndex
+        ? {
+            ...day,
+            slots: [...day.slots, { from: "", to: "" }],
+          }
+        : day
+    ),
+  }));
+};
+
 
   const handleSlotChange = (dIndex, sIndex, e) => {
     const { name, value: inputValue } = e.target;
@@ -152,15 +159,20 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
   }, []);
 
   // Remove the slot
-  const removeSlot = (dayIndex, slotIndex) => {
-    setValues((prev) => {
-      const updated = [...prev.workingTime];
+const removeSlot = (dayIndex, slotIndex) => {
+  setValues((prev) => ({
+    ...prev,
+    workingTime: prev.workingTime.map((day, index) =>
+      index === dayIndex
+        ? {
+            ...day,
+            slots: day.slots.filter((_, i) => i !== slotIndex),
+          }
+        : day
+    ),
+  }));
+};
 
-      updated[dayIndex].slots.splice(slotIndex, 1);
-
-      return { ...prev, workingTime: updated };
-    });
-  };
 
 
 const removeEducation = (index) => {
