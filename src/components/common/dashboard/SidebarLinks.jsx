@@ -27,11 +27,7 @@ export const SidebarLinks = {
       icon: <MdDashboard className="text-lg" />,
       path: "/dashboard/doctor",
     },
-    {
-      title: "Approve Appointments",
-      icon: <IoIosTime className="text-lg" />,
-      path: "approve-appointment",
-    },
+   
     {
       title: "Patient Consultation ",
       icon: <FaCheckToSlot className="text-lg" />,

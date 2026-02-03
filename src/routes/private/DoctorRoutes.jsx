@@ -30,10 +30,6 @@ const DoctorRoutes = [
             element: <DashboardHome />,
           },
           {
-            path: "approve-appointment",
-            element: <ApproveAppointment />,
-          },
-          {
             path: "patient-consultation",
             element: <PatientConsultation />,
           },
