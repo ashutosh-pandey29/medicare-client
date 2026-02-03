@@ -46,13 +46,13 @@ export const Settings = () => {
 
       <div className="sm:max-w-sm md:min-w-full mx-auto p-4 bg-gray-900 min-h-screen text-gray-200">
         <div className="max-w-6xl mx-auto space-y-6">
-          <h1 className="text-xl font-semibold text-white border-b border-slate-700 pb-3 p-2">
+          {/* <h1 className="text-xl font-semibold text-white border-b border-slate-700 pb-3 p-2">
             Website Settings
-          </h1>
+          </h1> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* ================= Website Branding ================= */}
-            <div className="bg-gray-800 rounded-md shadow p-6 space-y-4">
+            {/* <div className="bg-gray-800 rounded-md shadow p-6 space-y-4">
               <h2 className="text-lg font-semibold text-white">Website Branding</h2>
 
               <input
@@ -100,10 +100,10 @@ export const Settings = () => {
                   Save Change
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {/* ================= Contact & Hospital Info ================= */}
-            <div className="bg-gray-800 rounded-md shadow p-6 space-y-4">
+            {/* <div className="bg-gray-800 rounded-md shadow p-6 space-y-4">
               <h2 className="text-lg font-semibold text-white">Contact & Hospital Info</h2>
 
               <input
@@ -150,13 +150,13 @@ export const Settings = () => {
                   Save Change
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* system settings */}
 
-        <div className="max-w-6xl mx-auto space-y-6 mt-10 ">
+        <div className="max-w-6xl mx-auto space-y-6  ">
           {/* ================= Page Title ================= */}
           <h1 className="text-xl font-semibold text-white border-b border-slate-700 pb-3">
             System Settings
@@ -262,7 +262,7 @@ export const Settings = () => {
           </div>
 
           {/* ================= Extra Useful Settings (MVP+) ================= */}
-          <div className="bg-gray-800 rounded-lg shadow p-6 space-y-5">
+          {/* <div className="bg-gray-800 rounded-lg shadow p-6 space-y-5">
             <h2 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
               Additional System Controls
             </h2>
@@ -288,7 +288,7 @@ export const Settings = () => {
 
               <input type="checkbox" className="w-5 h-5 accent-blue-600 cursor-pointer" />
             </div>
-          </div>
+          </div> */}
 
           <div className="bg-gray-800 rounded-lg shadow p-6 space-y-5">
             <h2 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
