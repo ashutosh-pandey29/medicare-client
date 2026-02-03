@@ -1,8 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AdminPageHeading } from "../../components/common/dashboard/heading/AdminPageHeading";
-import { FaUserShield } from "react-icons/fa";
+import { FaEye, FaUserShield } from "react-icons/fa";
+import { useAccount } from "../../hooks/auth/useAccount";
+import { useModal } from "../../hooks/custom/useModal";
+import { useAuth } from "../../context/AuthContext";
+import { useForm } from "../../hooks/custom/useForm";
+import { accountUpdateSchema, passwordUpdateSchema } from "../../utils/schema/auth.validation";
+import { Button } from "../../components/UI/Button";
 
 export const Account = () => {
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const { modalData, openModal, closeModal } = useModal();
+  const { clearAuth } = useAuth();
+  const { loading, myAccountInfo, updateAccount, updatePassword, deleteAccount } = useAccount();
+
+  const accountInitialValues = {
+    email: "",
+    username: "",
+  };
+
+  const passwordInitialValue = {
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  };
+
+  const accountForm = useForm(accountInitialValues, accountUpdateSchema);
+  const passwordForm = useForm(passwordInitialValue, passwordUpdateSchema);
+
+  // destructing
+  const {
+    values: accountValues,
+    errors: accountErrors,
+    handleChange: handleAccountChange,
+    validateOnSubmit: validateAccount,
+    resetForm: resetAccountForm,
+    setValues: setAccountValues,
+  } = accountForm;
+
+  const {
+    values: passwordValues,
+    errors: passwordErrors,
+    handleChange: handlePasswordChange,
+    validateOnSubmit: validatePassword,
+    resetForm: resetPasswordForm,
+  } = passwordForm;
+
+  const fetchAccount = async () => {
+    const response = await myAccountInfo();
+    console.log(response.data);
+    setAccountValues(response.data);
+  };
+  useEffect(() => {
+    fetchAccount();
+  }, []);
+
+  const handleAccountUpdate = async (e) => {
+    e.preventDefault();
+
+    const formErrors = validateAccount(accountValues);
+    if (Object.keys(formErrors).length > 0) return;
+
+    try {
+      const payload = {
+        username: accountValues.username,
+        email: accountValues.email,
+      };
+
+      const response = await updateAccount(payload);
+
+      toast.success(response.message);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // update account password
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    const formErrors = validatePassword(passwordValues);
+    console.log(formErrors);
+
+    if (Object.keys(formErrors).length > 0) return;
+
+    try {
+      const payload = {
+        oldPassword: passwordValues.oldPassword,
+        newPassword: passwordValues.newPassword,
+      };
+
+      const response = await updatePassword(payload);
+      toast.success(response.message);
+      resetPasswordForm();
+
+      // clear access token ;
+      clearAuth();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <>
       <div className="sm:max-w-sm md:min-w-full mx-auto p-1 h-auto">
@@ -42,41 +141,40 @@ export const Account = () => {
               </div>
             </div>
 
-            {/* Username */}
-            <div className="space-y-1">
-              <label className="text-sm text-gray-400">Username</label>
-              <input
-                type="text"
-                placeholder="Enter username"
-                className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
-              />
-            </div>
+            <form onSubmit={handleAccountUpdate}>
+              {/* Username */}
+              <div className="space-y-1">
+                <label className="text-sm text-gray-400">Username</label>
+                <input
+                  type="text"
+                  placeholder="Enter username"
+                  className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  value={accountValues.username}
+                  onChange={handleAccountChange}
+                />
+              </div>
 
-            {/* Email */}
-            <div className="space-y-1">
-              <label className="text-sm text-gray-400">Email Address</label>
-              <input
-                type="email"
-                placeholder="Enter email"
-                className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
-              />
-            </div>
+              {/* Email */}
+              <div className="space-y-1">
+                <label className="text-sm text-gray-400">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="Enter email"
+                  className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  value={accountValues.email}
+                  onChange={handleAccountChange}
+                />
+              </div>
 
-            <div className="text-right pt-2">
-              <button
-                className="
-    inline-flex h-12 items-center justify-center rounded-md border border-blue-700
-    bg-[linear-gradient(110deg,#003366,45%,#0055aa,55%,#003366)] bg-size[200%_100%]
-    px-6 font-medium text-blue-100 transition-all duration-300
-    hover:bg-[linear-gradient(110deg,#0055aa,45%,#003366,55%,#0055aa)] hover:scale-105 hover:shadow-lg
-    active:scale-95 active:shadow-inner
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-50
-    cursor-pointer animate-shimmer
-  "
-              >
-                Save Change
-              </button>
-            </div>
+              <div className="text-right pt-2">
+                <Button
+                  label={loading ? "Saving Change..." : "Save Change"}
+                  variant="submit"
+                  type="submit"
+                  disabled={loading}
+                />
+              </div>
+            </form>
           </div>
 
           {/* ================= Security ================= */}
@@ -85,48 +183,103 @@ export const Account = () => {
               Security
             </h2>
 
-            <div className="space-y-1">
-              <label className="text-sm text-gray-400">Current Password</label>
-              <input
-                type="password"
-                placeholder="Enter current password"
-                className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
-              />
-            </div>
+            <form onSubmit={handleUpdatePassword}>
+              <div className="grid grid-cols-1  gap-6">
+                {/* Old Password */}
+                <div className="flex flex-col gap-1 relative">
+                  <label className="text-sm text-gray-400">Old Password</label>
 
-            <div className="space-y-1">
-              <label className="text-sm text-gray-400">New Password</label>
-              <input
-                type="password"
-                placeholder="Enter new password"
-                className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
-              />
-            </div>
+                  <input
+                    type={showOld ? "text" : "password"}
+                    name="oldPassword"
+                    onChange={handlePasswordChange}
+                    value={passwordValues.oldPassword || ""}
+                    placeholder="********"
+                    className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  />
 
-            <div className="space-y-1">
-              <label className="text-sm text-gray-400">Confirm New Password</label>
-              <input
-                type="password"
-                placeholder="Re-enter new password"
-                className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
-              />
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowOld(!showOld)}
+                    className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                  >
+                    {showOld ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                  {passwordErrors.oldPassword && (
+                    <p className="text-sm text-red-600 mt-1">{passwordErrors.oldPassword}</p>
+                  )}
+                </div>
 
-            <div className="text-right pt-2">
-              <button
-                className="
-    inline-flex h-12 items-center justify-center rounded-md border border-blue-700
-    bg-[linear-gradient(110deg,#003366,45%,#0055aa,55%,#003366)] bg-size[200%_100%]
-    px-6 font-medium text-blue-100 transition-all duration-300
-    hover:bg-[linear-gradient(110deg,#0055aa,45%,#003366,55%,#0055aa)] hover:scale-105 hover:shadow-lg
-    active:scale-95 active:shadow-inner
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-50
-    cursor-pointer animate-shimmer
-  "
-              >
-                Update Password
-              </button>
-            </div>
+                {/* New Password */}
+                <div className="flex flex-col gap-1 relative">
+                  <label className="text-sm text-gray-400">New Password</label>
+
+                  <input
+                    type={showNew ? "text" : "password"}
+                    name="newPassword"
+                    onChange={handlePasswordChange}
+                    value={passwordValues.newPassword || ""}
+                    placeholder="********"
+                    className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                  >
+                    {showNew ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                  {passwordErrors.newPassword && (
+                    <p className="text-sm text-red-600 mt-1">{passwordErrors.newPassword}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="flex flex-col gap-1 relative md:col-span-2 mt-5">
+                <label className="text-sm text-gray-400">Confirm New Password</label>
+
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  name="confirmPassword"
+                  onChange={handlePasswordChange}
+                  value={passwordValues.confirmPassword || ""}
+                  placeholder="********"
+                  className="w-full rounded-md px-4 py-3 border border-gray-700 bg-gray-900 text-gray-200 outline-none focus:border-blue-500"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirm ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                {passwordErrors.confirmPassword && (
+                  <p className="text-sm text-red-600 mt-1">{passwordErrors.confirmPassword}</p>
+                )}
+              </div>
+
+              <div className="rounded-md border border-yellow-500/40 bg-yellow-500/10 p-4 mt-5">
+                <h4 className="mb-1 text-sm font-semibold text-yellow-400">
+                  🔏Important Security Notice
+                </h4>
+
+                <p className="text-sm leading-relaxed text-yellow-200">
+                  After updating your password, you will be automatically logged out from your
+                  account. Please log in again using your new password to continue.
+                </p>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <Button
+                  label={loading ? "Updating..." : "Update Password"}
+                  variant="submit"
+                  type="submit"
+                />
+              </div>
+            </form>
           </div>
         </div>
 
