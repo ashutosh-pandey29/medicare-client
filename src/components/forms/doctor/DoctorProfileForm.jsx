@@ -127,6 +127,18 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
     console.log("FINAL DATA 👉", values);
   };
 
+  // working day selection
+  const getDefaultWorkingDaysOption = () => {
+    const days = values.workingTime.map((d) => d.day); // e.g. ["Mon","Tue"]
+
+    if (days.length === 7) return "fullWeek";
+    if (days.length === 5 && ["Mon", "Tue", "Wed", "Thu", "Fri"].every((d) => days.includes(d)))
+      return "weekdays";
+    if (days.length === 2 && ["Sat", "Sun"].every((d) => days.includes(d))) return "weekend";
+    return ""; // custom, no predefined option
+  };
+
+  // loading department
   useEffect(() => {
     const loadDepartmentDropdown = async () => {
       const response = await fetchPublicDepartment();
@@ -138,6 +150,31 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
     };
     loadDepartmentDropdown();
   }, []);
+
+  // Remove the slot
+  const removeSlot = (dayIndex, slotIndex) => {
+    setValues((prev) => {
+      const updated = [...prev.workingTime];
+
+      updated[dayIndex].slots.splice(slotIndex, 1);
+
+      return { ...prev, workingTime: updated };
+    });
+  };
+
+
+const removeEducation = (index) => {
+  setValues((prev) => {
+    const updated = [...prev.education];
+    
+    // Remove the education at index
+    updated.splice(index, 1);
+    
+    return { ...prev, education: updated };
+  });
+};
+
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50 ">
@@ -366,6 +403,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
               </label>
               <select
                 onChange={handleWorkingDays}
+                value={getDefaultWorkingDaysOption()}
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors bg-white"
               >
                 <option value="">Choose a schedule</option>
