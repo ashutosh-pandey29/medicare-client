@@ -20,6 +20,8 @@ export function DoctorProfilePage() {
 
       if (response.success) {
         setProfile(response.data);
+        localStorage.setItem("name", response.data.name);
+        localStorage.setItem("department", response.data.departmentName);
       }
     };
     loadProfile();
@@ -98,9 +100,11 @@ export function DoctorProfilePage() {
 
                           {/* Edit profile */}
                           <button
-                            onClick={()=>navigate("update", {
-                              state: { profileId: profile.profileId },
-                            })}
+                            onClick={() =>
+                              navigate("update", {
+                                state: { profileId: profile.profileId },
+                              })
+                            }
                             className="text-blue-600"
                           >
                             Edit Profile

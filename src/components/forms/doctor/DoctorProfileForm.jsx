@@ -144,7 +144,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
       <form onSubmit={handleSubmit}>
         <div className="space-y-6">
           {/* Personal Information */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+          <div className="bg-white rounded  p-4 border border-emerald-100">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-emerald-100 p-2 rounded-lg">
                 <CgUser className="text-emerald-600" size={24} />
@@ -212,7 +212,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
           </div>
 
           {/* Professional Information */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+          <div className="bg-white rounded p-4 border border-emerald-100">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-teal-100 p-2 rounded-lg">
                 <BsBriefcase className="text-teal-600" size={24} />
@@ -270,7 +270,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
           </div>
 
           {/* Education */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+          <div className="bg-white rounded p-4 border border-emerald-100">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-blue-100 p-2 rounded-lg">
                 <FaGraduationCap className="text-blue-600" size={24} />
@@ -352,7 +352,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
           </div>
 
           {/* Working Schedule */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+          <div className="bg-white rounded p-4 border border-emerald-100">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-purple-100 p-2 rounded-lg">
                 <CiClock1 className="text-purple-600" size={24} />
@@ -451,7 +451,7 @@ export const DoctorProfileForm = ({ isEdit = false }) => {
           </div>
 
           {/* Bio */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+          <div className="bg-white rounded  p-4 border border-emerald-100">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-orange-100 p-2 rounded-lg">
                 <FiFileText className="text-orange-600" size={24} />

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BsActivity, BsAward, BsCalendar, BsCalendar2 } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
-import { FaStethoscope } from "react-icons/fa6";
+import { FaClock, FaStethoscope } from "react-icons/fa6";
+import { useJwtDecode } from "../../../../hooks/custom/useJwtDecode";
 
 export default function WelcomeCard() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { decodedUser } = useJwtDecode();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -78,13 +80,15 @@ export default function WelcomeCard() {
               {/* Doctor Details */}
               <div className="ml-1 md:ml-6">
                 <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-xl md:text-4xl font-bold text-white">Dr. Rajesh Kumar</h2>
+                  <h2 className="text-xl md:text-4xl font-bold text-white">
+                    {decodedUser?.username}
+                  </h2>
                   <BsAward className="w-7 h-7 text-yellow-300" />
                 </div>
-                <p className="text-cyan-50 text-sm md:text-lg font-medium mb-1">
-                  Cardiologist • MBBS, MD
+                {/* <p className="text-cyan-50 text-sm md:text-lg font-medium mb-1">{decodedUser?.role}</p> */}
+                <p className="text-white/90 text-base md:text-xl font-semibold">
+                  Welcome to Your Dashboard
                 </p>
-                {/* <p className="text-white text-base md:text-xl font-semibold">Welcome to Your Dashboard</p> */}
               </div>
             </div>
           </div>
@@ -95,7 +99,7 @@ export default function WelcomeCard() {
               {/* Real-time Clock */}
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-green-600 bg-opacity-30 rounded-xl flex items-center justify-center">
-                  <CgLock className="w-6 h-6 text-white" />
+                  <FaClock className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <p className="text-cyan-100 text-sm font-medium">Current Time</p>

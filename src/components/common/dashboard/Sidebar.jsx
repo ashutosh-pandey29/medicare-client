@@ -1,18 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { SidebarLinks } from "./SidebarLinks";
 import profileImg from "../../../assets/dummy-profile/user.png";
-import { RiCloseLargeLine, RiLogoutCircleLine } from "react-icons/ri";
+import { RiLogoutCircleLine } from "react-icons/ri";
 import { useJwtDecode } from "../../../hooks/custom/useJwtDecode";
-import { ConfirmActionModal } from "../../modals/ConfirmActionModal";
-import { Modal } from "../../modals/Modal";
 import { useModal } from "../../../hooks/custom/useModal";
-import { FaCross } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import { useLogout } from "../../../hooks/auth/useLogout";
 
 export const Sidebar = ({ handleSidebarToggle, role }) => {
   const links = SidebarLinks[role] || [];
-  const { modalData, openModal, closeModal } = useModal();
   const { decodedUser } = useJwtDecode();
   const { logout } = useLogout();
 
@@ -42,9 +38,8 @@ export const Sidebar = ({ handleSidebarToggle, role }) => {
                   {decodedUser?.username}
                 </span>
                 <span className="text-white font-medium text-sm">
-                  <span className="flex items-center gap-1 text-sm text-green-300 animate-pulse">
-                    <span className="h-2 w-2 bg-green-400 rounded-full"></span>
-                    Available
+                  <span className="flex items-center gap-1 text-sm text-white/90 capitalize">
+                    {decodedUser?.role}
                   </span>
                 </span>
               </div>
