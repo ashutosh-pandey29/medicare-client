@@ -15,6 +15,7 @@ import { Pagination } from "../../components/UI/pagination/Pagination";
 import { NotFound } from "../../components/basic/NotFound";
 import { Modal } from "../../components/modals/Modal";
 import { useModal } from "../../hooks/custom/useModal";
+import { ExportOptionsModal } from "../../components/modals/ExportOptionsModal";
 
 export const PatientTable = () => {
   const [isOn, setIsOn] = useState(false);
@@ -185,7 +186,7 @@ export const PatientTable = () => {
                 {/* Buttons */}
                 <div className="flex items-center gap-2 justify-end">
                   <button
-                    onClick={() => openModal(<ExportOptionsModal onClose={closeModal} />)}
+                    onClick={() => openModal(<ExportOptionsModal  onClose={closeModal} theme="light" />)}
                     className="
                  h-10 w-10 flex items-center justify-center rounded-full
                  bg-zinc-100 hover:bg-zinc-300 transition
