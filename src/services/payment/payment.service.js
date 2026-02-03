@@ -4,6 +4,10 @@ export const getAllPaymentService = () => {
   return api.get("/payment/details");
 };
 
+export const getAllPaymentForAdminService = () => {
+  return api.get("/payment/all");
+};
+
 export const createPaymentService = (appointmentId) => {
   return api.post("/payment/create-order", { appointmentId });
 };

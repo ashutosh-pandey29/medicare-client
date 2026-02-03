@@ -1,40 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  MdLockReset,
-  MdOutlineNoAccounts,
-  MdOutlinePublishedWithChanges,
-  MdOutlineVerifiedUser,
-} from "react-icons/md";
+import { MdOutlineNoAccounts, MdOutlinePublishedWithChanges } from "react-icons/md";
 import { Dropdown } from "../../components/UI/Dropdown";
-import { FilterDropdown } from "../../components/UI/Dashboard/FilterDropdown";
-import {
-  FaDownload,
-  FaEdit,
-  FaEye,
-  FaFileExcel,
-  FaFilePdf,
-  FaHistory,
-  FaPrint,
-  FaSortAmountDown,
-} from "react-icons/fa";
+import { FaDownload, FaEye, FaSortAmountDown } from "react-icons/fa";
 import { useDoctor } from "../../hooks/admin/useDoctor";
 import { NotFound } from "../../components/basic/NotFound";
 import { TableSkeletonLoader } from "../../components/UI/loaders/skeleton/TableSkeletonLoader";
 import { usePagination } from "../../hooks/common/usePagination";
 import { Pagination } from "../../components/UI/pagination/Pagination";
 import { useModal } from "../../hooks/custom/useModal";
+import { ExportOptionsModal } from "../../components/modals/ExportOptionsModal";
+import { Modal } from "../../components/modals/Modal";
 
 export const DoctorList = () => {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
-
   const [search, setSearch] = useState("");
-
   const [sortOrder, setSortOrder] = useState(null);
-
   const { modalData, closeModal, openModal } = useModal();
-
   const { fetchDoctor, loading } = useDoctor();
 
   const loadDoctorList = async () => {
@@ -229,6 +212,9 @@ export const DoctorList = () => {
           </>
         )}
       </div>
+
+      {/* modal */}
+      <Modal data={modalData} onClose={closeModal} />
     </div>
   );
 };

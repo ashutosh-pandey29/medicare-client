@@ -2,12 +2,32 @@ import { useState } from "react";
 import {
   createPaymentService,
   downloadInvoiceService,
+  getAllPaymentForAdminService,
   getAllPaymentService,
   verifyPaymentService,
 } from "../../services/payment/payment.service";
 
 export const usePayment = () => {
   const [loading, setLoading] = useState(false);
+
+
+   const getAllPaymentForAdmin = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllPaymentForAdminService();
+      if (!response.success) {
+        throw new Error(response.message || "Payment not fetched ");
+      }
+
+      return response;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   const getAllPayment = async () => {
     setLoading(true);
@@ -73,5 +93,5 @@ export const usePayment = () => {
     }
   };
 
-  return { loading, createPayment, verifyPayment, getAllPayment, downloadInvoice };
+  return { loading, createPayment, verifyPayment, getAllPayment, downloadInvoice ,  getAllPaymentForAdmin };
 };
