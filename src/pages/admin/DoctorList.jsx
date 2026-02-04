@@ -11,6 +11,7 @@ import { Pagination } from "../../components/UI/pagination/Pagination";
 import { useModal } from "../../hooks/custom/useModal";
 import { ExportOptionsModal } from "../../components/modals/ExportOptionsModal";
 import { Modal } from "../../components/modals/Modal";
+import { toast } from "react-toastify";
 
 export const DoctorList = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export const DoctorList = () => {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState(null);
   const { modalData, closeModal, openModal } = useModal();
-  const { fetchDoctor, loading } = useDoctor();
+  const { fetchDoctor, rollbackDoctor, loading } = useDoctor();
 
   const loadDoctorList = async () => {
     const response = await fetchDoctor();
@@ -31,6 +32,16 @@ export const DoctorList = () => {
   useEffect(() => {
     loadDoctorList();
   }, []);
+
+  // handle role change
+
+  const handleRoleChange = async (id) => {
+    const response = await rollbackDoctor(id);
+    if (response.success) {
+      toast.success(response.message);
+      loadDoctorList();
+    }
+  };
 
   /**================SEARCH DATA========================  */
 
@@ -80,11 +91,7 @@ export const DoctorList = () => {
     {
       label: "Change role",
       icon: MdOutlinePublishedWithChanges,
-    },
-
-    {
-      label: "Deactivate Account",
-      icon: MdOutlineNoAccounts,
+      onClick: () => handleRoleChange(content._id),
     },
   ];
 

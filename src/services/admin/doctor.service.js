@@ -11,3 +11,7 @@ export const fetchDoctorByIdService = (profileId) => {
 export const verifyDoctorProfileService = (profileId) => {
   return api.patch(`/admin/doctor/${profileId}/verify`);
 };
+
+export const rollbackDoctorService = (userId) => {
+  return api.patch(`/admin/doctor/${userId}/rollback`);
+};
