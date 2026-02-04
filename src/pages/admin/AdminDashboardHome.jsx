@@ -4,20 +4,9 @@ import { AdminWelcomeCard } from "../../components/common/dashboard/card/AdminWe
 import { PatientAnalysisBarChart } from "../../components/charts/PatientAnalysisBarChart";
 import { RevenueBarChart } from "../../components/charts/RevenueAnalysis";
 import { FaUserMd, FaUsers, FaCalendarCheck, FaRupeeSign } from "react-icons/fa";
-import {
-  HiCheck,
-  HiOutlineArrowTrendingUp,
-  HiOutlinePresentationChartBar,
-  HiXMark,
-} from "react-icons/hi2";
-import { BsClockHistory, BsPersonCircle, BsThreeDotsVertical } from "react-icons/bs";
+import { HiOutlineArrowTrendingUp, HiOutlinePresentationChartBar } from "react-icons/hi2";
 
 export const AdminDashboardHome = () => {
-  const tableData = [
-    { id: 1, name: "John Doe", role: "Doctor", status: "Active" },
-    { id: 2, name: "Jane Smith", role: "Nurse", status: "Inactive" },
-  ];
-
   return (
     <section className="h-auto border">
       <AdminWelcomeCard />
@@ -35,8 +24,6 @@ export const AdminDashboardHome = () => {
         {/* Revenue */}
         <DarkMiniCard icon={<FaRupeeSign />} title="Revenue (Today)" value="₹18,500" />
       </div>
-
-      
 
       {/* Chart -patient track and payment track */}
 
