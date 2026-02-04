@@ -207,6 +207,7 @@ export const DepartmentList = () => {
 
         {currentData.length === 0 ? (
           <NotFound
+          theme="dark"
             message="No departments found"
             description="There are no departments to display at the moment"
             actionText="Add New Department"
