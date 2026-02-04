@@ -165,22 +165,26 @@ export const Billings = () => {
                 <table className="min-w-full border-collapse text-center ">
                   <thead className="bg-gray-800 text-gray-200 ">
                     <tr>
+                      <th className="px-4 py-2  text-gray-300 ">Sr.No.</th>
                       <th className="px-4 py-2  text-gray-300 ">Patient</th>
                       <th className="px-4 py-2  text-gray-300 ">Department</th>
                       <th className="px-4 py-2  text-gray-300 ">Amount(INR)</th>
                       <th className="px-4 py-2  text-gray-300">Status</th>
                       <th className="px-4 py-2  text-gray-300">Payment Method</th>
-                      <th className="px-4 py-2  text-gray-300">Date</th>
-                      <th className="px-4 py-2  text-gray-300"></th>
+                      <th className="px-4 py-2  text-gray-300">Date & Time</th>
+                      {/* <th className="px-4 py-2  text-gray-300"></th> */}
                     </tr>
                   </thead>
 
                   <tbody className="text-sm">
-                    {currentData.map((p) => (
+                    {currentData.map((p , i) => (
                       <tr
                         key={p.paymentId}
                         className="border-b border-gray-700 hover:bg-gray-800 transition "
                       >
+                         <td className="px-4 py-2 text-white whitespace-nowrap">
+                          0{(page - 1) * limit + i + 1}
+                        </td>
                         <td className="px-4 py-2 text-gray-300 ">{p.appointment.patientName}</td>
                         <td className="px-4 py-2 text-gray-300">{p.appointment.departmentName}</td>
                         <td className="px-4 py-2 text-gray-300 flex items-center justify-center">
@@ -203,9 +207,9 @@ export const Billings = () => {
                           {new Date(p.paidAt).toLocaleString()}
                         </td>
 
-                        <td className="px-4 py-2">
+                        {/* <td className="px-4 py-2">
                           <Dropdown actions={getAction(p)} theme="dark" />
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>
