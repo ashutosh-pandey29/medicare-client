@@ -76,14 +76,10 @@ export const SidebarLinks = {
     },
 
     {
-      title: "Accounts",
+      title: "Accounts and Settings",
       icon: <FaUsersCog className="text-lg" />,
       path: "accounts",
     },
-    {
-         title: "Settings",
-      icon: <FaGears className="text-lg" />,
-      path: "settings",
-    }
+   
   ],
 };
