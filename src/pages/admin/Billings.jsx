@@ -161,7 +161,7 @@ export const Billings = () => {
             <>
               {/* Table Wrapper */}
 
-              <div className="relative  overflow-x-auto h-screen ">
+              <div className="relative  overflow-x-auto ">
                 <table className="min-w-full border-collapse text-center ">
                   <thead className="bg-gray-800 text-gray-200 ">
                     <tr>
@@ -176,7 +176,7 @@ export const Billings = () => {
                     </tr>
                   </thead>
 
-                  <tbody className="text-sm">
+                  <tbody className="text-sm ">
                     {currentData.map((p , i) => (
                       <tr
                         key={p.paymentId}
