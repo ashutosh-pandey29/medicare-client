@@ -10,22 +10,33 @@ import {
 } from "recharts";
 
 import patientAnalysis from "../../assets/jsonData/patientAnalysis.json";
+import { useEffect, useState } from "react";
+import { useStateAndGraph } from "../../hooks/admin/useStatsAndGraph";
 
 export const PatientAnalysisBarChart = () => {
-  return (
-        <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={patientAnalysis}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+  const [patients, setPatient] = useState([]);
+  const { loading, getPatientGraphData } = useStateAndGraph();
 
-          {/* Bars */}
-          <Bar dataKey="new" fill="#4f46e5" name="New Patients" />
-          <Bar dataKey="returning" fill="#10b981" name="Returning Patients" />
-          <Bar dataKey="lost" fill="#ef4444" name="Lost Patients" />
-        </BarChart>
-      </ResponsiveContainer>
+  useEffect(() => {
+    const loadStats = async () => {
+      const response = await getPatientGraphData();
+      if (response.success) {
+        setPatient(response.data);
+      }
+    };
+    loadStats();
+  }, []);
+
+  return (
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={patients}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="year" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="total" fill="#4f46e5" name="Total Patients" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };

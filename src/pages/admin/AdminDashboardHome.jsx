@@ -1,28 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DarkMiniCard } from "../../components/common/dashboard/card/DarkMiniCard";
 import { AdminWelcomeCard } from "../../components/common/dashboard/card/AdminWelcomeCard";
 import { PatientAnalysisBarChart } from "../../components/charts/PatientAnalysisBarChart";
 import { RevenueBarChart } from "../../components/charts/RevenueAnalysis";
 import { FaUserMd, FaUsers, FaCalendarCheck, FaRupeeSign } from "react-icons/fa";
 import { HiOutlineArrowTrendingUp, HiOutlinePresentationChartBar } from "react-icons/hi2";
+import { useStateAndGraph } from "../../hooks/admin/useStatsAndGraph";
 
 export const AdminDashboardHome = () => {
+  // get stats
+  const [stats ,  setStats] =  useState({});
+  const { loading, getStatsForAdmin } = useStateAndGraph();
+
+  useEffect(() => {
+    const loadStats = async () => {
+      const response = await getStatsForAdmin();
+      if (response.success) {
+        setStats(response.data);
+      }
+    };
+    loadStats();
+  }, []);
+
   return (
     <section className="h-auto border">
       <AdminWelcomeCard />
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2.5 mt-5 md:mt-10">
         {/* Total Doctors */}
-        <DarkMiniCard icon={<FaUserMd />} title="Total Doctors" value={200} />
+        <DarkMiniCard icon={<FaUserMd />} title="Total Doctors" value={`${stats.totalDoctor}`} />
 
         {/* Total Patients */}
-        <DarkMiniCard icon={<FaUsers />} title="Total Patients" value={1280} />
+        <DarkMiniCard icon={<FaUsers />} title="Total Patients" value={`${stats.totalAppointment}`} />
 
         {/* Today's Appointments */}
-        <DarkMiniCard icon={<FaCalendarCheck />} title="Today's Appointments" value={42} />
+        <DarkMiniCard icon={<FaCalendarCheck />} title="Total Department" value={stats.department || "00"} />
 
         {/* Revenue */}
-        <DarkMiniCard icon={<FaRupeeSign />} title="Revenue (Today)" value="₹18,500" />
+        <DarkMiniCard icon={<FaRupeeSign />} title="Total Revenue" value={stats.totalRevenue}/>
       </div>
 
       {/* Chart -patient track and payment track */}
