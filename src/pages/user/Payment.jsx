@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { FaDownload, FaReceipt, FaShareAlt } from "react-icons/fa";
 import { FaWallet } from "react-icons/fa6";
-import paymentJSON from "../../assets/jsonData/payment.json";
 import { UserPageHeading } from "../../components/common/dashboard/heading/UserPageHeading";
 import { CardRow } from "../../components/common/dashboard/card/CardRow";
 import { FilterDropdown } from "../../components/UI/Dashboard/FilterDropdown";
 import { ShareOptionsModal } from "../../components/modals/ShareOptionsModal ";
 import { useModal } from "../../hooks/custom/useModal";
 import { Modal } from "../../components/modals/Modal";
-import { DownloadTimerModal } from "../../components/modals/DownloadTimerModal";
-import { ViewInvoiceModal } from "../../components/modals/ViewInvoiceModal";
 import { useEffect } from "react";
 import { usePayment } from "../../hooks/payment/usePayment";
 export const Payment = () => {

@@ -9,7 +9,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import patientAnalysis from "../../assets/jsonData/patientAnalysis.json";
 import { useEffect, useState } from "react";
 import { useStateAndGraph } from "../../hooks/admin/useStatsAndGraph";
 
