@@ -2,12 +2,8 @@ import logo from "../../assets/logo/logo.png";
 import { NavLink } from "react-router-dom";
 import hospitalInfo from "../../assets/jsonData/HospitalInfo.json";
 import {
-  FaInstagram,
   FaFacebookF,
-  FaLinkedinIn,
-  FaYoutube,
   FaWhatsapp,
-  FaInstagramSquare,
 } from "react-icons/fa";
 import { IconButton } from "../UI/IconButton";
 
