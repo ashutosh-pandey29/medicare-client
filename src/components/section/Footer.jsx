@@ -1,5 +1,6 @@
 import logo from "../../assets/logo/logo.png";
 import { NavLink } from "react-router-dom";
+import hospitalInfo from "../../assets/jsonData/HospitalInfo.json";
 import {
   FaInstagram,
   FaFacebookF,
@@ -33,19 +34,17 @@ export const Footer = () => {
             {/* footer social icon */}
             <div className="flex gap-2">
               <IconButton
-                href={"#"}
+                href={hospitalInfo.socialLinks.facebook}
+                target={"_blank"}
                 Icon={FaFacebookF}
                 variant="outline"
                 customClass={"hover:bg-blue-600 hover:text-white "}
               />
+
               <IconButton
-                href={"#"}
-                Icon={FaInstagram}
-                variant="outline"
-                customClass={"hover:from-purple-600 hover:to-pink-600 hover:text-white"}
-              />
-              <IconButton
-                href={"#"}
+                href={`${hospitalInfo.socialLinks.whatsapp}?text=${encodeURIComponent(
+                  "Hello MediCare Hospital, I would like to know more about your services."
+                )}`}
                 Icon={FaWhatsapp}
                 variant="outline"
                 customClass={"hover:bg-green-600 hover:text-white"}
@@ -60,18 +59,13 @@ export const Footer = () => {
             </h2>
             <ul className="space-y-2 text-zinc-700">
               <li>
-                <NavLink to="/" className="hover:text-orange-500 duration-200">
+                <NavLink to="/appointment" className="hover:text-orange-500 duration-200">
                   Book Appointment
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/" className="hover:text-orange-500 duration-200">
+                <NavLink to="/doctors" className="hover:text-orange-500 duration-200">
                   Find a Doctor
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/" className="hover:text-orange-500 duration-200">
-                  Emergency Services
                 </NavLink>
               </li>
 
@@ -120,19 +114,25 @@ export const Footer = () => {
                   to="mailto:support@medicare.com?subject=support%20Request&body=Hello%20MediCare%20Support%20Team,"
                   className="hover:text-orange-500 duration-200"
                 >
-                  support@medicare.com
+                  {hospitalInfo.contact.email}
                 </NavLink>
               </li>
               <li>
                 Phone :{" "}
-                <NavLink to="tel:+1200-321-3783" className="hover:text-orange-500 duration-200">
-                  1200-321-3783
+                <NavLink
+                  to={`tel:${hospitalInfo.contact.emergency}`}
+                  className="hover:text-orange-500 duration-200"
+                >
+                  {hospitalInfo.contact.phone}
                 </NavLink>
               </li>
               <li>
                 Emergency :{" "}
-                <NavLink to="tel:+1200-1234-8932" className="hover:text-orange-500 duration-200">
-                  1200-1234-8932
+                <NavLink
+                  to={`tel:${hospitalInfo.contact.emergency}`}
+                  className="hover:text-orange-500 duration-200"
+                >
+                  {hospitalInfo.contact.emergency}
                 </NavLink>
               </li>
             </ul>

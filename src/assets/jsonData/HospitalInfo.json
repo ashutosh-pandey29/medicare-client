@@ -2,7 +2,8 @@
   "hospitalName": "MediCare Hospital",
   "contact": {
     "phone": "+91-9876543210",
-    "emergency": "+91-1122334455"
+    "emergency": "+91-1122334455",
+    "email":"support@medicarehospital.com"
   },
   "location": {
     "address": "123, Main Road, City Center",
