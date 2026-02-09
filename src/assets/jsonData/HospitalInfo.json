@@ -1,82 +1,27 @@
 {
-  "hospital": {
-    "name": "Medicre Hospital & Research Center",
-    "tagline": "Your Health, Our Priority",
-    "logo": "/assets/logo.png",
-
-    "contact": {
-      "address": {
-        "line1": "2nd Floor, Medicre Tower",
-        "line2": "Near City Medical Square",
-        "city": "Indore",
-        "state": "Madhya Pradesh",
-        "country": "India",
-        "pincode": "452001"
-      },
-
-      "phone": {
-        "primary": "+91-98765-43210",
-        "secondary": "+91-731-4567890"
-      },
-
-      "email": {
-        "support": "support@medicre.com",
-        "appointments": "appointments@medicre.com",
-        "admin": "admin@medicre.com"
-      },
-
-      "emergency": {
-        "number": "108",
-        "available": true
-      }
+  "hospitalName": "MediCare Hospital",
+  "contact": {
+    "phone": "+91-9876543210",
+    "emergency": "+91-1122334455"
+  },
+  "location": {
+    "address": "123, Main Road, City Center",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "country": "India",
+    "googleMapsLink": "https://maps.app.goo.gl/oLU2gWEDm87G5K4TA"
+  },
+  "hoursOfOperation": {
+    "opd": {
+      "days": "All Days",
+      "timing": "9:00 AM – 9:00 PM"
     },
-
-    "workingHours": {
-      "opd": {
-        "mondayToFriday": "9:00 AM - 7:00 PM",
-        "saturday": "9:00 AM - 4:00 PM",
-        "sunday": "Closed"
-      },
-      "emergency": "24x7"
-    },
-
-    "departments": [
-      "Cardiology",
-      "Orthopedics",
-      "Neurology",
-      "Pediatrics",
-      "Dermatology",
-      "General Medicine"
-    ],
-
-    "socialLinks": {
-      "facebook": "https://facebook.com/medicre",
-      "instagram": "https://instagram.com/medicre",
-      "twitter": "https://twitter.com/medicre",
-      "linkedin": "https://linkedin.com/company/medicre"
-    },
-
-    "legal": {
-      "registrationNumber": "HOSP-MP-2024-01928",
-      "gstNumber": "23ABCDE1234F1Z5"
+    "emergency": {
+      "availability": "24 × 7 Available"
     }
   },
-
-  "system": {
-    "timezone": "Asia/Kolkata",
-    "currency": "INR",
-    "language": "en-IN"
-  },
-
-  "features": {
-    "onlineAppointments": true,
-    "opdBooking": true,
-    "ipdManagement": false,
-    "teleConsultation": false
-  },
-
-  "meta": {
-    "lastUpdated": "2025-01-01",
-    "version": "1.0.0"
+  "socialLinks": {
+    "whatsapp": "https://wa.me/919876543210",
+    "facebook": "https://facebook.com/medicarehospital"
   }
 }
