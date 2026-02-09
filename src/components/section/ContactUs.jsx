@@ -1,5 +1,8 @@
 import React from "react";
 import { Button } from "../UI/Button";
+import hospitalInfo from "../../assets/jsonData/HospitalInfo.json";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+
 export const ContactUs = () => {
   return (
     <>
@@ -60,8 +63,21 @@ export const ContactUs = () => {
                     </svg>
                     <div>
                       <h4 class="font-semibold text-indigo-700 text-sm mb-2">Our Location</h4>
-                      <p class="text-slate-600 text-sm">Sector 12, Near Metro Station</p>
-                      <p class="text-slate-600 text-[13px] mt-0.5"> New Delhi, India - 110034</p>
+                      <p class="text-slate-600 text-sm">{hospitalInfo.location.address}</p>
+                      <p class="text-slate-600 text-[13px] mt-0.5">
+                        {hospitalInfo.location.city} , {hospitalInfo.location.state}{" "}
+                        {hospitalInfo.location.country}
+                        <br />
+                        <a
+                          href={hospitalInfo.location.googleMapsLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-700 flex items-center gap-1.5"
+                        >
+                          Get Directions
+                          <FaArrowUpRightFromSquare />
+                        </a>
+                      </p>
                     </div>
                   </div>
 
@@ -78,8 +94,11 @@ export const ContactUs = () => {
                     </svg>
                     <div>
                       <h4 class="font-semibold text-indigo-700 text-sm mb-2">Phone Number</h4>
-                      <a href="tel:+1200-321-3783" class="text-slate-600 text-[13px]">
-                        1200-321-3783
+                      <a
+                        href={`tel:${hospitalInfo.contact.phone}`}
+                        class="text-slate-600 text-[13px]"
+                      >
+                        {hospitalInfo.contact.phone}
                       </a>
                     </div>
                   </div>
@@ -102,10 +121,10 @@ export const ContactUs = () => {
                     <div>
                       <h4 class="font-semibold text-indigo-700 text-sm mb-2">Email Address</h4>
                       <a
-                        href="mailto:support@medicare.com?subject=support%20Request&body=Hello%20MediCare%20Support%20Team,"
+                        href={`mailto:${hospitalInfo.contact.email}?subject=support%20Request&body=Hello%20MediCare%20Support%20Team`}
                         class="text-slate-600 text-[13px]"
                       >
-                        support@medicare.com
+                        {hospitalInfo.contact.email}
                       </a>
                     </div>
                   </div>
@@ -122,7 +141,9 @@ export const ContactUs = () => {
                       Outpatient Department(OPD) {" - "}
                       <span className="text-red-600 font-medium">All Days</span>
                     </span>
-                    <span className="text-slate-900 text-sm font-medium">9:00 AM – 9:00 PM</span>
+                    <span className="text-slate-900 text-sm font-medium">
+                      {hospitalInfo.hoursOfOperation.opd.timing}
+                    </span>
                   </div>
 
                   {/* Divider */}
@@ -131,7 +152,9 @@ export const ContactUs = () => {
                   {/* Emergency */}
                   <div className="flex justify-between items-center gap-4 flex-wrap">
                     <span className="text-red-600 text-sm font-semibold">Emergency Services</span>
-                    <span className="text-red-700 text-sm font-bold">24 × 7 Available</span>
+                    <span className="text-red-700 text-sm font-bold">
+                      {hospitalInfo.hoursOfOperation.emergency.availability}
+                    </span>
                   </div>
                 </div>
               </div>
