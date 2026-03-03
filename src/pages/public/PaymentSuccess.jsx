@@ -32,7 +32,6 @@ export const PaymentSuccess = () => {
   const [appointmentData, setAppointmentData] = useState(null);
 
   useEffect(() => {
-    alert();
     const fetchAppointmentData = async () => {
       const response = await fetchAppointmentById(appointmentId);
 
