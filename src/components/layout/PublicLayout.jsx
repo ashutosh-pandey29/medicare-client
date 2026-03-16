@@ -21,7 +21,7 @@ const PublicLayout = () => {
       <Footer />
       
       {/* public support chatbot  */}
-      <Chatbot />
+      {/* <Chatbot /> */}
     </>
   );
 };
