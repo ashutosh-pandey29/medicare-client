@@ -38,7 +38,7 @@ export const ViewDepartment = ({ data, onClose }) => {
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Total Doctors */}
-          <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
+          {/* <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
             <div className="p-3 bg-indigo-600 rounded-full">
               <FaUserMd className="text-white text-xl" />
             </div>
@@ -46,10 +46,10 @@ export const ViewDepartment = ({ data, onClose }) => {
               <p className="text-sm text-gray-400">Total Doctors</p>
               <h3 className="text-xl font-bold">102</h3>
             </div>
-          </div>
+          </div> */}
 
           {/* Total Patients */}
-          <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
+          {/* <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
             <div className="p-3 bg-emerald-600 rounded-full">
               <FaUsers className="text-white text-xl" />
             </div>
@@ -57,9 +57,9 @@ export const ViewDepartment = ({ data, onClose }) => {
               <p className="text-sm text-gray-400">Total Patients</p>
               <h3 className="text-xl font-bold">7820</h3>
             </div>
-          </div>
+          </div> */}
 
-          <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
+          {/* <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-900 transition">
             <div className="p-3 bg-yellow-600 rounded-full">
               <FaRupeeSign className="text-white text-xl" />
             </div>
@@ -67,7 +67,7 @@ export const ViewDepartment = ({ data, onClose }) => {
               <p className="text-sm text-gray-400">Department Fees</p>
               <h3 className="text-xl font-bold">{data?.departmentFees}</h3>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Description */}
