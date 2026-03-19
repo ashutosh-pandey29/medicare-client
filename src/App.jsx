@@ -11,6 +11,7 @@ import { UnexpectedError } from "./pages/errors/UnexpectedError";
 import { registerServiceWorker } from "./utils/notifications/registerService.worker";
 import { useEffect } from "react";
 import { requestNotificationPermission } from "./utils/notifications/notificationPermission";
+import { Maintenance } from "./pages/errors/Maintenance";
 const router = createBrowserRouter([
   ...PublicRoutes,
   ...UserRoutes,
@@ -25,6 +26,12 @@ const router = createBrowserRouter([
     path: "/unauthorized",
     element: <UnauthorizedError />,
   },
+
+  {
+    path: "/maintenance",
+    element: <Maintenance />,
+  },
+
   {
     path: "*",
     element: <NotFound />,
@@ -39,7 +46,6 @@ function App() {
 
   return (
     <>
-      
       {/* <button className="mt-50 border "
   onClick={async () => {
     const allowed = await requestNotificationPermission();
@@ -56,7 +62,6 @@ function App() {
   Enable Notifications
 </button> */}
 
-      
       <RouterProvider router={router} />
       <ToastContainer
         position="bottom-right"

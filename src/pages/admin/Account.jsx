@@ -9,6 +9,8 @@ import { accountUpdateSchema, passwordUpdateSchema } from "../../utils/schema/au
 import { Button } from "../../components/UI/Button";
 import { useWebPush } from "../../hooks/notification/useWebPush";
 import { BiLoader } from "react-icons/bi";
+import { updateMaintenance, fetchStatus } from "../../services/admin/setting.service";
+import { toast } from "react-toastify";
 
 export const Account = () => {
   const [showOld, setShowOld] = useState(false);
@@ -16,6 +18,7 @@ export const Account = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { modalData, openModal, closeModal } = useModal();
   const [notificationEnabled, setNotificationEnabled] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   const { enableNotification, disableNotification } = useWebPush();
 
@@ -76,7 +79,7 @@ export const Account = () => {
 
   const fetchAccount = async () => {
     const response = await myAccountInfo();
-    console.log(response.data);
+    // console.log(response.data);
     setAccountValues(response.data);
   };
   useEffect(() => {
@@ -107,7 +110,7 @@ export const Account = () => {
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
     const formErrors = validatePassword(passwordValues);
-    console.log(formErrors);
+    // console.log(formErrors);
 
     if (Object.keys(formErrors).length > 0) return;
 
@@ -125,6 +128,41 @@ export const Account = () => {
       clearAuth();
     } catch (err) {
       toast.error(err.message);
+    }
+  };
+
+  // fetch maintenance mode status
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetchStatus();
+
+        console.log("rs", res.data.maintenanceMode);
+
+        setMaintenanceMode(res.data.maintenanceMode);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  //   handle maintenance mode
+
+  const handleMaintenanceMode = async () => {
+    const newValue = !maintenanceMode;
+
+    setMaintenanceMode(newValue);
+
+    try {
+      const response = await updateMaintenance({ maintenanceMode: newValue });
+      //   console.log(response);
+      toast.success(response.message);
+    } catch (err) {
+      // revert if API fail
+      setMaintenanceMode(!newValue);
+      toast.error(response.message);
     }
   };
 
@@ -401,7 +439,12 @@ export const Account = () => {
               </div>
 
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={maintenanceMode}
+                  onChange={handleMaintenanceMode}
+                />
                 <div
                   className="peer bg-gray-700 w-14 h-6 rounded-full relative
                   after:content-[''] after:absolute after:top-1 after:left-1

@@ -68,6 +68,15 @@ api.interceptors.response.use(
       }
     }
 
+    if (
+      error.response?.status === 503 &&
+      !window.location.pathname.startsWith("/auth") &&
+      window.location.pathname !== "/maintenance"
+    ) {
+      window.location.href = "/maintenance";
+      return Promise.reject(error);
+    }
+
     // backend error
     if (serverErr) {
       return Promise.reject(serverErr);
