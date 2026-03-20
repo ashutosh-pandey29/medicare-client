@@ -34,7 +34,7 @@ export const AdminDashboardHome = () => {
         <DarkMiniCard icon={<FaUsers />} title="Total Patients" value={`${stats.totalAppointment}`} />
 
         {/* Today's Appointments */}
-        <DarkMiniCard icon={<FaCalendarCheck />} title="Total Department" value={stats.department || "00"} />
+        <DarkMiniCard icon={<FaCalendarCheck />} title="Total Department" value={stats.totalDepartment || "00"} />
 
         {/* Revenue */}
         <DarkMiniCard icon={<FaRupeeSign />} title="Total Revenue" value={stats.totalRevenue}/>
