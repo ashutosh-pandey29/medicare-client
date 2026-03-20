@@ -5,5 +5,9 @@ export const updateMaintenance = (payload) => {
 };
 
 export const fetchStatus = () => {
- return api.get("/settings/maintenance-mode")
+  return api.get("/settings/maintenance-mode");
+};
+
+export const backupDBservice = () => {
+  return api.get("/settings/backup-db" , {responseType:"blob"});
 };

@@ -9,7 +9,11 @@ import { accountUpdateSchema, passwordUpdateSchema } from "../../utils/schema/au
 import { Button } from "../../components/UI/Button";
 import { useWebPush } from "../../hooks/notification/useWebPush";
 import { BiLoader } from "react-icons/bi";
-import { updateMaintenance, fetchStatus } from "../../services/admin/setting.service";
+import {
+  updateMaintenance,
+  fetchStatus,
+  backupDBservice,
+} from "../../services/admin/setting.service";
 import { toast } from "react-toastify";
 
 export const Account = () => {
@@ -19,6 +23,7 @@ export const Account = () => {
   const { modalData, openModal, closeModal } = useModal();
   const [notificationEnabled, setNotificationEnabled] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [backupLoading, setBackupLoading] = useState(false);
 
   const { enableNotification, disableNotification } = useWebPush();
 
@@ -136,9 +141,7 @@ export const Account = () => {
     const fetchSettings = async () => {
       try {
         const res = await fetchStatus();
-
         console.log("rs", res.data.maintenanceMode);
-
         setMaintenanceMode(res.data.maintenanceMode);
       } catch (err) {
         console.log(err);
@@ -152,9 +155,7 @@ export const Account = () => {
 
   const handleMaintenanceMode = async () => {
     const newValue = !maintenanceMode;
-
     setMaintenanceMode(newValue);
-
     try {
       const response = await updateMaintenance({ maintenanceMode: newValue });
       //   console.log(response);
@@ -163,6 +164,33 @@ export const Account = () => {
       // revert if API fail
       setMaintenanceMode(!newValue);
       toast.error(response.message);
+    }
+  };
+
+  //   handle db backup
+  const handleDBbackup = async () => {
+    try {
+      setBackupLoading(true);
+      const response = await backupDBservice();
+
+      const blob = new Blob([response.data], { type: "application/zip" });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `backup-${new Date().toISOString()}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Data backup successful");
+    } catch (err) {
+      console.error(err);
+      toast.error("Backup failed, please try again later");
+    } finally {
+      setBackupLoading(false);
     }
   };
 
@@ -502,8 +530,16 @@ export const Account = () => {
             cursor-pointer
             animate-shimmer
           "
+                  onClick={handleDBbackup}
+                  disabled={backupLoading}
                 >
-                  Database Backup
+                  {backupLoading ? (
+                    <span className="flex items-center gap-2">
+                      <BiLoader className="animate-spin" /> Backing Up...
+                    </span>
+                  ) : (
+                    "Database Backup"
+                  )}
                 </button>
               </div>
 
