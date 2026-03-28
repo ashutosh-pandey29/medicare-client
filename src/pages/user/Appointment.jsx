@@ -176,7 +176,7 @@ export const Appointment = () => {
   if (loading) return <PreLoader />;
   return (
     <>
-      <section className=" w-full h-auto bg-white ">
+      <section className=" w-full h-screen bg-white ">
         <div className="p-3 flex flex-col  md:justify-between md:items-center gap-4 border-b border-b-zinc-100">
           {/* heading  */}
           <UserPageHeading

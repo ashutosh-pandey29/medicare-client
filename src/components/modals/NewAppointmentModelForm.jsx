@@ -48,7 +48,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   useEffect(() => {
     const fetchDepartment = async () => {
       const response = await fetchPublicDepartment(setErrors);
-      console.log(response);
+      console.log("departmet ", response);
       if (response.success) {
         setDepartments(response.data);
       }
@@ -60,7 +60,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
 
   const fetchDoctor = async (departmentId) => {
     const response = await fetchDoctorByDepartmentId(departmentId);
-    console.log(response);
+    console.log("doc", response);
     if (response.success) {
       setDoctor(response.data);
     }
@@ -69,7 +69,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   // handle department change
   const handleDepartmentChange = (e) => {
     handleChange(e);
-    
+
     setDoctor([]); // reset old doctor
     fetchDoctor(e.target.value);
   };
@@ -232,8 +232,11 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 px-3 py-2.5 text-white rounded cursor-pointer"
             >
-              {loading ? "Booking..." : mode === "update" ? "Update Appointment" : "Book Appointment"}
-
+              {loading
+                ? "Booking..."
+                : mode === "update"
+                  ? "Update Appointment"
+                  : "Book Appointment"}
             </button>
           </div>
         </form>
