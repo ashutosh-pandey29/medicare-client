@@ -60,7 +60,7 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
 
   const fetchDoctor = async (departmentId) => {
     const response = await fetchDoctorByDepartmentId(departmentId);
-    console.log("doc", response);
+    console.log("doctor:", response);
     if (response.success) {
       setDoctor(response.data);
     }
@@ -69,17 +69,16 @@ export const NewAppointmentModelForm = ({ mode = "create", data, onClose }) => {
   // handle department change
   const handleDepartmentChange = (e) => {
     handleChange(e);
-
     setDoctor([]); // reset old doctor
     fetchDoctor(e.target.value);
   };
 
   // fetch doctor when department already exists (update case)
   useEffect(() => {
-    if (values.departmentId) {
-      fetchDoctor(values.departmentId);
+    if (values?.departmentId) {
+      fetchDoctor(values?.departmentId);
     }
-  }, [values.departmentId]);
+  }, [values?.departmentId]);
 
   // handle submit appointment
 

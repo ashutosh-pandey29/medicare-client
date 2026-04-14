@@ -187,7 +187,7 @@ export const Appointment = () => {
           />
         </div>
 
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mt-5 p-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mt-5 p-3   ">
           {appointmentData.length > 0 ? (
             appointmentData.map((appointment, index) => (
               <CardRow
